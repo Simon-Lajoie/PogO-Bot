@@ -27,9 +27,9 @@ logging.getLogger("PIL").setLevel(logging.WARNING)
 # =====================
 region = 'na1'
 summoner_names_list = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", "Sehnbon", "Wyatt1", "Gourish",
-                       "Gabyumi", "Mii Chan","meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
-                       "Tiny Cena", "Aàrón","5billon","Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
-                       "Yazeed", "Goosecan", "cancerkween","Azote", "Kovannate3"
+                       "Gabyumi", "Mii Chan", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
+                       "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
+                       "Yazeed", "Goosecan", "cancerkween", "Azote", "Kovannate3", "ÇatFood"
                        ]
 
 
@@ -73,17 +73,17 @@ def rank_to_value(tier_division_rank, lp):
     return final_ranked_value
 
 
-def get_tft_ranked_stats():
+async def get_tft_ranked_stats():
     rankings_list = []
     for summoner_name in summoner_names_list:
+        await asyncio.sleep(0.5)
         # Gets account information
         logging.info(f"Making request to Riot API for summoner: {summoner_name}")
         summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
-
+        await asyncio.sleep(0.5)
         # Gets TFT rankedStats using summoner's ID
         logging.info(f"Making request to Riot API for ranked stats of summoner: {summoner_name}")
         rankedStats = tft_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
-
         # Find the object with the "queueType" value of "RANKED_TFT"
         rankedStats = next((stats for stats in rankedStats if stats["queueType"] == "RANKED_TFT"), None)
 
@@ -155,7 +155,8 @@ def get_discord_username(summoner_name):
                    "Mrs Mighty Bacon": "<@251140411043610625>", "cpt stryder": "<@148338461433135104>",
                    "Yazeed": "<@495380694525280276>", "Kenpachi": "<@263107658762944512>",
                    "Goosecan": "<@221019724505546752>", "cancerkween": "<@999785244045615224>",
-                   "azote": "<@80372982337241088>", "Kovannate3": "<@194615471226617865>"}
+                   "azote": "<@80372982337241088>", "Kovannate3": "<@194615471226617865>",
+                   "ÇatFood": "160067484559474688"}
     return discord_ids[summoner_name]
 
 
@@ -232,20 +233,6 @@ async def balance(ctx, summoner_names):
     await ctx.send(f'Team 2: {", ".join(team2)}')
 
 
-# TODO
-def get_match_ids_history():
-    match_history_ids = []
-    for summoner_name in summoner_names_list:
-        # Gets account information
-        summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
-        # Gets last 2 TFT games ids from match history using summoner's PUUID
-        last_2_games_ids = tft_watcher.match.by_puuid(region=region, puuid=summoner["puuid"], count=2)
-
-
-def check_match_history_streak():
-    return "test"
-
-
 async def update_leaderboard():
     previous_rankings = []
     # channel = client.get_channel(1118758206840262686) TESTING SERVER
@@ -253,7 +240,7 @@ async def update_leaderboard():
     tft_leaderboard_channel = client.get_channel(1118278946048454726)
     while True:
         print("collecting ranked stats...")
-        rankings_list = get_tft_ranked_stats()
+        rankings_list = await get_tft_ranked_stats()
 
         # Compare the top 4 summoners in the previous rankings with the top 3 summoners in the new rankings
         for i in range(4):
@@ -343,15 +330,57 @@ async def update_leaderboard():
             update_leaderboard.last_message = await tft_leaderboard_channel.send(
                 file=discord.File(output, filename="leaderboard.png"))
 
-        # TODO Compare previous match history
-        # Get Match History
-        #     match_history_ids = get_match_ids_history
-        #     check_match_history_streak()
-        #     previous_match_history_ids = match_history_ids
+        print("waiting 5 minutes before repeating...")
+        # Wait for 5 minutes before updating the leaderboard again
+        await asyncio.sleep(300)
 
-        print("waiting 2 minutes before repeating...")
-        # Wait for 2 minutes before updating the leaderboard again
-        await asyncio.sleep(120)
+
+async def get_match_history(previous_match_history_ids):
+    match_history_ids = []
+    general_channel = client.get_channel(846551161388662789)
+    for summoner_name in summoner_names_list:
+        # Gets account information
+        summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
+        # Gets last 2 TFT games ids from match history using summoner's PUUID
+        last_2_games_ids = tft_watcher.match.by_puuid(region=region, puuid=summoner["puuid"], count=2)
+        match_history_ids.append(last_2_games_ids)
+
+        # Check if any ids in last_2_games_ids are present in previous_match_history_ids
+        common_ids = set(last_2_games_ids).intersection(previous_match_history_ids)
+        if not common_ids:
+            match_1 = tft_watcher.match.by_id(last_2_games_ids[0])
+            match_2 = tft_watcher.match.by_id(last_2_games_ids[1])
+            placement1, placement2 = ''
+            # Find the player placements in the match_1 object
+            for participant in match_1["info"]["participants"]:
+                if participant["puuid"] == summoner["puuid"]:
+                    placement1 = participant["placement"]
+                    break
+
+            # Find the player placements in the match_2 object
+            for participant in match_1["info"]["participants"]:
+                if participant["puuid"] == summoner["puuid"]:
+                    placement2 = participant["placement"]
+                    break
+
+            if placement1 == 1 and placement2 == 1:
+                pogo_emote = "<:PogO:949833186689568768>"
+                await general_channel.send(f"🏆 ATTENTION! {get_discord_username(summoner_name)} got two 1st in a row! {pogo_emote} 🏆")
+            if placement1 == 8 and placement2 == 8:
+                aycaramba_emote = "<:aycaramba:960051307752849448>"
+                await general_channel.send(f"📉 ATTENTION! {get_discord_username(summoner_name)} got two 8th in a row!  {aycaramba_emote} 📉")
+
+    return match_history_ids
+
+
+async def check_match_history_streak():
+    previous_match_history_ids = []
+    while True:
+        match_history_ids = get_match_history(previous_match_history_ids)
+        # Save current match history ids
+        previous_match_history_ids = match_history_ids
+        # Wait for 5 minutes before updating the leaderboard again
+        await asyncio.sleep(600)
 
 
 # =====================
@@ -363,6 +392,7 @@ async def on_ready():
     await client.tree.sync()
     print("Success: PogO bot is connected to Discord".format(client))
     client.loop.create_task(update_leaderboard())
+    client.loop.create_task(check_match_history_streak())
 
 
 @client.hybrid_command()
@@ -386,7 +416,4 @@ async def on_message(message):
     # if message.content.startswith('test'):
     #    await message.channel.send('test')
 
-
-# To be replaced with Token variable when deployed
-# client.run(os.getenv('TOKEN'))
 client.run(client_id)

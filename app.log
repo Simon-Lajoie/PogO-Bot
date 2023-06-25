@@ -2,7 +2,7 @@ discord.client - DEBUG - on_ready has successfully been registered as an event
 discord.client - DEBUG - on_message has successfully been registered as an event
 asyncio - DEBUG - Using proactor: IocpProactor
 discord.client - INFO - logging in using static token
-discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: 79b5f19e57ed636c051164d61d4e37a1).
+discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: 562ecaddf6ed3305f3b106b3185912d7).
 root - DEBUG - on_ready function called
 root - INFO - Making request to Riot API for summoner: Sir Mighty Bacon
 urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): na1.api.riotgames.com:443
@@ -117,3 +117,911 @@ root - INFO - Making request to Riot API for summoner: Kovannate3
 urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Kovannate3 HTTP/1.1" 200 None
 root - INFO - Making request to Riot API for ranked stats of summoner: Kovannate3
 urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/D5aIJYFmfCrXJbmm3U6yGBVOx1g6kZL4l5MQoQdbmVVgmtPwfjApZ-xNaA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/%C3%87atFood HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/6E_MKLcjrxZXf-xZ_JumEpHb2qY6vKs5di52SQyCQPIKBjg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - Resetting dropped connection: na1.api.riotgames.com
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sir%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txqQw6Pxo9o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Settupss HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/w-THN6OPeTdgL2JauMBPkvYaUYgD8WiwiX39mc3Yk4Dcs1k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Classiq HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/FQtC6bnuIM6JzqQGPswTwgoSvEZEa0WucLjaChTRdrKdbAQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Salsa%20King HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sehnbon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/QHuy9eL2GdDcu3erWravRY1rDshpvfMM6EtjeNnYI7r-YIw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Wyatt1 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gourish HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/9zX1sJAd7RciO6B7GwQODzAvBaQO634peXMAUtOINuX2y_k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gabyumi HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/8nLXCqx3oDKEJ4pAceeQSr3L0uUAdY4rdTJgXKHh8OyRzoc HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mii%20Chan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/1a-PuFsiNRx_b4CrVJzrt4kdmmWZGFCH0AdvpEeKUWcVMH8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/meyst HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/dasfJoEy9c_DNWqG8Y30RzK6Fgm-hdE_6dcx7XzL3MzA-Lw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Limited HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/OkZo1rN5o0DDWK5LGwgXDT4k5fd2FHhCRcPv69LulAEqirk HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Z3SIeeper HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/u78gFAF4MJ2J4brtythuTE-uPpYEaFNCRK5hbXDLOOjf_3Ck HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/BlackDrag HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/cmxCpBLbYX48necTpKLBiTn5IM1J0AYWHKiCAC5OcyuG6_o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Flames HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/APXt68Ogg5-pMLP5vdoq1hwpn-wl4sFxJl6GJg4356U3Vbs HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/silvah%20bee HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/oUBkj0tZr-5IDuqudJruJpZ_O2hiDdYLahwJI8Z2A5ey5yg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Tiny%20Cena HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/UBLAyVJLtvI0DvNJZc5Ln_ShUKt_DpPJijJNgewxRLTP4Mg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/A%C3%A0r%C3%B3n HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hR0VrK_dmuN1_CbI9ea576MSKDKoQfH9_VEd_4iBCjEogLU HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/5billon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/C4Ewpnp_HCLtxYT3TXwR-bcQQzIu63dODg7Zc_B298hkm9U HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Nappy HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/4ZG-cOVycckEnl86R8h1h0wl0P9c4ZMkdFBJL9cY_-pm55Y HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/KingNeptun3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/fPMH_-GawqeVv22Kr5PSAd582K3zRd57C_5m0QZR4Yoy7dw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mrs%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/wMMQdqPaS1ZMobR8SQHcwjbQyB1GpFeg4PoReTKU8HiPpG8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cpt%20stryder HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/CS5p6zEnufRFlSTe0fF9pQeW_meyyZJmcGN8-ZvmLcQo9LQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Yazeed HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/sOlL_O3f4qF8a54KGkB1GK1DpRKsfbDesrGmMKj5G38ElBE HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Goosecan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/e7Iu-5NCQ73RMxGsxoYeg6zpzI7tPHy_00vGyp44RCBG2uA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cancerkween HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/zAtWP0dciMVlK5XHahuXW3KDsmGjq0PcJBL3LY-B-3N1Aik HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Azote HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hjyAMX0av2nWPtjMEd3GyyrAeWAx6x-E0iBWiXXVMSkaAGw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Kovannate3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/D5aIJYFmfCrXJbmm3U6yGBVOx1g6kZL4l5MQoQdbmVVgmtPwfjApZ-xNaA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/%C3%87atFood HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/6E_MKLcjrxZXf-xZ_JumEpHb2qY6vKs5di52SQyCQPIKBjg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - Resetting dropped connection: na1.api.riotgames.com
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sir%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txqQw6Pxo9o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Settupss HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/w-THN6OPeTdgL2JauMBPkvYaUYgD8WiwiX39mc3Yk4Dcs1k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Classiq HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/FQtC6bnuIM6JzqQGPswTwgoSvEZEa0WucLjaChTRdrKdbAQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Salsa%20King HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sehnbon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/QHuy9eL2GdDcu3erWravRY1rDshpvfMM6EtjeNnYI7r-YIw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Wyatt1 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gourish HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/9zX1sJAd7RciO6B7GwQODzAvBaQO634peXMAUtOINuX2y_k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gabyumi HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/8nLXCqx3oDKEJ4pAceeQSr3L0uUAdY4rdTJgXKHh8OyRzoc HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mii%20Chan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/1a-PuFsiNRx_b4CrVJzrt4kdmmWZGFCH0AdvpEeKUWcVMH8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/meyst HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/dasfJoEy9c_DNWqG8Y30RzK6Fgm-hdE_6dcx7XzL3MzA-Lw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Limited HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/OkZo1rN5o0DDWK5LGwgXDT4k5fd2FHhCRcPv69LulAEqirk HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Z3SIeeper HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/u78gFAF4MJ2J4brtythuTE-uPpYEaFNCRK5hbXDLOOjf_3Ck HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/BlackDrag HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/cmxCpBLbYX48necTpKLBiTn5IM1J0AYWHKiCAC5OcyuG6_o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Flames HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/APXt68Ogg5-pMLP5vdoq1hwpn-wl4sFxJl6GJg4356U3Vbs HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/silvah%20bee HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/oUBkj0tZr-5IDuqudJruJpZ_O2hiDdYLahwJI8Z2A5ey5yg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Tiny%20Cena HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/UBLAyVJLtvI0DvNJZc5Ln_ShUKt_DpPJijJNgewxRLTP4Mg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/A%C3%A0r%C3%B3n HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hR0VrK_dmuN1_CbI9ea576MSKDKoQfH9_VEd_4iBCjEogLU HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/5billon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/C4Ewpnp_HCLtxYT3TXwR-bcQQzIu63dODg7Zc_B298hkm9U HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Nappy HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/4ZG-cOVycckEnl86R8h1h0wl0P9c4ZMkdFBJL9cY_-pm55Y HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/KingNeptun3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/fPMH_-GawqeVv22Kr5PSAd582K3zRd57C_5m0QZR4Yoy7dw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mrs%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/wMMQdqPaS1ZMobR8SQHcwjbQyB1GpFeg4PoReTKU8HiPpG8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cpt%20stryder HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/CS5p6zEnufRFlSTe0fF9pQeW_meyyZJmcGN8-ZvmLcQo9LQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Yazeed HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/sOlL_O3f4qF8a54KGkB1GK1DpRKsfbDesrGmMKj5G38ElBE HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Goosecan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/e7Iu-5NCQ73RMxGsxoYeg6zpzI7tPHy_00vGyp44RCBG2uA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cancerkween HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/zAtWP0dciMVlK5XHahuXW3KDsmGjq0PcJBL3LY-B-3N1Aik HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Azote HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hjyAMX0av2nWPtjMEd3GyyrAeWAx6x-E0iBWiXXVMSkaAGw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Kovannate3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/D5aIJYFmfCrXJbmm3U6yGBVOx1g6kZL4l5MQoQdbmVVgmtPwfjApZ-xNaA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/%C3%87atFood HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/6E_MKLcjrxZXf-xZ_JumEpHb2qY6vKs5di52SQyCQPIKBjg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - Resetting dropped connection: na1.api.riotgames.com
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sir%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txqQw6Pxo9o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Settupss HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/w-THN6OPeTdgL2JauMBPkvYaUYgD8WiwiX39mc3Yk4Dcs1k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Classiq HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/FQtC6bnuIM6JzqQGPswTwgoSvEZEa0WucLjaChTRdrKdbAQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Salsa%20King HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sehnbon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/QHuy9eL2GdDcu3erWravRY1rDshpvfMM6EtjeNnYI7r-YIw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Wyatt1 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gourish HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/9zX1sJAd7RciO6B7GwQODzAvBaQO634peXMAUtOINuX2y_k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gabyumi HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/8nLXCqx3oDKEJ4pAceeQSr3L0uUAdY4rdTJgXKHh8OyRzoc HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mii%20Chan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/1a-PuFsiNRx_b4CrVJzrt4kdmmWZGFCH0AdvpEeKUWcVMH8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/meyst HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/dasfJoEy9c_DNWqG8Y30RzK6Fgm-hdE_6dcx7XzL3MzA-Lw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Limited HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/OkZo1rN5o0DDWK5LGwgXDT4k5fd2FHhCRcPv69LulAEqirk HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Z3SIeeper HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/u78gFAF4MJ2J4brtythuTE-uPpYEaFNCRK5hbXDLOOjf_3Ck HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/BlackDrag HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/cmxCpBLbYX48necTpKLBiTn5IM1J0AYWHKiCAC5OcyuG6_o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Flames HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/APXt68Ogg5-pMLP5vdoq1hwpn-wl4sFxJl6GJg4356U3Vbs HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/silvah%20bee HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/oUBkj0tZr-5IDuqudJruJpZ_O2hiDdYLahwJI8Z2A5ey5yg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Tiny%20Cena HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/UBLAyVJLtvI0DvNJZc5Ln_ShUKt_DpPJijJNgewxRLTP4Mg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/A%C3%A0r%C3%B3n HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hR0VrK_dmuN1_CbI9ea576MSKDKoQfH9_VEd_4iBCjEogLU HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/5billon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/C4Ewpnp_HCLtxYT3TXwR-bcQQzIu63dODg7Zc_B298hkm9U HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Nappy HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/4ZG-cOVycckEnl86R8h1h0wl0P9c4ZMkdFBJL9cY_-pm55Y HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/KingNeptun3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/fPMH_-GawqeVv22Kr5PSAd582K3zRd57C_5m0QZR4Yoy7dw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mrs%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/wMMQdqPaS1ZMobR8SQHcwjbQyB1GpFeg4PoReTKU8HiPpG8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cpt%20stryder HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/CS5p6zEnufRFlSTe0fF9pQeW_meyyZJmcGN8-ZvmLcQo9LQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Yazeed HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/sOlL_O3f4qF8a54KGkB1GK1DpRKsfbDesrGmMKj5G38ElBE HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Goosecan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/e7Iu-5NCQ73RMxGsxoYeg6zpzI7tPHy_00vGyp44RCBG2uA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cancerkween HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/zAtWP0dciMVlK5XHahuXW3KDsmGjq0PcJBL3LY-B-3N1Aik HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Azote HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hjyAMX0av2nWPtjMEd3GyyrAeWAx6x-E0iBWiXXVMSkaAGw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Kovannate3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/D5aIJYFmfCrXJbmm3U6yGBVOx1g6kZL4l5MQoQdbmVVgmtPwfjApZ-xNaA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/%C3%87atFood HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/6E_MKLcjrxZXf-xZ_JumEpHb2qY6vKs5di52SQyCQPIKBjg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - Resetting dropped connection: na1.api.riotgames.com
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sir%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txqQw6Pxo9o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Settupss HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/w-THN6OPeTdgL2JauMBPkvYaUYgD8WiwiX39mc3Yk4Dcs1k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Classiq HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/FQtC6bnuIM6JzqQGPswTwgoSvEZEa0WucLjaChTRdrKdbAQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Salsa%20King HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sehnbon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/QHuy9eL2GdDcu3erWravRY1rDshpvfMM6EtjeNnYI7r-YIw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Wyatt1 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gourish HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/9zX1sJAd7RciO6B7GwQODzAvBaQO634peXMAUtOINuX2y_k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gabyumi HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/8nLXCqx3oDKEJ4pAceeQSr3L0uUAdY4rdTJgXKHh8OyRzoc HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mii%20Chan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/1a-PuFsiNRx_b4CrVJzrt4kdmmWZGFCH0AdvpEeKUWcVMH8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/meyst HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/dasfJoEy9c_DNWqG8Y30RzK6Fgm-hdE_6dcx7XzL3MzA-Lw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Limited HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/OkZo1rN5o0DDWK5LGwgXDT4k5fd2FHhCRcPv69LulAEqirk HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Z3SIeeper HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/u78gFAF4MJ2J4brtythuTE-uPpYEaFNCRK5hbXDLOOjf_3Ck HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/BlackDrag HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/cmxCpBLbYX48necTpKLBiTn5IM1J0AYWHKiCAC5OcyuG6_o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Flames HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/APXt68Ogg5-pMLP5vdoq1hwpn-wl4sFxJl6GJg4356U3Vbs HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/silvah%20bee HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/oUBkj0tZr-5IDuqudJruJpZ_O2hiDdYLahwJI8Z2A5ey5yg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Tiny%20Cena HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/UBLAyVJLtvI0DvNJZc5Ln_ShUKt_DpPJijJNgewxRLTP4Mg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/A%C3%A0r%C3%B3n HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hR0VrK_dmuN1_CbI9ea576MSKDKoQfH9_VEd_4iBCjEogLU HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/5billon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/C4Ewpnp_HCLtxYT3TXwR-bcQQzIu63dODg7Zc_B298hkm9U HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Nappy HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/4ZG-cOVycckEnl86R8h1h0wl0P9c4ZMkdFBJL9cY_-pm55Y HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/KingNeptun3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/fPMH_-GawqeVv22Kr5PSAd582K3zRd57C_5m0QZR4Yoy7dw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mrs%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/wMMQdqPaS1ZMobR8SQHcwjbQyB1GpFeg4PoReTKU8HiPpG8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cpt%20stryder HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/CS5p6zEnufRFlSTe0fF9pQeW_meyyZJmcGN8-ZvmLcQo9LQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Yazeed HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/sOlL_O3f4qF8a54KGkB1GK1DpRKsfbDesrGmMKj5G38ElBE HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Goosecan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/e7Iu-5NCQ73RMxGsxoYeg6zpzI7tPHy_00vGyp44RCBG2uA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cancerkween HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/zAtWP0dciMVlK5XHahuXW3KDsmGjq0PcJBL3LY-B-3N1Aik HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Azote HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hjyAMX0av2nWPtjMEd3GyyrAeWAx6x-E0iBWiXXVMSkaAGw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Kovannate3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/D5aIJYFmfCrXJbmm3U6yGBVOx1g6kZL4l5MQoQdbmVVgmtPwfjApZ-xNaA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/%C3%87atFood HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/6E_MKLcjrxZXf-xZ_JumEpHb2qY6vKs5di52SQyCQPIKBjg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - Resetting dropped connection: na1.api.riotgames.com
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sir%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txqQw6Pxo9o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Settupss HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/w-THN6OPeTdgL2JauMBPkvYaUYgD8WiwiX39mc3Yk4Dcs1k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Classiq HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/FQtC6bnuIM6JzqQGPswTwgoSvEZEa0WucLjaChTRdrKdbAQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Salsa%20King HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sehnbon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/QHuy9eL2GdDcu3erWravRY1rDshpvfMM6EtjeNnYI7r-YIw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Wyatt1 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gourish HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/9zX1sJAd7RciO6B7GwQODzAvBaQO634peXMAUtOINuX2y_k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gabyumi HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/8nLXCqx3oDKEJ4pAceeQSr3L0uUAdY4rdTJgXKHh8OyRzoc HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mii%20Chan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/1a-PuFsiNRx_b4CrVJzrt4kdmmWZGFCH0AdvpEeKUWcVMH8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/meyst HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/dasfJoEy9c_DNWqG8Y30RzK6Fgm-hdE_6dcx7XzL3MzA-Lw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Limited HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/OkZo1rN5o0DDWK5LGwgXDT4k5fd2FHhCRcPv69LulAEqirk HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Z3SIeeper HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/u78gFAF4MJ2J4brtythuTE-uPpYEaFNCRK5hbXDLOOjf_3Ck HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/BlackDrag HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/cmxCpBLbYX48necTpKLBiTn5IM1J0AYWHKiCAC5OcyuG6_o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Flames HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/APXt68Ogg5-pMLP5vdoq1hwpn-wl4sFxJl6GJg4356U3Vbs HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/silvah%20bee HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/oUBkj0tZr-5IDuqudJruJpZ_O2hiDdYLahwJI8Z2A5ey5yg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Tiny%20Cena HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/UBLAyVJLtvI0DvNJZc5Ln_ShUKt_DpPJijJNgewxRLTP4Mg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/A%C3%A0r%C3%B3n HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hR0VrK_dmuN1_CbI9ea576MSKDKoQfH9_VEd_4iBCjEogLU HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/5billon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/C4Ewpnp_HCLtxYT3TXwR-bcQQzIu63dODg7Zc_B298hkm9U HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Nappy HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/4ZG-cOVycckEnl86R8h1h0wl0P9c4ZMkdFBJL9cY_-pm55Y HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/KingNeptun3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/fPMH_-GawqeVv22Kr5PSAd582K3zRd57C_5m0QZR4Yoy7dw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mrs%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/wMMQdqPaS1ZMobR8SQHcwjbQyB1GpFeg4PoReTKU8HiPpG8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cpt%20stryder HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/CS5p6zEnufRFlSTe0fF9pQeW_meyyZJmcGN8-ZvmLcQo9LQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Yazeed HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/sOlL_O3f4qF8a54KGkB1GK1DpRKsfbDesrGmMKj5G38ElBE HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Goosecan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/e7Iu-5NCQ73RMxGsxoYeg6zpzI7tPHy_00vGyp44RCBG2uA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cancerkween HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/zAtWP0dciMVlK5XHahuXW3KDsmGjq0PcJBL3LY-B-3N1Aik HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Azote HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hjyAMX0av2nWPtjMEd3GyyrAeWAx6x-E0iBWiXXVMSkaAGw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Kovannate3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/D5aIJYFmfCrXJbmm3U6yGBVOx1g6kZL4l5MQoQdbmVVgmtPwfjApZ-xNaA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/%C3%87atFood HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/6E_MKLcjrxZXf-xZ_JumEpHb2qY6vKs5di52SQyCQPIKBjg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - Resetting dropped connection: na1.api.riotgames.com
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sir%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txqQw6Pxo9o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Settupss HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/w-THN6OPeTdgL2JauMBPkvYaUYgD8WiwiX39mc3Yk4Dcs1k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Classiq HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/FQtC6bnuIM6JzqQGPswTwgoSvEZEa0WucLjaChTRdrKdbAQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Salsa%20King HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sehnbon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/QHuy9eL2GdDcu3erWravRY1rDshpvfMM6EtjeNnYI7r-YIw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Wyatt1 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gourish HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/9zX1sJAd7RciO6B7GwQODzAvBaQO634peXMAUtOINuX2y_k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gabyumi HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/8nLXCqx3oDKEJ4pAceeQSr3L0uUAdY4rdTJgXKHh8OyRzoc HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mii%20Chan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/1a-PuFsiNRx_b4CrVJzrt4kdmmWZGFCH0AdvpEeKUWcVMH8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/meyst HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/dasfJoEy9c_DNWqG8Y30RzK6Fgm-hdE_6dcx7XzL3MzA-Lw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Limited HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/OkZo1rN5o0DDWK5LGwgXDT4k5fd2FHhCRcPv69LulAEqirk HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Z3SIeeper HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/u78gFAF4MJ2J4brtythuTE-uPpYEaFNCRK5hbXDLOOjf_3Ck HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/BlackDrag HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/cmxCpBLbYX48necTpKLBiTn5IM1J0AYWHKiCAC5OcyuG6_o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Flames HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/APXt68Ogg5-pMLP5vdoq1hwpn-wl4sFxJl6GJg4356U3Vbs HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/silvah%20bee HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/oUBkj0tZr-5IDuqudJruJpZ_O2hiDdYLahwJI8Z2A5ey5yg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Tiny%20Cena HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/UBLAyVJLtvI0DvNJZc5Ln_ShUKt_DpPJijJNgewxRLTP4Mg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/A%C3%A0r%C3%B3n HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hR0VrK_dmuN1_CbI9ea576MSKDKoQfH9_VEd_4iBCjEogLU HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/5billon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/C4Ewpnp_HCLtxYT3TXwR-bcQQzIu63dODg7Zc_B298hkm9U HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Nappy HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/4ZG-cOVycckEnl86R8h1h0wl0P9c4ZMkdFBJL9cY_-pm55Y HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/KingNeptun3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/fPMH_-GawqeVv22Kr5PSAd582K3zRd57C_5m0QZR4Yoy7dw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mrs%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/wMMQdqPaS1ZMobR8SQHcwjbQyB1GpFeg4PoReTKU8HiPpG8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cpt%20stryder HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/CS5p6zEnufRFlSTe0fF9pQeW_meyyZJmcGN8-ZvmLcQo9LQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Yazeed HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/sOlL_O3f4qF8a54KGkB1GK1DpRKsfbDesrGmMKj5G38ElBE HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Goosecan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/e7Iu-5NCQ73RMxGsxoYeg6zpzI7tPHy_00vGyp44RCBG2uA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cancerkween HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/zAtWP0dciMVlK5XHahuXW3KDsmGjq0PcJBL3LY-B-3N1Aik HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Azote HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hjyAMX0av2nWPtjMEd3GyyrAeWAx6x-E0iBWiXXVMSkaAGw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Kovannate3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/D5aIJYFmfCrXJbmm3U6yGBVOx1g6kZL4l5MQoQdbmVVgmtPwfjApZ-xNaA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/%C3%87atFood HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/6E_MKLcjrxZXf-xZ_JumEpHb2qY6vKs5di52SQyCQPIKBjg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - Resetting dropped connection: na1.api.riotgames.com
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sir%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txqQw6Pxo9o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Settupss HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/w-THN6OPeTdgL2JauMBPkvYaUYgD8WiwiX39mc3Yk4Dcs1k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Classiq HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/FQtC6bnuIM6JzqQGPswTwgoSvEZEa0WucLjaChTRdrKdbAQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Salsa%20King HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sehnbon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/QHuy9eL2GdDcu3erWravRY1rDshpvfMM6EtjeNnYI7r-YIw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Wyatt1 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gourish HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/9zX1sJAd7RciO6B7GwQODzAvBaQO634peXMAUtOINuX2y_k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gabyumi HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/8nLXCqx3oDKEJ4pAceeQSr3L0uUAdY4rdTJgXKHh8OyRzoc HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mii%20Chan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/1a-PuFsiNRx_b4CrVJzrt4kdmmWZGFCH0AdvpEeKUWcVMH8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/meyst HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/dasfJoEy9c_DNWqG8Y30RzK6Fgm-hdE_6dcx7XzL3MzA-Lw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Limited HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/OkZo1rN5o0DDWK5LGwgXDT4k5fd2FHhCRcPv69LulAEqirk HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Z3SIeeper HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/u78gFAF4MJ2J4brtythuTE-uPpYEaFNCRK5hbXDLOOjf_3Ck HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/BlackDrag HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/cmxCpBLbYX48necTpKLBiTn5IM1J0AYWHKiCAC5OcyuG6_o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Flames HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/APXt68Ogg5-pMLP5vdoq1hwpn-wl4sFxJl6GJg4356U3Vbs HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/silvah%20bee HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/oUBkj0tZr-5IDuqudJruJpZ_O2hiDdYLahwJI8Z2A5ey5yg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Tiny%20Cena HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/UBLAyVJLtvI0DvNJZc5Ln_ShUKt_DpPJijJNgewxRLTP4Mg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/A%C3%A0r%C3%B3n HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hR0VrK_dmuN1_CbI9ea576MSKDKoQfH9_VEd_4iBCjEogLU HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/5billon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/C4Ewpnp_HCLtxYT3TXwR-bcQQzIu63dODg7Zc_B298hkm9U HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Nappy HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/4ZG-cOVycckEnl86R8h1h0wl0P9c4ZMkdFBJL9cY_-pm55Y HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/KingNeptun3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/fPMH_-GawqeVv22Kr5PSAd582K3zRd57C_5m0QZR4Yoy7dw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mrs%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/wMMQdqPaS1ZMobR8SQHcwjbQyB1GpFeg4PoReTKU8HiPpG8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cpt%20stryder HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/CS5p6zEnufRFlSTe0fF9pQeW_meyyZJmcGN8-ZvmLcQo9LQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Yazeed HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/sOlL_O3f4qF8a54KGkB1GK1DpRKsfbDesrGmMKj5G38ElBE HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Goosecan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/e7Iu-5NCQ73RMxGsxoYeg6zpzI7tPHy_00vGyp44RCBG2uA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cancerkween HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/zAtWP0dciMVlK5XHahuXW3KDsmGjq0PcJBL3LY-B-3N1Aik HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Azote HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hjyAMX0av2nWPtjMEd3GyyrAeWAx6x-E0iBWiXXVMSkaAGw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Kovannate3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/D5aIJYFmfCrXJbmm3U6yGBVOx1g6kZL4l5MQoQdbmVVgmtPwfjApZ-xNaA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/%C3%87atFood HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/6E_MKLcjrxZXf-xZ_JumEpHb2qY6vKs5di52SQyCQPIKBjg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - Resetting dropped connection: na1.api.riotgames.com
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sir%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sir Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txqQw6Pxo9o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Settupss HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Settupss
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/w-THN6OPeTdgL2JauMBPkvYaUYgD8WiwiX39mc3Yk4Dcs1k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Classiq HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Classiq
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/FQtC6bnuIM6JzqQGPswTwgoSvEZEa0WucLjaChTRdrKdbAQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Salsa%20King HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Salsa King
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Sehnbon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Sehnbon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/QHuy9eL2GdDcu3erWravRY1rDshpvfMM6EtjeNnYI7r-YIw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Wyatt1 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Wyatt1
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gourish HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gourish
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/9zX1sJAd7RciO6B7GwQODzAvBaQO634peXMAUtOINuX2y_k HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Gabyumi HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Gabyumi
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/8nLXCqx3oDKEJ4pAceeQSr3L0uUAdY4rdTJgXKHh8OyRzoc HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mii%20Chan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mii Chan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/1a-PuFsiNRx_b4CrVJzrt4kdmmWZGFCH0AdvpEeKUWcVMH8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/meyst HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: meyst
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/dasfJoEy9c_DNWqG8Y30RzK6Fgm-hdE_6dcx7XzL3MzA-Lw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Limited HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Limited
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/OkZo1rN5o0DDWK5LGwgXDT4k5fd2FHhCRcPv69LulAEqirk HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Z3SIeeper HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Z3SIeeper
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/u78gFAF4MJ2J4brtythuTE-uPpYEaFNCRK5hbXDLOOjf_3Ck HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/BlackDrag HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: BlackDrag
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/cmxCpBLbYX48necTpKLBiTn5IM1J0AYWHKiCAC5OcyuG6_o HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Flames HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Flames
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/APXt68Ogg5-pMLP5vdoq1hwpn-wl4sFxJl6GJg4356U3Vbs HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/silvah%20bee HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: silvah bee
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/oUBkj0tZr-5IDuqudJruJpZ_O2hiDdYLahwJI8Z2A5ey5yg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Tiny%20Cena HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Tiny Cena
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/UBLAyVJLtvI0DvNJZc5Ln_ShUKt_DpPJijJNgewxRLTP4Mg HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/A%C3%A0r%C3%B3n HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Aàrón
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hR0VrK_dmuN1_CbI9ea576MSKDKoQfH9_VEd_4iBCjEogLU HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/5billon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: 5billon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/C4Ewpnp_HCLtxYT3TXwR-bcQQzIu63dODg7Zc_B298hkm9U HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Nappy HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Nappy
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/4ZG-cOVycckEnl86R8h1h0wl0P9c4ZMkdFBJL9cY_-pm55Y HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/KingNeptun3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: KingNeptun3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/fPMH_-GawqeVv22Kr5PSAd582K3zRd57C_5m0QZR4Yoy7dw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Mrs%20Mighty%20Bacon HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Mrs Mighty Bacon
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/wMMQdqPaS1ZMobR8SQHcwjbQyB1GpFeg4PoReTKU8HiPpG8 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cpt%20stryder HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cpt stryder
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/CS5p6zEnufRFlSTe0fF9pQeW_meyyZJmcGN8-ZvmLcQo9LQ HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Yazeed HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Yazeed
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/sOlL_O3f4qF8a54KGkB1GK1DpRKsfbDesrGmMKj5G38ElBE HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Goosecan HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Goosecan
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/e7Iu-5NCQ73RMxGsxoYeg6zpzI7tPHy_00vGyp44RCBG2uA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/cancerkween HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: cancerkween
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/zAtWP0dciMVlK5XHahuXW3KDsmGjq0PcJBL3LY-B-3N1Aik HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Azote HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Azote
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/hjyAMX0av2nWPtjMEd3GyyrAeWAx6x-E0iBWiXXVMSkaAGw HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/Kovannate3 HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: Kovannate3
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/D5aIJYFmfCrXJbmm3U6yGBVOx1g6kZL4l5MQoQdbmVVgmtPwfjApZ-xNaA HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/summoner/v1/summoners/by-name/%C3%87atFood HTTP/1.1" 200 None
+root - INFO - Making request to Riot API for ranked stats of summoner: ÇatFood
+urllib3.connectionpool - DEBUG - https://na1.api.riotgames.com:443 "GET /tft/league/v1/entries/by-summoner/6E_MKLcjrxZXf-xZ_JumEpHb2qY6vKs5di52SQyCQPIKBjg HTTP/1.1" 200 None
