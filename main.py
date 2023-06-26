@@ -294,10 +294,10 @@ async def update_leaderboard():
 
                 if len(summoner[0]) > 12:
                     # Load the font smaller size for summoner name
-                    font = ImageFont.truetype("BebasNeue-Regular.ttf", SMALL_FONT_SIZE)
+                    font = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", SMALL_FONT_SIZE)
                 else:
                     # Load the font normal size for summoner name
-                    font = ImageFont.truetype("BebasNeue-Regular.ttf", NORMAL_FONT_SIZE)
+                    font = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", NORMAL_FONT_SIZE)
                 # Draw summoner name
                 draw.text((x + 45, y + 235), summoner[0], fill="white", font=font)
 
@@ -318,7 +318,7 @@ async def update_leaderboard():
                 image.alpha_composite(tier_image, dest=(tier_image_x, tier_image_y))
 
                 # Load the font normal size for the tier & rank text
-                font = ImageFont.truetype("BebasNeue-Regular.ttf", NORMAL_FONT_SIZE)
+                font = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", NORMAL_FONT_SIZE)
                 # Draw tier & rank text
                 draw.text((x + 237, y + 235), f"{summoner[4]}", fill="white", font=font)
 
