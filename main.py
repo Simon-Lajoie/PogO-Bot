@@ -29,7 +29,7 @@ region = 'na1'
 summoner_names_list = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", "Sehnbon", "Wyatt1", "Gourish",
                        "Gabyumi", "Mii Chan", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
                        "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
-                       "Yazeed", "Goosecan", "cancerkween", "Azote", "Kovannate3", "ÇatFood"
+                       "Goosecan", "cancerkween", "Azote", "Kovannate3", "ÇatFood"#,"dokudami milk", "Yazeed"
                        ]
 
 
@@ -358,7 +358,7 @@ async def get_match_history(previous_match_history_ids):
                     break
 
             # Find the player placements in the match_2 object
-            for participant in match_1["info"]["participants"]:
+            for participant in match_2["info"]["participants"]:
                 if participant["puuid"] == summoner["puuid"]:
                     placement2 = participant["placement"]
                     break
