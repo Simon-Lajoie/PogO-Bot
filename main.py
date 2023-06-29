@@ -29,7 +29,7 @@ region = 'na1'
 summoner_names_list = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", "Sehnbon", "Wyatt1", "Gourish",
                        "Gabyumi", "Mii Chan", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
                        "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
-                       "Goosecan", "cancerkween", "Azote", "Kovannate3", "ÇatFood"#,"dokudami milk", "Yazeed"
+                       "Goosecan", "cancerkween", "Azote", "Kovannate3", "ÇatFood","Tkipp"#,"dokudami milk", "Yazeed"
                        ]
 
 
@@ -60,8 +60,8 @@ def calculate_tier_division_value(tier_division_rank):
         "DIAMOND II": 23,
         "DIAMOND I": 24,
         "MASTER I": 25,
-        "GRANDMASTER": 25,
-        "CHALLENGER": 25
+        "GRANDMASTER I": 25,
+        "CHALLENGER I": 25
     }
     rank_number = ranks[tier_division_rank]
     return rank_number
@@ -93,7 +93,11 @@ async def get_tft_ranked_stats():
             lp = rankedStats["leaguePoints"]
             tier_division = tier + " " + rank
             ranked_value = rank_to_value(tier_division, lp)
-            tier_division_lp = tier_division + " " + str(lp)
+            if tier == "MASTER" or tier == "GRANDMASTER" or tier == "CHALLENGER":
+                rank = ""
+                tier_division_lp = tier + " " + str(lp)
+            else:
+                tier_division_lp = tier + " " + rank + " " + str(lp)
             print(f" {summoner_name} : {ranked_value} : {tier} {rank} {lp} LP ")
         else:
             tier_division = "UNRANKED"
@@ -127,7 +131,11 @@ def get_lol_ranked_stats(names):
             lp = rankedStats["leaguePoints"]
             tier_division = tier + " " + rank
             ranked_value = rank_to_value(tier_division, lp)
-            tier_division_lp = tier_division + " " + str(lp)
+            if tier == "MASTER" or tier == "GRANDMASTER" or tier == "CHALLENGER":
+                rank = ""
+                tier_division_lp = tier + " " + str(lp)
+            else:
+                tier_division_lp = tier + " " + rank + " " + str(lp)
             # print(f" {summoner_name} : {ranked_value} : {tier} {rank} {lp} LP ")
         else:
             tier_division = "UNRANKED"
@@ -264,6 +272,7 @@ async def update_leaderboard():
                 pass
         # Set up some constants
         NORMAL_FONT_SIZE = 25
+        MEDIUM_FONT_SIZE = 23
         SMALL_FONT_SIZE = 21
         RANK_IMAGE_SIZE = (55, 55)
         POGO_IMAGE_SIZE = (40, 40)
@@ -311,7 +320,7 @@ async def update_leaderboard():
                 tier_image.thumbnail(image_size)
                 tier_image_x = x + 165
                 if summoner[3] == "UNRANKED" or summoner[3] == "PLATINUM" or summoner[3] == "DIAMOND" or summoner[
-                    3] == "Master" or summoner[3] == "Grandmaster" or summoner[3] == "Challenger":
+                    3] == "MASTER" or summoner[3] == "GRANDMASTER" or summoner[3] == "CHALLENGER":
                     tier_image_y = y + 225
                 else:
                     tier_image_y = y + 220
@@ -319,8 +328,13 @@ async def update_leaderboard():
 
                 # Load the font normal size for the tier & rank text
                 font = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", NORMAL_FONT_SIZE)
+                # Load the font small size for the tier GM+ & rank text
+                small_font = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", MEDIUM_FONT_SIZE)
                 # Draw tier & rank text
-                draw.text((x + 237, y + 235), f"{summoner[4]}", fill="white", font=font)
+                if summoner[3] == "GRANDMASTER" or summoner[3] == "CHALLENGER":
+                    draw.text((x + 237, y + 235), f"{summoner[4]}", fill="white", font=small_font)
+                else:
+                    draw.text((x + 237, y + 235), f"{summoner[4]}", fill="white", font=font)
 
         # Save the image to a file-like object in memory
         with io.BytesIO() as output:
@@ -350,7 +364,7 @@ async def get_match_history(previous_match_history_ids):
         if not common_ids:
             match_1 = tft_watcher.match.by_id(last_2_games_ids[0])
             match_2 = tft_watcher.match.by_id(last_2_games_ids[1])
-            placement1, placement2 = ''
+            placement1, placement2 = ""
             # Find the player placements in the match_1 object
             for participant in match_1["info"]["participants"]:
                 if participant["puuid"] == summoner["puuid"]:
@@ -412,7 +426,6 @@ async def on_message(message):
     if message.content == 'T PogO':
         await message.delete()
         await message.channel.send(file=discord.File("img/tpogo.png"))
-
     # if message.content.startswith('test'):
     #    await message.channel.send('test')
 
