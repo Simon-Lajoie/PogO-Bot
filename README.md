@@ -14,8 +14,14 @@ PogO Bot is a Discord bot mainly for Riot Games related content. It has several 
 ## Usage
 - Currently, PogO Bot is only available for use in a private Discord server community and is not open to other Discord servers.
 
-
 ## Commands
 - PogO: Replaces your message with a PogO emote.
 - T PogO: Replaces your message with a T PogO emote.
 - /balance_teams: Takes summoner names as input and returns 2 teams balanced based on each player’s Solo Q rank.
+
+## Technologies
+* Python
+* Libraries: Discord, RiotWatcher, Pillow
+
+## Author
+* Simon Lajoie
