@@ -8,7 +8,7 @@ PogO Bot is a Discord bot mainly for Riot Games related content. It has several 
 - **Auto Team Balancer for League of Legends**: The bot features an auto team balancer command for League of Legends. The balance_teams command takes summoner names as input and retrieves each player’s Solo Q ranked stats through API calls. The bot then creates 2 teams that offer the most balanced matchup.
 - **Custom Emotes**: PogO Bot has several typing commands that can replace certain words with custom emotes. For example, typing “PogO” will replace your message with a PogO emote.
 
-## Example of leaderboard picture generated and constantly updated by the Pogo Bot
+## Example of leaderboard picture periodically updated by PogO Bot
 ![image](https://github.com/Simon-Lajoie/PogO-Bot/assets/123536951/4bc85e0e-860a-47eb-93ef-81fe3edbcca7)
 
 ## Usage
