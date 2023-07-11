@@ -1,9 +1,12 @@
 import asyncio
 import io
+
+import aiohttp
 import discord
 import random
 
 import requests
+from discord.http import Route
 from riotwatcher import LolWatcher, ApiError, TftWatcher
 from PIL import Image, ImageDraw, ImageFont
 from discord.ext import commands
@@ -34,6 +37,8 @@ summoner_names_list = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", 
                        "Goosecan", "cancerkween", "Azote", "Kovannate3", "ÇatFood", "Tkipp", "Skrt Skrt Skaarl",
                        "NonMaisWallah"  # ,"dokudami milk", "Yazeed"
                        ]
+
+previous_match_history_ids = []
 
 
 def calculate_tier_division_value(tier_division_rank):
@@ -82,6 +87,7 @@ async def get_tft_ranked_stats():
         # Gets account information
         logging.info(f"Making request to Riot API for summoner: {summoner_name}")
         summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
+
         # Gets TFT rankedStats using summoner's ID
         logging.info(f"Making request to Riot API for ranked stats of summoner: {summoner_name}")
         rankedStats = tft_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
@@ -109,12 +115,16 @@ async def get_tft_ranked_stats():
             tier_division_lp = tier_division
         rankings_list.append((summoner_name, ranked_value, lp, tier, tier_division_lp))
 
-        if (i + 1) % 5 == 0:
-            response = requests.get(
-                "https://na1.api.riotgames.com/tft/league/v1/entries/by-summoner/cuPjNdhPu6N3dCfsZE5bYkSPGmvBEdKMv5KUIM7ToWd1A5E?api_key=" + tft_watcher_key)
-            rate_limit_remaining = response.headers['X-App-Rate-Limit-Count']
-            logging.info(f"Rate limit remaining: {rate_limit_remaining}")
-            print(f"Rate limit remaining: {rate_limit_remaining}")
+        # Used to check rate limit remaining since RiotWatcher doesn't have a method for it
+        # TODO: Could modify RiotWatcher library to add this functionality and save on API calls
+        if (i + 1) % 7 == 0:
+            async with aiohttp.ClientSession() as session:
+                response = await session.get(
+                    "https://na1.api.riotgames.com/tft/league/v1/entries/by-summoner/cuPjNdhPu6N3dCfsZE5bYkSPGmvBEdKMv5KUIM7ToWd1A5E?api_key=" + tft_watcher_key)
+                rate_limit_remaining = response.headers['X-App-Rate-Limit-Count']
+                logging.info(f"Rate limit remaining: {rate_limit_remaining}")
+                print(f"Rate limit remaining: {rate_limit_remaining}")
+
     rankings_list.sort(key=lambda x: x[1], reverse=True)
     return rankings_list
 
@@ -250,12 +260,17 @@ async def balance(ctx, summoner_names):
     await ctx.send(f'Team 2: {", ".join(team2)}')
 
 
-async def update_leaderboard():
+async def update_leaderboard(message):
+    logging.info("Starting update_leaderboard function...")
     previous_rankings = []
     # channel = client.get_channel(1118758206840262686) TESTING SERVER
     general_channel = client.get_channel(846551161388662789)
     tft_leaderboard_channel = client.get_channel(1118278946048454726)
-    #while True:
+
+    # Edit the content of the message object to display "refreshing..."
+    logging.info("Countdown timer: Refreshing leaderboard...")
+    await message.edit(content="Refreshing leaderboard...")
+
     print("collecting ranked stats...")
     rankings_list = await get_tft_ranked_stats()
 
@@ -353,9 +368,9 @@ async def update_leaderboard():
         update_leaderboard.last_message = await tft_leaderboard_channel.send(
             file=discord.File(output, filename="leaderboard.png"))
 
-           # print("waiting 5 minutes before repeating...")
-            # Wait for 5 minutes before updating the leaderboard again
-           # await asyncio.sleep(300)
+    # Start the countdown timer and pass the message object as a parameter
+    logging.info("Starting countdown timer...")
+    await countdown_timer(300, message)
 
 
 async def get_match_history(previous_match_history_ids):
@@ -372,18 +387,19 @@ async def get_match_history(previous_match_history_ids):
             if match["info"]["queue_id"] == 1100:
                 ranked_games.append(match)
         print(f"Ranked games ID: {ranked_games}")
-        match_history_ids.extend(last_3_games_ids)
         # Check if any ids in last_3_games_ids are present in previous_match_history_ids
-        common_ids = set(match_history_ids) == set(previous_match_history_ids)
+        common_ids = set(last_3_games_ids).intersection(previous_match_history_ids)
         logging.info(f"{summoner_name} common ids: {common_ids}")
         print(f"{summoner_name} common ids: {common_ids}")
         placements = []
+        game_ids = []
         if not common_ids:
             for game in ranked_games:
                 # Find the player placements in the every match
                 for participant in game["info"]["participants"]:
                     if participant["puuid"] == summoner["puuid"]:
                         placements.append(participant["placement"])
+                        game_ids.append(game["metadata"]["match_id"])
                         break
             logging.info(f"{summoner_name} placements: {placements}")
             print(f"{summoner_name} got the following placements: {placements}")
@@ -392,16 +408,21 @@ async def get_match_history(previous_match_history_ids):
                     pogo_emote = "<:PogO:949833186689568768>"
                     await general_channel.send(
                         f"🏆 ATTENTION! {get_discord_username(summoner_name)} got two 1st placements in a row! {pogo_emote} 🏆")
+                    # Add game ids to match_history_ids
+                    match_history_ids.extend(game_ids[i:i + 2])
                 if placements[i] == 8 and placements[i + 1] == 8:
                     aycaramba_emote = "<:aycaramba:960051307752849448>"
                     await general_channel.send(
                         f"📉 ATTENTION! {get_discord_username(summoner_name)} got two 8th placements in a row! {aycaramba_emote} 📉")
-
+                    # Add game ids to match_history_ids
+                    match_history_ids.extend(game_ids[i:i + 2])
+            else:
+                match_history_ids.extend(common_ids)
     return match_history_ids
 
 
 async def check_match_history_streak():
-    previous_match_history_ids = []
+    global previous_match_history_ids
     logging.info(f"Checking match history...")
     print(f"Checking match history...")
     match_history_ids = await get_match_history(previous_match_history_ids)
@@ -410,22 +431,90 @@ async def check_match_history_streak():
     print(f"previous match history ids: {previous_match_history_ids}")
 
 
+async def countdown_timer(time, message):
+    logging.info(f"Starting countdown timer with time={time} and message={message.content}")
+
+    # Calculate the number of minutes and seconds remaining
+    minutes, seconds = divmod(time, 60)
+
+    # Edit the content of the message object to display the time remaining
+    await message.edit(content=f"Next update in: {minutes}:{seconds:02d}")
+    while time > 0:
+        await asyncio.sleep(1)
+        time -= 1
+
+        # Calculate the number of minutes and seconds remaining
+        minutes, seconds = divmod(time, 60)
+
+        # Check if the content of the message object has been changed to "refreshing..."
+        if message.content == "Refreshing leaderboard...":
+            logging.info(f"Countdown timer stopped because message content changed to 'refreshing...'")
+            # Break out of the while loop to stop the countdown timer
+            break
+
+        # Edit the content of the message object to display the time remaining
+        await message.edit(content=f"Next update in: {minutes}:{seconds:02d}")
+
+        try:
+            # Make a request to the Discord API using a public method
+            channel = await message.guild.fetch_channel(message.channel.id)
+        except discord.HTTPException as e:
+            # Get the rate limit headers from the response
+            remaining = e.response.headers.get('X-RateLimit-Remaining')
+            reset_at = e.response.headers.get('X-RateLimit-Reset')
+            rate_limit = e.response.headers.get('X-RateLimit-Limit')
+
+            # Log the rate limit information
+            logging.info(f"Remaining requests: {remaining}")
+            logging.info(f"Rate limit resets at: {reset_at}")
+            logging.info(f"Rate limit (in seconds): {rate_limit}")
+
+        logging.info(f"Countdown timer finished with time={time} and message={message.content}")
+
+
+async def clear_channel(channel):
+    # Check if the bot has the necessary permissions to delete messages
+    if not channel.permissions_for(channel.guild.me).manage_messages:
+        print(f"I do not have permission to delete messages in {channel.name}")
+        return
+
+    # Delete all messages in the channel
+    await channel.purge(limit=5)
+
+
 async def update_tasks():
+    tft_leaderboard_channel = client.get_channel(1118278946048454726)
+    leaderboard_update_count = 0
+
+    # Send the initial message
+    message = await tft_leaderboard_channel.send("Starting TFT leaderboard...")
+
     while True:
-        # Call update_leaderboard every 5 minutes
-        client.loop.create_task(update_leaderboard())
-        await asyncio.sleep(300)
+        logging.info(f"update_tasks loop with message={message.content}")
+        # Call update_leaderboard every 5 minutes and pass the message object as a parameter
+        task = client.loop.create_task(update_leaderboard(message))
+
+        leaderboard_update_count += 1
+
+        # Reset the leaderboard_update_count variable after it reaches a certain value
+        if leaderboard_update_count >= 1000000:
+            leaderboard_update_count = 0
+
+        logging.info(f"Waiting for update_leaderboard task to complete...")
+        # Wait for the update_leaderboard task to complete
+        await task
+
+        # logging.info(f"Waiting for 5 minutes...")
+        # await asyncio.sleep(300)
 
         # Call check_match_history_streak every 10 minutes
-        client.loop.create_task(check_match_history_streak())
-        await asyncio.sleep(300)
+        # client.loop.create_task(check_match_history_streak())
 
-        client.loop.create_task(update_leaderboard())
-        await asyncio.sleep(300)
-
-        # Clear the contents of the app.log file
-        with open("app.log", "w") as log_file:
-            log_file.truncate()
+        # Clear the contents of the app.log file every 3 leaderboard updates
+        if leaderboard_update_count % 3 == 0:
+            with open("app.log", "w") as log_file:
+                log_file.write("")
+            print("app.log file cleared")
 
 
 # =====================
@@ -436,6 +525,9 @@ async def on_ready():
     logging.debug("on_ready function called")
     await client.tree.sync()
     print("Success: PogO bot is connected to Discord".format(client))
+    tft_leaderboard_channel = client.get_channel(1118278946048454726)
+    await clear_channel(tft_leaderboard_channel)
+    print("Success: PogO bot has cleared the TFT leaderboard channel")
     client.loop.create_task(update_tasks())
 
 
