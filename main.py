@@ -206,6 +206,7 @@ def get_random_message(old_summoner, new_summoner, position):
     }
     new_summoner = get_discord_username(new_summoner)
     old_summoner = get_discord_username(old_summoner)
+    gourish_summoner = get_discord_username("Gourish")
     messages = [
         f"{new_summoner} just pulled off a spectacular heist {emoji_codes['business']}, ousting {old_summoner} from position {position} like a sneaky mastermind {emoji_codes['cathiago']}!",
         f"Yeah.. {emoji_codes['sadge']} I'm sorry to announce {new_summoner} has dethroned {old_summoner} from position {position}. Don't ask me how. {emoji_codes['pepeshrug']}. Surely this is deserved. {emoji_codes['scam']}",
@@ -229,8 +230,13 @@ def get_random_message(old_summoner, new_summoner, position):
         f"{emoji_codes['pogo']} {new_summoner} has just taken {position} from {old_summoner}. {emoji_codes['business']} In a cruel display of humiliation, {new_summoner} has left a message for us: This game is just all luck no skills, unlucky buddy {emoji_codes['scam']}",
         f"{emoji_codes['pogo']} OOF! {old_summoner} just got destroyed by {new_summoner}, who took {position} from them. {emoji_codes['aycaramba']} Mortdog sends his regards, unlucky buddy {emoji_codes['pantsgrab']}",
         f"{emoji_codes['pogo']} HUH {emoji_codes['huh']} {old_summoner} just got outplayed by {new_summoner}, who snatched {position} from them. Maybe you just didn’t hit this game, surely you will hit next game {emoji_codes['scam']} 📉",
-        f"{emoji_codes['pogo']} What a tragedy.. Surely. {emoji_codes['pogo']} {old_summoner} just got annihilated by {new_summoner}, who claimed {position} from them. Who balances this game? {emoji_codes['pepeshrug']} Unlucky buddy. Take this L {emoji_codes['sadge']}"
+        f"{emoji_codes['pogo']} What a tragedy.. Surely. {emoji_codes['pogo']} {old_summoner} just got annihilated by {new_summoner}, who claimed {position} from them. Who balances this game? {emoji_codes['pepeshrug']} Unlucky buddy. Take this L {emoji_codes['sadge']}",
+        f"{emoji_codes['pogo']} {old_summoner} just got humiliated by {new_summoner}, who kicked them from {position}. RIP BOZO. 🤡 You won’t be missed {emoji_codes['deadge']}"
     ]
+    gourish_messages = ["demoted", "banished", "relegated", "exiled", "downgraded", "dismissed","degraded", "expelled", "ousted", "lowered", "removed", "cast out", "dethroned", "ejected", "displaced", "deposed"]
+    if old_summoner == gourish_summoner:
+        gourish_random = random.choice(gourish_messages)
+        return f"{emoji_codes['pogo']} {new_summoner} has just {gourish_random} {old_summoner} to their rightful place… GOURISH LOW! {emoji_codes['aycaramba']}"
     return random.choice(messages)
 
 
