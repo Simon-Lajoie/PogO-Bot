@@ -215,10 +215,21 @@ def get_random_message(old_summoner, new_summoner, position):
         f"{emoji_codes['pogo']} {new_summoner} has decisively toppled {old_summoner} from position {position}, leaving no doubt of their supremacy. {emoji_codes['cathiago']}",
         f"NAHHHH THIS {new_summoner} PLAYER MIGHT JUST THE THE BEST PLAYER IN THE WORLD.{emoji_codes['dongerj']} HE LITERALLY JUST TOOK POSITION {position} FROM {old_summoner} JUST LIKE THAT ? {emoji_codes['huh']} IT'S WAY TOO FREE. {new_summoner} IS JUST BUILT DIFFERENT! {emoji_codes['pepestrong']}",
         f"{new_summoner} --> {position} {emoji_codes['pogo']} {old_summoner} --> {emoji_codes['deadge']}",
-        f"{emoji_codes['pogo']} BREAKING NEWS! BREAKING NEWS! {emoji_codes['pogo']} A major upset has just occurred in the TFT scene. {new_summoner} has just dethroned {old_summoner} from position {position}. It’s a shocking turn of events, a stunning upset, a colossal blunder. {emoji_codes['aycaramba']} How did this happen? How did this travesty occur? How did this abomination come to be? {emoji_codes['pepeshrug']} We may never know. All we know is that {old_summoner} has just lost their dignity, their honor, their pride. {emoji_codes['sadge']}",
+        f"{emoji_codes['pogo']} BREAKING NEWS! BREAKING NEWS! {emoji_codes['pogo']} A major upset has just occurred in the TFT scene. {new_summoner} has just dethroned {old_summoner} from position {position}. It's a shocking turn of events, a stunning upset, a colossal blunder. {emoji_codes['aycaramba']} How did this happen? How did this travesty occur? How did this abomination come to be? {emoji_codes['pepeshrug']} We may never know. All we know is that {old_summoner} has just lost their dignity, their honor, their pride. {emoji_codes['sadge']}",
         f"{emoji_codes['pogo']} Hold on as {new_summoner} shakes things up and steals the glory from {old_summoner} at position {position}. {old_summoner} has just been humiliated, disgraced, destroyed. {emoji_codes['huh']} They have been reduced to nothing. {emoji_codes['huh']} They are now irrelevant. {emoji_codes['huh']} They are now forgotten. {emoji_codes['huh']} They are now dead to us. {emoji_codes['deadge']} All hail our new TFT overlord! {new_summoner}",
         f"{emoji_codes['pogo']} Unbelievable chaos has erupted in the TFT realm! Brace yourselves as {new_summoner} shatters the status quo and snatches the crown from {old_summoner} at position {position}. It's an absolute whirlwind of confusion, a mind-bending plot twist, an inexplicable mishap. The world is left scratching its head, questioning the very fabric of reality. {emoji_codes['pogo']} How did the stars align for this calamity? {emoji_codes['huh']} How did the TFT gods allow such an unfathomable catastrophe? {emoji_codes['aycaramba']} How did this confounding enigma come to pass? {emoji_codes['scam']}",
-        f"{emoji_codes['pogo']} Attention, esteemed individuals, assemble and be captivated for a momentous announcement! {emoji_codes['pogo']} We stand in awe as {new_summoner} emerges as the undisputed victor, toppling {old_summoner} from their exalted position {position}. {emoji_codes['dongerj']} The path to this remarkable achievement remains shrouded in mystery, with scant details divulged on the hows and whys. {emoji_codes['pepeshrug']} The precise methods and strategies employed may forever elude our understanding, leaving us in awe of the enigma that surrounds this monumental accomplishment. {emoji_codes['yeahboi']} Such is the nature of this astounding feat, a tale woven with threads of intrigue and bewilderment, forever etched in the annals of TFT history. {emoji_codes['business']}"
+        f"{emoji_codes['pogo']} Attention, esteemed individuals, assemble and be captivated for a momentous announcement! {emoji_codes['pogo']} We stand in awe as {new_summoner} emerges as the undisputed victor, toppling {old_summoner} from their exalted position {position}. {emoji_codes['dongerj']} The path to this remarkable achievement remains shrouded in mystery, with scant details divulged on the hows and whys. {emoji_codes['pepeshrug']} The precise methods and strategies employed may forever elude our understanding, leaving us in awe of the enigma that surrounds this monumental accomplishment. {emoji_codes['yeahboi']} Such is the nature of this astounding feat, a tale woven with threads of intrigue and bewilderment, forever etched in the annals of TFT history. {emoji_codes['business']}",
+        f"Well, well, well... Look who's the new ruler of the TFT kingdom!👑 {new_summoner} has cunningly snatched the crown from {old_summoner} at position {position}. It's a classic case of 'outplayed and outwitted.' {emoji_codes['scam']} Bow down to the new TFT mastermind, for they have left their opponents scratching their heads in utter disbelief. {emoji_codes['pogo']}",
+        f"{emoji_codes['pogo']} Ladies and gentlemen, gather 'round! Witness the rise of {new_summoner} as they conquer position {position} and send {old_summoner} packing! {emoji_codes['pantsgrab']} It's like watching a legendary underdog story unfold before our eyes. {emoji_codes['business']} Let's give a standing ovation to {new_summoner} for defying the odds and proving that dreams do come true in the realm of TFT!",
+        f"{emoji_codes['pogo']} Hey {old_summoner}, guess who just took your spot at position {position}? {emoji_codes['scam']} Oh right, it's {new_summoner}! {emoji_codes['deadge']} They strategically outplayed you, leaving you in a state of utter confusion and embarrassment. {emoji_codes['aycaramba']} Looks like someone could use a lesson or two... Get ready to learn TFT buddy. {emoji_codes['pogo']}",
+        f"{emoji_codes['pogo']} Brace yourselves, TFT enthusiasts, for the rise of {new_summoner}! They've outshined {old_summoner} at position {position} like a radiant sun emerging from the clouds. {emoji_codes['peepoflor']} Meanwhile, {old_summoner} seems to be lost in the shadows of defeat. {emoji_codes['sadge']} Better luck next time, {old_summoner}, you'll need it! {emoji_codes['pogo']}",
+        f"{emoji_codes['pogo']} Brace yourselves, ladies and gentlemen, because we have a new champion in town! {emoji_codes['pepestrong']} {new_summoner} has just obliterated {old_summoner} from position {position}, leaving no room for doubt. It's a devastating blow, a crushing defeat, a humiliating loss. {emoji_codes['deadge']} How did this happen? How did this disaster strike? How did this nightmare unfold? {emoji_codes['scam']} We may never know the full story, but we can all witness the aftermath. {emoji_codes['pantsgrab']}",
+        f"{emoji_codes['pogo']} Hold on to your seats, folks, because we have a wild ride ahead of us! {emoji_codes['pogo']} {new_summoner} has just pulled off a miraculous feat, snatching position {position} from {old_summoner} in a nail-biting showdown. It's a jaw-dropping spectacle, a mind-blowing display, a heart-stopping performance. {emoji_codes['peepoflor']} How did they do it? How did they pull it off? How did they defy the odds? {emoji_codes['pepestrong']} We may never understand the secrets of their genius, but we can all admire their brilliance. {emoji_codes['yeahboi']}",
+        f"{emoji_codes['pogo']} Wow! Wow! Wow! {emoji_codes['pogo']} {new_summoner} has just outplayed {old_summoner} from position {position}, showing us all what TFT is all about. {emoji_codes['yeahboi']} It's a dazzling show, a thrilling game, a spectacular victory. {emoji_codes['dongerj']} How did they do it? How did they win? How did they conquer? {emoji_codes['business']} We may never know the details, but we can all appreciate the results. 📈 {emoji_codes['peepoflor']}",
+        f"{emoji_codes['pogo']} {new_summoner} has just taken {position} from {old_summoner}. {emoji_codes['business']} In a cruel display of humiliation, {new_summoner} has left a message for us: This game is just all luck no skills, unlucky buddy {emoji_codes['scam']}",
+        f"{emoji_codes['pogo']} OOF! {old_summoner} just got destroyed by {new_summoner}, who took {position} from them. {emoji_codes['aycaramba']} Mortdog sends his regards, unlucky buddy {emoji_codes['pantsgrab']}",
+        f"{emoji_codes['pogo']} HUH {emoji_codes['huh']} {old_summoner} just got outplayed by {new_summoner}, who snatched {position} from them. Maybe you just didn’t hit this game, surely you will hit next game {emoji_codes['scam']} 📉",
+        f"{emoji_codes['pogo']} What a tragedy.. Surely. {emoji_codes['pogo']} {old_summoner} just got annihilated by {new_summoner}, who claimed {position} from them. Who balances this game? {emoji_codes['pepeshrug']} Unlucky buddy. Take this L {emoji_codes['sadge']}"
     ]
     return random.choice(messages)
 
@@ -260,9 +271,7 @@ async def balance(ctx, summoner_names):
     await ctx.send(f'Team 2: {", ".join(team2)}')
 
 
-async def update_leaderboard(message):
-    logging.info("Starting update_leaderboard function...")
-    previous_rankings = []
+async def update_leaderboard(previous_rankings, message):
     # channel = client.get_channel(1118758206840262686) TESTING SERVER
     general_channel = client.get_channel(846551161388662789)
     tft_leaderboard_channel = client.get_channel(1118278946048454726)
@@ -271,6 +280,7 @@ async def update_leaderboard(message):
     logging.info("Countdown timer: Refreshing leaderboard...")
     await message.edit(content="Refreshing leaderboard...")
 
+    logging.info(f"Previous rankings: {previous_rankings}")
     print("collecting ranked stats...")
     rankings_list = await get_tft_ranked_stats()
 
@@ -283,9 +293,17 @@ async def update_leaderboard(message):
             if i < previous_rank:
                 print(rankings_list[i])
                 print(previous_rankings[i])
+                logging.info(f"Rankings have changed! {rankings_list[i][0]} has passed {previous_rankings[i][0]}")
                 # Send alert message when rankings have changed and someone ranked up
                 await general_channel.send(get_random_message(previous_rankings[i][0], rankings_list[i][0], i + 1))
-    previous_rankings = rankings_list
+                logging.info("Rankings changed message sent!")
+
+    # Clear the contents of the previous_rankings list
+    previous_rankings.clear()
+    # Add the new rankings to the previous_rankings list
+    previous_rankings.extend(rankings_list)
+
+    logging.info(f"Newly updated rankings: {previous_rankings}")
     print("updating leaderboard...")
     # Delete the last leaderboard message if it exists
     if hasattr(update_leaderboard, "last_message") and update_leaderboard.last_message:
@@ -434,18 +452,18 @@ async def check_match_history_streak():
 async def countdown_timer(time, message):
     logging.info(f"Starting countdown timer with time={time} and message={message.content}")
 
-    # Calculate the number of minutes and seconds remaining
-    minutes, seconds = divmod(time, 60)
+    # Calculate the number of minutes remaining
+    minutes = time // 60
 
     # Edit the content of the message object to display the time remaining
-    await message.edit(content=f"Next update in: {minutes}:{seconds:02d}")
+    await message.edit(content=f"Next update in: {minutes} minutes")
     while time > 0:
         await asyncio.sleep(1)
         time -= 1
-
+        # logging.info(f"Countdown timer ticked with time={time} and message={message.content}")
         # Calculate the number of minutes and seconds remaining
         minutes, seconds = divmod(time, 60)
-
+        minutes = minutes + 1
         # Check if the content of the message object has been changed to "refreshing..."
         if message.content == "Refreshing leaderboard...":
             logging.info(f"Countdown timer stopped because message content changed to 'refreshing...'")
@@ -453,23 +471,13 @@ async def countdown_timer(time, message):
             break
 
         # Edit the content of the message object to display the time remaining
-        await message.edit(content=f"Next update in: {minutes}:{seconds:02d}")
+        if seconds == 59:
+            logging.info(f"Countdown timer updated: {minutes} minutes")
+            await message.edit(content=f"Next update in: {minutes} minutes")
+        elif minutes == 0 and seconds == 10:
+            await message.edit(content=f"Next update in: {seconds:2d} seconds")
 
-        try:
-            # Make a request to the Discord API using a public method
-            channel = await message.guild.fetch_channel(message.channel.id)
-        except discord.HTTPException as e:
-            # Get the rate limit headers from the response
-            remaining = e.response.headers.get('X-RateLimit-Remaining')
-            reset_at = e.response.headers.get('X-RateLimit-Reset')
-            rate_limit = e.response.headers.get('X-RateLimit-Limit')
-
-            # Log the rate limit information
-            logging.info(f"Remaining requests: {remaining}")
-            logging.info(f"Rate limit resets at: {reset_at}")
-            logging.info(f"Rate limit (in seconds): {rate_limit}")
-
-        logging.info(f"Countdown timer finished with time={time} and message={message.content}")
+    logging.info(f"Countdown timer finished with time={time} and message={message.content}")
 
 
 async def clear_channel(channel):
@@ -478,21 +486,28 @@ async def clear_channel(channel):
         print(f"I do not have permission to delete messages in {channel.name}")
         return
 
-    # Delete all messages in the channel
-    await channel.purge(limit=5)
+    # Get the last 5 messages in the channel
+    messages = []
+    async for message in channel.history(limit=5):
+        messages.append(message)
+
+    # Delete the messages
+    for message in messages:
+        await message.delete()
+        logging.debug(f"Message deleted: {message.content}")
 
 
 async def update_tasks():
     tft_leaderboard_channel = client.get_channel(1118278946048454726)
     leaderboard_update_count = 0
-
+    previous_rankings = []
     # Send the initial message
     message = await tft_leaderboard_channel.send("Starting TFT leaderboard...")
 
     while True:
         logging.info(f"update_tasks loop with message={message.content}")
         # Call update_leaderboard every 5 minutes and pass the message object as a parameter
-        task = client.loop.create_task(update_leaderboard(message))
+        task = client.loop.create_task(update_leaderboard(previous_rankings, message))
 
         leaderboard_update_count += 1
 
@@ -504,17 +519,15 @@ async def update_tasks():
         # Wait for the update_leaderboard task to complete
         await task
 
-        # logging.info(f"Waiting for 5 minutes...")
-        # await asyncio.sleep(300)
-
         # Call check_match_history_streak every 10 minutes
         # client.loop.create_task(check_match_history_streak())
 
         # Clear the contents of the app.log file every 3 leaderboard updates
         if leaderboard_update_count % 3 == 0:
-            with open("app.log", "w") as log_file:
-                log_file.write("")
-            print("app.log file cleared")
+            with open("app.log", 'r') as file:
+                lines = file.readlines()
+            with open("app.log", 'w') as file:
+                file.writelines(lines[250:])
 
 
 # =====================
