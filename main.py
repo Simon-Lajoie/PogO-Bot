@@ -117,13 +117,28 @@ def rank_to_value(tier_division_rank, lp):
 async def get_tft_ranked_stats(summoner_names):
     rankings_list = []
     for summoner_name in summoner_names:
-        # Gets account information
-        logging.info(f"Making request to Riot API for summoner: {summoner_name}")
-        summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
+        max_attempts = 5
+        attempt = 0
+        rankedStats = None
+        while attempt < max_attempts:
+            try:
+                # Gets account information
+                logging.info(f"Making request to Riot API for summoner: {summoner_name}")
+                summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
 
-        # Gets TFT rankedStats using summoner's ID
-        logging.info(f"Making request to Riot API for ranked stats of summoner: {summoner_name}")
-        rankedStats = tft_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
+                # Gets TFT rankedStats using summoner's ID
+                logging.info(f"Making request to Riot API for ranked stats of summoner: {summoner_name}")
+                rankedStats = tft_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
+                break
+            except ConnectionError:
+                attempt += 1
+                wait_time = 2 ** attempt
+                logging.warning(f"ConnectionError occurred, retrying in {wait_time} seconds...")
+                await asyncio.sleep(wait_time)
+        else:
+            # handle the case where all attempts failed
+            logging.error(f"Failed to get data from Riot API after {max_attempts} attempts")
+
         # Find the object with the "queueType" value of "RANKED_TFT"
         rankedStats = next((stats for stats in rankedStats if stats["queueType"] == "RANKED_TFT"), None)
 
@@ -155,8 +170,8 @@ async def get_tft_ranked_stats(summoner_names):
 async def update_rankings_list(updated_rankings_list_lock):
     global updated_rankings_list
     while True:
-        for i in range(0, len(summoner_names_list), 10):
-            batch = summoner_names_list[i:i + 10]
+        for i in range(0, len(summoner_names_list), 8):
+            batch = summoner_names_list[i:i + 8]
             logging.info(f"Updating rankings for batch: {batch}")
             batch_rankings = await get_tft_ranked_stats(batch)
             async with updated_rankings_list_lock:
@@ -168,8 +183,8 @@ async def update_rankings_list(updated_rankings_list_lock):
                     updated_rankings_list.append(ranking)
                 updated_rankings_list.sort(key=lambda x: x[1], reverse=True)
             logging.info(f"Updated rankings list: {updated_rankings_list}")
-            logging.info(f"Waiting 2 minutes until next batch update...")
-            await asyncio.sleep(120)
+            logging.info(f"Waiting 1 minutes until next batch update...")
+            await asyncio.sleep(60)
 
 
 def get_lol_ranked_stats(names):
@@ -338,17 +353,18 @@ async def update_leaderboard(previous_rankings, message, updated_rankings_list_l
         for i in range(4):
             if previous_rankings and updated_rankings_list[i][0] != previous_rankings[i][0]:
                 current_player = updated_rankings_list[i][0]
-                previous_rank = [x for x in range(len(previous_rankings)) if previous_rankings[x][0] == current_player][
-                    0]
-                if i < previous_rank:
-                    print(updated_rankings_list[i])
-                    print(previous_rankings[i])
-                    logging.info(
-                        f"Rankings have changed! {updated_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
-                    # Send alert message when rankings have changed and someone ranked up
-                    await general_channel.send(
-                        get_random_message(previous_rankings[i][0], updated_rankings_list[i][0], i + 1))
-                    logging.info("Rankings changed message sent!")
+                player_ranks = [x for x in range(len(previous_rankings)) if previous_rankings[x][0] == current_player]
+                if player_ranks:
+                    previous_rank = player_ranks[0]
+                    if i < previous_rank:
+                        print(updated_rankings_list[i])
+                        print(previous_rankings[i])
+                        logging.info(
+                            f"Rankings have changed! {updated_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
+                        # Send alert message when rankings have changed and someone ranked up
+                        await general_channel.send(
+                            get_random_message(previous_rankings[i][0], updated_rankings_list[i][0], i + 1))
+                        logging.info("Rankings changed message sent!")
 
         # Clear the contents of the previous_rankings list
         previous_rankings.clear()
