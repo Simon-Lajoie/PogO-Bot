@@ -438,9 +438,9 @@ async def update_leaderboard(previous_rankings, message, updated_rankings_list_l
             update_leaderboard.last_message = await tft_leaderboard_channel.send(
                 file=discord.File(output, filename="leaderboard.png"))
 
-        # Start the countdown timer and pass the message object as a parameter
-        logging.info("Starting countdown timer...")
-        await countdown_timer(360, message)
+    # Start the countdown timer and pass the message object as a parameter
+    logging.info("Starting countdown timer...")
+    await countdown_timer(360, message)
 
 
 async def get_match_history(previous_match_history_ids):
