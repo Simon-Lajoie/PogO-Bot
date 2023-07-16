@@ -62,11 +62,17 @@ logging.getLogger("PIL").setLevel(logging.WARNING)
 # Teamfight Tactics
 # =====================
 region = 'na1'
-summoner_names_list = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", "Sehnbon", "Wyatt1", "Gourish",
+summoner_names_list_tft = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", "Sehnbon", "Wyatt1", "Gourish",
                        "Gabyumi", "Mii Chan", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
                        "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
-                       "Goosecan", "cancerkween", "Azote", "Kovannate3", "ÇatFood", "Tkipp", "Skrt Skrt Skaarl",
+                       "Goosecan", "cancerkween", "Azote", "Kovannate3", "ÇatFood", "Skrt Skrt Skaarl",
                        "NonMaisWallah"  # ,"dokudami milk", "Yazeed"
+                       ]
+summoner_names_list_lol = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", "Sehnbon", "Wyatt1", "Gourish",
+                       "Gabyumi", "Mii Chan", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
+                       "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
+                       "Goosecan", "cancerkween", "Azote", "Kovannate3", "ÇatFood", "Skrt Skrt Skaarl",
+                       "NonMaisWallah", "Mnesia"  # ,"dokudami milk", "Yazeed"
                        ]
 
 previous_match_history_ids = []
@@ -181,8 +187,8 @@ async def get_tft_ranked_stats(summoner_names):
 async def update_tft_rankings_list(updated_tft_rankings_list_lock):
     global updated_tft_rankings_list
     while True:
-        for i in range(0, len(summoner_names_list), 8):
-            batch = summoner_names_list[i:i + 8]
+        for i in range(0, len(summoner_names_list_tft), 8):
+            batch = summoner_names_list_tft[i:i + 8]
             logging.info(f"Updating TFT rankings for batch: {batch}")
             batch_rankings = await get_tft_ranked_stats(batch)
             async with updated_tft_rankings_list_lock:
@@ -201,8 +207,8 @@ async def update_tft_rankings_list(updated_tft_rankings_list_lock):
 async def update_lol_rankings_list(updated_lol_rankings_list_lock):
     global updated_lol_rankings_list
     while True:
-        for i in range(0, len(summoner_names_list), 8):
-            batch = summoner_names_list[i:i + 8]
+        for i in range(0, len(summoner_names_list_lol), 8):
+            batch = summoner_names_list_lol[i:i + 8]
             logging.info(f"Updating LoL rankings for batch: {batch}")
             batch_rankings = await get_lol_ranked_stats(batch)
             async with updated_lol_rankings_list_lock:
@@ -297,7 +303,7 @@ def get_discord_username(summoner_name):
                    "Goosecan": "<@221019724505546752>", "cancerkween": "<@999785244045615224>",
                    "azote": "<@80372982337241088>", "Kovannate3": "<@194615471226617865>",
                    "ÇatFood": "<@160067484559474688>", "Skrt Skrt Skaarl": "<@272440042251616256>",
-                   "NonMaisWallah": "<@520754531525459969>"}
+                   "NonMaisWallah": "<@520754531525459969>", "Mnesia": "<@402638715849146378>"}
     return discord_ids[summoner_name]
 
 
@@ -641,7 +647,7 @@ async def update_lol_leaderboard(previous_rankings, message, updated_lol_ranking
 async def get_match_history(previous_match_history_ids):
     match_history_ids = []
     general_channel = client.get_channel(846551161388662789)
-    for summoner_name in summoner_names_list:
+    for summoner_name in summoner_names_list_tft:
         # Gets account information
         summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
         # Gets last 3 TFT games ids from match history using summoner's PUUID and find the ranked games
