@@ -66,7 +66,7 @@ summoner_names_list_tft = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa Kin
                            "Gabyumi", "Mii Chan", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
                            "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
                            "Goosecan", "cancerkween", "Azote", "Kovannate3", "ÇatFood", "Skrt Skrt Skaarl",
-                           "NonMaisWallah"  # ,"dokudami milk", "Yazeed"
+                           "NonMaisWallah", "Fonty", "Oogli"  # ,"dokudami milk", "Yazeed"
                            ]
 summoner_names_list_lol = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", "Sehnbon", "Wyatt1", "Gourish",
                            "Gabyumi", "Mii Chan", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
@@ -301,9 +301,10 @@ def get_discord_username(summoner_name):
                    "Mrs Mighty Bacon": "<@251140411043610625>", "cpt stryder": "<@148338461433135104>",
                    "Yazeed": "<@495380694525280276>", "Kenpachi": "<@263107658762944512>",
                    "Goosecan": "<@221019724505546752>", "cancerkween": "<@999785244045615224>",
-                   "azote": "<@80372982337241088>", "Kovannate3": "<@194615471226617865>",
+                   "azote": "<@80372982337241088>", "Kovannate3": "<@1946154    71226617865>",
                    "ÇatFood": "<@160067484559474688>", "Skrt Skrt Skaarl": "<@272440042251616256>",
-                   "NonMaisWallah": "<@520754531525459969>", "Mnesia": "<@402638715849146378>"}
+                   "NonMaisWallah": "<@520754531525459969>", "Mnesia": "<@402638715849146378>",
+                   "Fonty": "<@133458482232819712>", "Oogli": "<@173232033772994560>"}
     return discord_ids[summoner_name]
 
 
