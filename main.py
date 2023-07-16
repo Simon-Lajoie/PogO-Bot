@@ -306,7 +306,6 @@ def get_discord_username(summoner_name):
                    "NonMaisWallah": "<@520754531525459969>", "Mnesia": "<@402638715849146378>"}
     return discord_ids[summoner_name]
 
-
 def get_random_message(old_summoner, new_summoner, position):
     emoji_codes = {
         "pogo": "<:PogO:949833186689568768>",
