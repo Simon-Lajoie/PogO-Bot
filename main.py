@@ -11,10 +11,12 @@ from discord.ext import commands
 from itertools import combinations
 import logging
 import os
+from dotenv import load_dotenv
 
 intents = discord.Intents.default()
 intents.message_content = True
 client = commands.Bot(command_prefix="/", intents=intents)
+load_dotenv()
 
 
 class CustomRateLimiter(RateLimiter):
