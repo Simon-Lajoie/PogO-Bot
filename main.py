@@ -3,11 +3,8 @@ import io
 from collections import deque
 from datetime import datetime, timedelta
 from time import time
-import aiohttp
 import discord
 import random
-import requests
-from discord.http import Route
 from riotwatcher import LolWatcher, ApiError, TftWatcher, RateLimiter
 from PIL import Image, ImageDraw, ImageFont
 from discord.ext import commands
