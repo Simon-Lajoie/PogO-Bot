@@ -13,7 +13,7 @@ import logging
 import os
 
 intents = discord.Intents.default()
-#intents.message_content = True
+intents.message_content = True
 client = commands.Bot(command_prefix="/", intents=intents)
 
 
