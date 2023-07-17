@@ -124,7 +124,7 @@ async def get_tft_ranked_stats(summoner_names):
     for summoner_name in summoner_names:
         max_attempts = 2
         attempt = 0
-        rankedStats = None
+        ranked_stats = None
         while attempt < max_attempts:
             try:
                 await asyncio.sleep(1)
@@ -132,9 +132,9 @@ async def get_tft_ranked_stats(summoner_names):
                 logging.info(f"Making request to Riot API for summoner: {summoner_name}")
                 summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
                 await asyncio.sleep(1)
-                # Gets TFT rankedStats using summoner's ID
+                # Gets TFT ranked_stats using summoner's ID
                 logging.info(f"Making request to Riot API for ranked stats of summoner: {summoner_name}")
-                rankedStats = tft_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
+                ranked_stats = tft_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
                 break
             except ConnectionError:
                 attempt += 1
@@ -154,12 +154,12 @@ async def get_tft_ranked_stats(summoner_names):
             logging.error(f"Failed to get data from Riot API after {max_attempts} attempts")
 
         # Find the object with the "queueType" value of "RANKED_TFT"
-        rankedStats = next((stats for stats in rankedStats if stats["queueType"] == "RANKED_TFT"), None)
+        ranked_stats = next((stats for stats in ranked_stats if stats["queueType"] == "RANKED_TFT"), None)
 
-        if rankedStats:
-            tier = rankedStats["tier"]
-            rank = rankedStats["rank"]
-            lp = rankedStats["leaguePoints"]
+        if ranked_stats:
+            tier = ranked_stats["tier"]
+            rank = ranked_stats["rank"]
+            lp = ranked_stats["leaguePoints"]
             tier_division = tier + " " + rank
             ranked_value = rank_to_value(tier_division, lp)
             if tier == "MASTER" or tier == "GRANDMASTER" or tier == "CHALLENGER":
@@ -227,7 +227,7 @@ async def get_lol_ranked_stats(summoner_names):
     for summoner_name in summoner_names:
         max_attempts = 2
         attempt = 0
-        rankedStats = None
+        ranked_stats = None
         while attempt < max_attempts:
             try:
                 await asyncio.sleep(1)
@@ -235,9 +235,9 @@ async def get_lol_ranked_stats(summoner_names):
                 logging.info(f"Making request to Riot API for summoner: {summoner_name}")
                 summoner = lol_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
                 await asyncio.sleep(1)
-                # Gets LoL rankedStats using summoner's ID
+                # Gets LoL ranked_stats using summoner's ID
                 logging.info(f"Making request to Riot API for ranked stats of summoner: {summoner_name}")
-                rankedStats = lol_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
+                ranked_stats = lol_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
                 break
             except ConnectionError:
                 attempt += 1
@@ -257,12 +257,12 @@ async def get_lol_ranked_stats(summoner_names):
             logging.error(f"Failed to get data from Riot API after {max_attempts} attempts")
 
         # Find the object with the "queueType" value of "RANKED_SOLO_5x5"
-        rankedStats = next((stats for stats in rankedStats if stats["queueType"] == "RANKED_SOLO_5x5"), None)
+        ranked_stats = next((stats for stats in ranked_stats if stats["queueType"] == "RANKED_SOLO_5x5"), None)
 
-        if rankedStats:
-            tier = rankedStats["tier"]
-            rank = rankedStats["rank"]
-            lp = rankedStats["leaguePoints"]
+        if ranked_stats:
+            tier = ranked_stats["tier"]
+            rank = ranked_stats["rank"]
+            lp = ranked_stats["leaguePoints"]
             tier_division = tier + " " + rank
             ranked_value = rank_to_value(tier_division, lp)
             if tier == "MASTER" or tier == "GRANDMASTER" or tier == "CHALLENGER":
