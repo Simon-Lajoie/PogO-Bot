@@ -4,9 +4,9 @@ PogO Bot is a Discord bot mainly for Riot Games related content. It has several 
 ## Features
 - **TFT Ranked Leaderboard**: PogO Bot uses the Pillow library to generate and update a TFT ranked leaderboard for the users in your Discord server every 6 minutes. The bot retrieves summoner information and ranked stats for each person on the list through Riot Games API calls. PogO Bot uses a custom algorithm to generate a score for each player based on their ranked data, allowing them to be sorted by rank on the leaderboard.
 
-- **Top 4 Spot Notifications**: The top 4 spots on the leaderboard are highly coveted. Whenever a player overtakes another player in the top 4, the bot will post a humorous message in the general chat to praise or roast the players involved. The bot gathers data every minute instead of all at once to spread API calls.
-
 - **League of Legends Solo queue ranked Leaderboard**: PogO Bot uses the Pillow library to generate and update a LoL ranked leaderboard for the users in your Discord server every 6 minutes. The bot retrieves summoner information and ranked stats for each person on the list through Riot Games API calls. PogO Bot uses a custom algorithm to generate a score for each player based on their ranked data, allowing them to be sorted by rank on the leaderboard. The bot gathers data every minute instead of all at once to spread API calls.
+
+- **Top 4 Spot Notifications**: The top 4 spots on the leaderboard are highly coveted. Whenever a player overtakes another player in the top 4, the bot will post a humorous message in the general chat to praise or roast the players involved. The bot gathers data every minute instead of all at once to spread API calls.
 
 - **TFT Match History Tracking**: The bot also tracks the TFT match history of each player in the server by checking their last 2 games. If any player achieves 1st place twice in a row or 8th place twice in a row, they will be tagged in the general chat and a message will be displayed.
 
