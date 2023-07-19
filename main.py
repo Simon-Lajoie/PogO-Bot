@@ -62,16 +62,16 @@ logging.getLogger("PIL").setLevel(logging.WARNING)
 # =====================
 region = 'na1'
 summoner_names_list_tft = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", "Sehnbon", "Wyatt1", "Gourish",
-                           "Gabyumi", "Mii Chan", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
+                           "Gabyumi", "Best Pigeon NA", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
                            "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
                            "Goosecan", "cancerkween", "Azote", "Kovannate3", "ÇatFood", "Skrt Skrt Skaarl",
-                           "NonMaisWallah", "Fonty", "Oogli"  # ,"dokudami milk", "Yazeed"
+                           "NonMaisWallah", "Fonty", "Oogli", "Lewis Kane"  # ,"dokudami milk", "Yazeed"
                            ]
 summoner_names_list_lol = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", "Sehnbon", "Wyatt1", "Gourish",
-                           "Gabyumi", "Mii Chan", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
+                           "Gabyumi", "Best Pigeon NA", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
                            "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
                            "Goosecan", "cancerkween", "Azote", "Kovannate3", "ÇatFood", "Skrt Skrt Skaarl",
-                           "NonMaisWallah", "Mnesia", "Fonty", "Oogli"  # ,"dokudami milk", "Yazeed"
+                           "NonMaisWallah", "Mnesia", "Fonty", "Oogli","Cowboy Codi"  # ,"dokudami milk", "Yazeed"
                            ]
 
 previous_match_history_ids = []
@@ -291,7 +291,7 @@ def get_discord_username(summoner_name):
                    "Classiq": "<@155758849582825472>", "Salsa King": "<@315272936053276672>",
                    "Sehnbon": "<@198960489022095360>", "Wyatt1": "<@86595633288351744>",
                    "Gourish": "<@700837976544116808>", "Gabyumi": "<@241712679150944257>",
-                   "Mii Chan": "<@180136748091834368>", "meyst": "<@153778413646118912>",
+                   "Best Pigeon NA": "<@180136748091834368>", "meyst": "<@153778413646118912>",
                    "Limited": "<@715430081975025687>", "Z3SIeeper": "<@130242869708587008>",
                    "BlackDrag": "<@244390872983011328>", "Flames": "<@80373001006096384>",
                    "silvah bee": "<@527593111547805696>", "Tiny Cena": "<@154752158854545408>",
@@ -303,7 +303,8 @@ def get_discord_username(summoner_name):
                    "azote": "<@80372982337241088>", "Kovannate3": "<@1946154    71226617865>",
                    "ÇatFood": "<@160067484559474688>", "Skrt Skrt Skaarl": "<@272440042251616256>",
                    "NonMaisWallah": "<@520754531525459969>", "Mnesia": "<@402638715849146378>",
-                   "Fonty": "<@133458482232819712>", "Oogli": "<@173232033772994560>"}
+                   "Fonty": "<@133458482232819712>", "Oogli": "<@173232033772994560>", "Cowboy Codi": "<@115992535855267844>",
+                   "Lewis Kane": "<@913637634767716393"}
     return discord_ids[summoner_name]
 
 
@@ -811,9 +812,14 @@ async def update_tasks(updated_tft_rankings_list_lock, updated_lol_rankings_list
         # client.loop.create_task(check_match_history_streak())
 
         # Clear the contents of the app.log file every 10 leaderboard updates
-        if leaderboard_update_count % 10 == 0:
-            with open('app.log', 'w') as file:
-                file.write('')
+       # if leaderboard_update_count % 10 == 0:
+            # Delete the file if it exists
+       #     if os.path.exists("app.log"):
+       #         os.remove("app.log")
+
+            # Create a new file with the same name
+        #    with open("app.log", 'w') as file:
+        #        file.write('')
 
 
 # =====================
