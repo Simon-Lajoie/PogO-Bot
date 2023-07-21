@@ -102,13 +102,17 @@ def calculate_tier_division_value(tier_division_rank):
         "PLATINUM III": 18,
         "PLATINUM II": 19,
         "PLATINUM I": 20,
-        "DIAMOND IV": 21,
-        "DIAMOND III": 22,
-        "DIAMOND II": 23,
-        "DIAMOND I": 24,
-        "MASTER I": 25,
-        "GRANDMASTER I": 25,
-        "CHALLENGER I": 25
+        "EMERALD IV": 21,
+        "EMERALD III": 22,
+        "EMERALD II": 23,
+        "EMERALD I": 24,
+        "DIAMOND IV": 25,
+        "DIAMOND III": 26,
+        "DIAMOND II": 27,
+        "DIAMOND I": 28,
+        "MASTER I": 29,
+        "GRANDMASTER I": 30,
+        "CHALLENGER I": 31
     }
     rank_number = ranks[tier_division_rank]
     return rank_number
