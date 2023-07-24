@@ -71,7 +71,7 @@ summoner_names_list_lol = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa Kin
                            "Gabyumi", "Best Pigeon NA", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
                            "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
                            "Goosecan", "cancerkween", "Azote", "Kovannate3", "ÇatFood", "Skrt Skrt Skaarl",
-                           "NonMaisWallah", "Mnesia", "Fonty", "Oogli","Cowboy Codi"  # ,"dokudami milk", "Yazeed"
+                           "NonMaisWallah", "Mnesia", "Fonty", "Oogli","Cowboy Codi","nasir2" # ,"dokudami milk", "Yazeed"
                            ]
 
 previous_match_history_ids = []
@@ -135,11 +135,13 @@ async def get_tft_ranked_stats(summoner_names):
             try:
                 await asyncio.sleep(1)
                 # Gets account information
-                logging.info(f"Making request to Riot API for summoner: {summoner_name}")
+                logging.info(f"Making request to Riot API for TFT summoner: {summoner_name}")
+                print(f"Making request to Riot API for TFT summoner: {summoner_name}")
                 summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
                 await asyncio.sleep(1)
                 # Gets TFT ranked_stats using summoner's ID
-                logging.info(f"Making request to Riot API for ranked stats of summoner: {summoner_name}")
+                logging.info(f"Making request to Riot API for TFT ranked stats of summoner: {summoner_name}")
+                print(f"Making request to Riot API for TFT ranked stats of summoner: {summoner_name}")
                 ranked_stats = tft_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
                 break
             except ConnectionError:
@@ -193,7 +195,12 @@ async def update_tft_rankings_list(updated_tft_rankings_list_lock):
         for i in range(0, len(summoner_names_list_tft), 8):
             batch = summoner_names_list_tft[i:i + 8]
             logging.info(f"Updating TFT rankings for batch: {batch}")
-            batch_rankings = await get_tft_ranked_stats(batch)
+            print(f"Updating TFT rankings for batch: {batch}")
+            try:
+                batch_rankings = await get_tft_ranked_stats(batch)
+            except Exception as e:
+                logging.error(f"An error occurred while getting LoL ranked stats for batch {batch}: {e}")
+                continue
             async with updated_tft_rankings_list_lock:
                 for ranking in batch_rankings:
                     summoner_name = ranking[0]
@@ -207,13 +214,36 @@ async def update_tft_rankings_list(updated_tft_rankings_list_lock):
             await asyncio.sleep(60)
 
 
+#async def update_lol_rankings_list(updated_lol_rankings_list_lock):
+#    global updated_lol_rankings_list
+#    while True:
+#        for i in range(0, len(summoner_names_list_lol), 8):
+#            batch = summoner_names_list_lol[i:i + 8]
+#            logging.info(f"Updating LoL rankings for batch: {batch}")
+#            batch_rankings = await get_lol_ranked_stats(batch)
+#            async with updated_lol_rankings_list_lock:
+#                for ranking in batch_rankings:
+#                    summoner_name = ranking[0]
+#                    existing_ranking = next((r for r in updated_lol_rankings_list if r[0] == summoner_name), None)
+#                    if existing_ranking:
+#                        updated_lol_rankings_list.remove(existing_ranking)
+#                    updated_lol_rankings_list.append(ranking)
+#                updated_lol_rankings_list.sort(key=lambda x: x[1], reverse=True)
+#            logging.info(f"Updated LoL rankings list: {updated_lol_rankings_list}")
+#            logging.info(f"Waiting 1 minutes until next LoL batch update...")
+#            await asyncio.sleep(60)
 async def update_lol_rankings_list(updated_lol_rankings_list_lock):
     global updated_lol_rankings_list
     while True:
         for i in range(0, len(summoner_names_list_lol), 8):
             batch = summoner_names_list_lol[i:i + 8]
             logging.info(f"Updating LoL rankings for batch: {batch}")
-            batch_rankings = await get_lol_ranked_stats(batch)
+            print(f"Updating LoL rankings for batch: {batch}")
+            try:
+                batch_rankings = await get_lol_ranked_stats(batch)
+            except Exception as e:
+                logging.error(f"An error occurred while getting LoL ranked stats for batch {batch}: {e}")
+                continue
             async with updated_lol_rankings_list_lock:
                 for ranking in batch_rankings:
                     summoner_name = ranking[0]
@@ -224,6 +254,8 @@ async def update_lol_rankings_list(updated_lol_rankings_list_lock):
                 updated_lol_rankings_list.sort(key=lambda x: x[1], reverse=True)
             logging.info(f"Updated LoL rankings list: {updated_lol_rankings_list}")
             logging.info(f"Waiting 1 minutes until next LoL batch update...")
+            print(f"Updated LoL rankings list: {updated_lol_rankings_list}")
+            print(f"Waiting 1 minutes until next LoL batch update...")
             await asyncio.sleep(60)
 
 
@@ -238,11 +270,13 @@ async def get_lol_ranked_stats(summoner_names):
             try:
                 await asyncio.sleep(1)
                 # Gets account information
-                logging.info(f"Making request to Riot API for summoner: {summoner_name}")
+                logging.info(f"Making request to Riot API for LoL summoner: {summoner_name}")
+                print(f"Making request to Riot API for LoL summoner: {summoner_name}")
                 summoner = lol_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
                 await asyncio.sleep(1)
                 # Gets LoL ranked_stats using summoner's ID
-                logging.info(f"Making request to Riot API for ranked stats of summoner: {summoner_name}")
+                logging.info(f"Making request to Riot API for LoL ranked stats of summoner: {summoner_name}")
+                print(f"Making request to Riot API for LoL ranked stats of summoner: {summoner_name}")
                 ranked_stats = lol_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
                 break
             except ConnectionError:
@@ -308,7 +342,7 @@ def get_discord_username(summoner_name):
                    "ÇatFood": "<@160067484559474688>", "Skrt Skrt Skaarl": "<@272440042251616256>",
                    "NonMaisWallah": "<@520754531525459969>", "Mnesia": "<@402638715849146378>",
                    "Fonty": "<@133458482232819712>", "Oogli": "<@173232033772994560>", "Cowboy Codi": "<@115992535855267844>",
-                   "Lewis Kane": "<@913637634767716393"}
+                   "Lewis Kane": "<@913637634767716393","nasir2":"<@1052819643351433268>"}
     return discord_ids[summoner_name]
 
 
@@ -412,6 +446,7 @@ async def update_tft_leaderboard(previous_rankings, message, updated_tft_ranking
 
         # Edit the content of the message object to display "refreshing..."
         logging.info("TFT Countdown timer: Refreshing leaderboard...")
+        print("Refreshing leaderboard...")
         await message.edit(content="Refreshing leaderboard...")
 
         logging.info(f"Previous TFT rankings: {previous_rankings}")
@@ -426,12 +461,12 @@ async def update_tft_leaderboard(previous_rankings, message, updated_tft_ranking
                     if i < previous_rank:
                         print(updated_tft_rankings_list[i])
                         print(previous_rankings[i])
-                        logging.info(
-                            f"TFT Rankings have changed! {updated_tft_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
+                        logging.info(f"TFT Rankings have changed! {updated_tft_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
+                        print(f"TFT Rankings have changed! {updated_tft_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
                         # Send alert message when rankings have changed and someone ranked up
-                        await general_channel.send(
-                            get_random_message(previous_rankings[i][0], updated_tft_rankings_list[i][0], i + 1))
+                        await general_channel.send(get_random_message(previous_rankings[i][0], updated_tft_rankings_list[i][0], i + 1))
                         logging.info("TFT Rankings update message sent to TFT Leaderboard chat!")
+                        print("TFT Rankings update message sent to TFT Leaderboard chat!")
 
         # Clear the contents of the previous_rankings list
         previous_rankings.clear()
@@ -523,6 +558,7 @@ async def update_tft_leaderboard(previous_rankings, message, updated_tft_ranking
 
     # Start the countdown timer and pass the message object as a parameter
     logging.info("Starting TFT countdown timer...")
+    print("Starting TFT countdown timer...")
     await countdown_timer_tft(360, message)
 
 
@@ -535,6 +571,7 @@ async def update_lol_leaderboard(previous_rankings, message, updated_lol_ranking
 
         # Edit the content of the message object to display "refreshing..."
         logging.info("LoL Countdown timer: Refreshing LoL leaderboard...")
+        print("Refreshing LoL leaderboard...")
         await message.edit(content="Refreshing leaderboard...")
 
         logging.info(f"LoL Previous rankings: {previous_rankings}")
@@ -549,12 +586,13 @@ async def update_lol_leaderboard(previous_rankings, message, updated_lol_ranking
                     if i < previous_rank:
                         print(updated_lol_rankings_list[i])
                         print(previous_rankings[i])
-                        logging.info(
-                            f"LoL Rankings have changed! {updated_lol_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
+                        logging.info(f"LoL Rankings have changed! {updated_lol_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
+                        print(f"LoL Rankings have changed! {updated_lol_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
                         # Send alert message when rankings have changed and someone ranked up
                         # await general_channel.send(
                         #    get_random_message(previous_rankings[i][0], updated_lol_rankings_list[i][0], i + 1))
                         logging.info("LoL Rankings changed message sent!")
+                        print("LoL Rankings changed message sent!")
 
         # Clear the contents of the previous_rankings list
         previous_rankings.clear()
@@ -646,6 +684,7 @@ async def update_lol_leaderboard(previous_rankings, message, updated_lol_ranking
 
     # Start the countdown timer and pass the message object as a parameter
     logging.info("Starting LoL countdown timer...")
+    print("Starting LoL countdown timer...")
     await countdown_timer_lol(360, message)
 
 
@@ -709,7 +748,7 @@ async def check_match_history_streak():
 
 async def countdown_timer_tft(time, message):
     logging.info(f"Starting TFT countdown timer with time={time} and message={message.content}")
-
+    print(f"Starting TFT countdown timer with time={time} and message={message.content}")
     # Calculate the number of minutes remaining
     minutes = time // 60
 
@@ -725,6 +764,7 @@ async def countdown_timer_tft(time, message):
         # Check if the content of the message object has been changed to "refreshing..."
         if message.content == "Refreshing TFT leaderboard...":
             logging.info(f"TFT Countdown timer stopped because message content changed to 'refreshing...'")
+            print(f"TFT Countdown timer stopped because message content changed to 'refreshing...'")
             # Break out of the while loop to stop the countdown timer
             break
 
@@ -736,11 +776,12 @@ async def countdown_timer_tft(time, message):
             await message.edit(content=f"Next update in: {seconds:2d} seconds")
 
     logging.info(f"TFT Countdown timer finished with time={time} and message={message.content}")
+    print(f"TFT Countdown timer finished with time={time} and message={message.content}")
 
 
 async def countdown_timer_lol(time, message):
     logging.info(f"Starting LoL countdown timer with time={time} and message={message.content}")
-
+    print(f"Starting LoL countdown timer with time={time} and message={message.content}")
     # Calculate the number of minutes remaining
     minutes = time // 60
 
@@ -756,6 +797,7 @@ async def countdown_timer_lol(time, message):
         # Check if the content of the message object has been changed to "refreshing..."
         if message.content == "Refreshing Soloq leaderboard...":
             logging.info(f"LoL Countdown timer stopped because message content changed to 'refreshing...'")
+            print(f"LoL Countdown timer stopped because message content changed to 'refreshing...'")
             # Break out of the while loop to stop the countdown timer
             break
 
@@ -767,6 +809,7 @@ async def countdown_timer_lol(time, message):
             await message.edit(content=f"Next update in: {seconds:2d} seconds")
 
     logging.info(f"LoL Countdown timer finished with time={time} and message={message.content}")
+    print(f"LoL Countdown timer finished with time={time} and message={message.content}")
 
 
 async def clear_channel(channel):
@@ -796,7 +839,6 @@ async def update_tasks(updated_tft_rankings_list_lock, updated_lol_rankings_list
     message_tft = await tft_leaderboard_channel.send("Starting TFT leaderboard...")
     message_lol = await lol_leaderboard_channel.send("Starting LoL leaderboard...")
     while True:
-        logging.info(f"update_tasks loop with message={message_tft.content}")
         # Call update_tft_leaderboard every 5 minutes and pass the message object as a parameter
         task1 = client.loop.create_task(
             update_tft_leaderboard(previous_tft_rankings, message_tft, updated_tft_rankings_list_lock))
@@ -808,7 +850,8 @@ async def update_tasks(updated_tft_rankings_list_lock, updated_lol_rankings_list
         if leaderboard_update_count >= 1000000:
             leaderboard_update_count = 0
 
-        logging.info(f"Waiting for update_tft_leaderboard task to complete...")
+        logging.info(f"Waiting for update_tft_leaderboard and update_lol_leaderboard task to complete...")
+        print(f"Waiting for update_tft_leaderboard and update_lol_leaderboard task to complete...")
         # Wait for the update_tft_leaderboard and update_lol_leaderboard task to complete
         await asyncio.gather(task1, task2)
 
