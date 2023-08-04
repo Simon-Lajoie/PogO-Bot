@@ -62,16 +62,18 @@ logging.getLogger("PIL").setLevel(logging.WARNING)
 # =====================
 region = 'na1'
 summoner_names_list_tft = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", "Sehnbon", "Wyatt1", "Gourish",
-                           "Gabyumi", "Best Pigeon NA", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
+                           "Gabyumi", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
                            "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
-                           "Goosecan", "cancerkween", "Azote", "Kovannate3", "ÇatFood", "Skrt Skrt Skaarl",
-                           "NonMaisWallah", "Fonty", "Oogli", "Lewis Kane"  # ,"dokudami milk", "Yazeed"
+                           "Goosecan", "cancerkween", "Azote", "ÇatFood", "Skrt Skrt Skaarl",
+                           "NonMaisWallah", "Fonty", "Oogli", "Lewis Kane", "Maa san"
+                           # "Kovannate3" ,"dokudami milk", "Yazeed"
                            ]
 summoner_names_list_lol = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", "Sehnbon", "Wyatt1", "Gourish",
-                           "Gabyumi", "Best Pigeon NA", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
+                           "Gabyumi", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
                            "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
-                           "Goosecan", "cancerkween", "Azote", "Kovannate3", "ÇatFood", "Skrt Skrt Skaarl",
-                           "NonMaisWallah", "Mnesia", "Fonty", "Oogli","Cowboy Codi","nasir2" # ,"dokudami milk", "Yazeed"
+                           "Goosecan", "cancerkween", "Azote", "ÇatFood", "Skrt Skrt Skaarl", "Maa san",
+                           "NonMaisWallah", "Mnesia", "Fonty", "Oogli", "Cowboy Codi", "nasir2"
+                           # "Kovannate3" ,"dokudami milk", "Yazeed"
                            ]
 
 previous_match_history_ids = []
@@ -135,14 +137,16 @@ async def get_tft_ranked_stats(summoner_names):
             try:
                 await asyncio.sleep(1)
                 # Gets account information
-                logging.info(f"Making request to Riot API for TFT summoner: {summoner_name}")
-                print(f"Making request to Riot API for TFT summoner: {summoner_name}")
-                summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
+                #logging.info(f"Making request to Riot API for TFT summoner: {summoner_name}")
+                #print(f"Making request to Riot API for TFT summoner: {summoner_name}")
+                #summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
+                summoner_id = get_tft_summoner_id(summoner_name)
                 await asyncio.sleep(1)
                 # Gets TFT ranked_stats using summoner's ID
                 logging.info(f"Making request to Riot API for TFT ranked stats of summoner: {summoner_name}")
                 print(f"Making request to Riot API for TFT ranked stats of summoner: {summoner_name}")
-                ranked_stats = tft_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
+                #ranked_stats = tft_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
+                ranked_stats = tft_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner_id)
                 break
             except ConnectionError:
                 attempt += 1
@@ -214,24 +218,6 @@ async def update_tft_rankings_list(updated_tft_rankings_list_lock):
             await asyncio.sleep(60)
 
 
-#async def update_lol_rankings_list(updated_lol_rankings_list_lock):
-#    global updated_lol_rankings_list
-#    while True:
-#        for i in range(0, len(summoner_names_list_lol), 8):
-#            batch = summoner_names_list_lol[i:i + 8]
-#            logging.info(f"Updating LoL rankings for batch: {batch}")
-#            batch_rankings = await get_lol_ranked_stats(batch)
-#            async with updated_lol_rankings_list_lock:
-#                for ranking in batch_rankings:
-#                    summoner_name = ranking[0]
-#                    existing_ranking = next((r for r in updated_lol_rankings_list if r[0] == summoner_name), None)
-#                    if existing_ranking:
-#                        updated_lol_rankings_list.remove(existing_ranking)
-#                    updated_lol_rankings_list.append(ranking)
-#                updated_lol_rankings_list.sort(key=lambda x: x[1], reverse=True)
-#            logging.info(f"Updated LoL rankings list: {updated_lol_rankings_list}")
-#            logging.info(f"Waiting 1 minutes until next LoL batch update...")
-#            await asyncio.sleep(60)
 async def update_lol_rankings_list(updated_lol_rankings_list_lock):
     global updated_lol_rankings_list
     while True:
@@ -270,14 +256,16 @@ async def get_lol_ranked_stats(summoner_names):
             try:
                 await asyncio.sleep(1)
                 # Gets account information
-                logging.info(f"Making request to Riot API for LoL summoner: {summoner_name}")
-                print(f"Making request to Riot API for LoL summoner: {summoner_name}")
-                summoner = lol_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
+                #logging.info(f"Making request to Riot API for LoL summoner: {summoner_name}")
+                #print(f"Making request to Riot API for LoL summoner: {summoner_name}")
+                #summoner = lol_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
+                summoner_id = get_lol_summoner_id(summoner_name)
                 await asyncio.sleep(1)
                 # Gets LoL ranked_stats using summoner's ID
                 logging.info(f"Making request to Riot API for LoL ranked stats of summoner: {summoner_name}")
                 print(f"Making request to Riot API for LoL ranked stats of summoner: {summoner_name}")
-                ranked_stats = lol_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
+                #ranked_stats = lol_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
+                ranked_stats = lol_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner_id)
                 break
             except ConnectionError:
                 attempt += 1
@@ -341,9 +329,86 @@ def get_discord_username(summoner_name):
                    "azote": "<@80372982337241088>", "Kovannate3": "<@1946154    71226617865>",
                    "ÇatFood": "<@160067484559474688>", "Skrt Skrt Skaarl": "<@272440042251616256>",
                    "NonMaisWallah": "<@520754531525459969>", "Mnesia": "<@402638715849146378>",
-                   "Fonty": "<@133458482232819712>", "Oogli": "<@173232033772994560>", "Cowboy Codi": "<@115992535855267844>",
-                   "Lewis Kane": "<@913637634767716393","nasir2":"<@1052819643351433268>"}
+                   "Fonty": "<@133458482232819712>", "Oogli": "<@173232033772994560>",
+                   "Cowboy Codi": "<@115992535855267844>",
+                   "Lewis Kane": "<@913637634767716393", "nasir2": "<@1052819643351433268>"}
     return discord_ids[summoner_name]
+
+
+def get_tft_summoner_id(summoner_name):
+    summoner_ids = {"Sir Mighty Bacon": "0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txqQw6Pxo9o",
+                    "Settupss": "w-THN6OPeTdgL2JauMBPkvYaUYgD8WiwiX39mc3Yk4Dcs1k",
+                    "Classiq": "FQtC6bnuIM6JzqQGPswTwgoSvEZEa0WucLjaChTRdrKdbAQ",
+                    "Salsa King": "MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg",
+                    "Sehnbon": "QHuy9eL2GdDcu3erWravRY1rDshpvfMM6EtjeNnYI7r-YIw",
+                    "Wyatt1": "nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b",
+                    "Gourish": "9zX1sJAd7RciO6B7GwQODzAvBaQO634peXMAUtOINuX2y_k",
+                    "Gabyumi": "8nLXCqx3oDKEJ4pAceeQSr3L0uUAdY4rdTJgXKHh8OyRzoc",
+                    "meyst": "dasfJoEy9c_DNWqG8Y30RzK6Fgm-hdE_6dcx7XzL3MzA-Lw",
+                    "Limited": "OkZo1rN5o0DDWK5LGwgXDT4k5fd2FHhCRcPv69LulAEqirk",
+                    "Z3SIeeper": "u78gFAF4MJ2J4brtythuTE-uPpYEaFNCRK5hbXDLOOjf_3Ck",
+                    "BlackDrag": "cmxCpBLbYX48necTpKLBiTn5IM1J0AYWHKiCAC5OcyuG6_o",
+                    "Flames": "APXt68Ogg5-pMLP5vdoq1hwpn-wl4sFxJl6GJg4356U3Vbs",
+                    "silvah bee": "oUBkj0tZr-5IDuqudJruJpZ_O2hiDdYLahwJI8Z2A5ey5yg",
+                    "Tiny Cena": "UBLAyVJLtvI0DvNJZc5Ln_ShUKt_DpPJijJNgewxRLTP4Mg",
+                    "Aàrón": "hR0VrK_dmuN1_CbI9ea576MSKDKoQfH9_VEd_4iBCjEogLU",
+                    "5billon": "C4Ewpnp_HCLtxYT3TXwR-bcQQzIu63dODg7Zc_B298hkm9U",
+                    "Nappy": "4ZG-cOVycckEnl86R8h1h0wl0P9c4ZMkdFBJL9cY_-pm55Y",
+                    "KingNeptun3": "fPMH_-GawqeVv22Kr5PSAd582K3zRd57C_5m0QZR4Yoy7dw",
+                    "Mrs Mighty Bacon": "wMMQdqPaS1ZMobR8SQHcwjbQyB1GpFeg4PoReTKU8HiPpG8",
+                    "cpt stryder": "CS5p6zEnufRFlSTe0fF9pQeW_meyyZJmcGN8-ZvmLcQo9LQ",
+                    "Goosecan": "e7Iu-5NCQ73RMxGsxoYeg6zpzI7tPHy_00vGyp44RCBG2uA",
+                    "cancerkween": "zAtWP0dciMVlK5XHahuXW3KDsmGjq0PcJBL3LY-B-3N1Aik",
+                    "Azote": "hjyAMX0av2nWPtjMEd3GyyrAeWAx6x-E0iBWiXXVMSkaAGw",
+                    "ÇatFood": "6E_MKLcjrxZXf-xZ_JumEpHb2qY6vKs5di52SQyCQPIKBjg",
+                    "Skrt Skrt Skaarl": "3Hk5eY4OPC9YtMy0wunkJfrU7OJvLjQdPCtpVpuSJe6T59I",
+                    "NonMaisWallah": "O-uH49qtvOCpYCxny_dLNVA8-VP-lg9q8ItA4qjZh7M6RKY",
+                    "Fonty": "cJ4MBSz6cOeG8QsYlGo_d926VRLSRyCPQfPgDLNwIsde68Y",
+                    "Oogli": "oMsxDlJYVyjMafhFYE-DvG_7Tc8R-PUg-DA8Twj88DY_-aU",
+                    "Lewis Kane": "m-a_uIa_oQIaVhliUaITnBLcy0cV01tBQwF04DXxj-9IrEE",
+                    "Maa san": "1a-PuFsiNRx_b4CrVJzrt4kdmmWZGFCH0AdvpEeKUWcVMH8",
+                    "Mnesia": "b7nHdeLVJ7Zl-fazM4k-KJBy88s1cB8zm_nppsPkNSS7KU8",
+                    "Cowboy Codi": "JB8H7801QFiu3GFZAN1i0fT_aaJdra2zM7XbghmS93Ntsa4",
+                    "nasir2": "1vJSvGRpUgiltfK1_fY1BaqboL7gCGiuqt8sAAWdRa8brxE"}
+    return summoner_ids[summoner_name]
+
+
+def get_lol_summoner_id(summoner_name):
+    summoner_ids = {"Sir Mighty Bacon": "BGGUjqEm1nar21U8pP_wj7Bv2uyd1Na-03wy7yeZVMRdEv0",
+                    "Settupss": "r6XtQGwiHuXfAHfrfvIXXuhOYpyyoUsm2JgC3r_BAVGWYbs",
+                    "Classiq": "yYoauMyQZaUfORAaOybCxcKgToviC5W5Yay_uyhZC-aAzYk",
+                    "Salsa King": "y37IGgVEke9uG-LLpZa5mlPanyxZi3x9rtJRXF9OW2B-wc8",
+                    "Sehnbon": "EbFaesXSJiOZulgc_peh78EfhbBg_Slk74xJmQAWPuM1N4I",
+                    "Wyatt1": "BxEp90dfHbxrE0aYSgayPLb3eh3wqu7SEoUEHEj1aSWdGso_",
+                    "Gourish": "3dgqr2I7GQmtQCkdLB_calb0h-UmOyWJVQhjCC_bB-U-Ln4",
+                    "Gabyumi": "0j2bXO5OOOeFhe4LX1cGAzEYxBSP8x3xZmIqbuFQVd2j8Yw",
+                    "meyst": "g0BTZnymywWaJ39n_oE8XCrNy2hN6Zi0ljnYIXBR5jU2ILs",
+                    "Limited": "N0LkC1sOwO-9J_fE2_IHpcEc-B4GArYFD11Jhfh21MklKLg",
+                    "Z3SIeeper": "H8mMWxvMNWpxhMoSOaC8m59txmO3ZmLTmAEV1hCIzNrLdZ-b",
+                    "BlackDrag": "hLXUGO0f4JSogjsJKhyrXlzzFm27iz5nkLuOczd2YKEOCqw",
+                    "Flames": "IZx8e2BrDLu1x7X6pUgzPxMqqKBOMwXrJ59Fgr0W7C3GSjY",
+                    "silvah bee": "t2YrGQw9KgNXXkBg5B6VChMyR0Lw7naQpP8hgsIzkyZtncE",
+                    "Tiny Cena": "kr9B4wdzki8INVxOyXrvPDqUcdCxMKoDhUc4ytusynhqn7Q",
+                    "Aàrón": "HGVC39mIVJauqT3njok44TNPIxMJp9A8sptkhY0CP__bJSc",
+                    "5billon": "PCBqQfKevnh_PwJerhJOFOZ8BEZi90HYOBXduWvJl_pMaPg",
+                    "Nappy": "6XhgOt9X2zQ_Fe7jo6rsC2d23YCsdPGMygSxjyjQ3dfzMUM",
+                    "KingNeptun3": "IK9m0nzKywT8QHETKGGo3x84dxHFWAncogb0Lza-jAvtMFQ",
+                    "Mrs Mighty Bacon": "9C7cBE25XnHAq5v79I93sHF870IF-gPEUWeL-wG4UJavp2E",
+                    "cpt stryder": "AnWANDBFFi5jTDZabqcnCfs9G3USpUyHsCq0ScoWEwMJt14",
+                    "Goosecan": "n029BIV9BGNMyGOdbSZ2Di8n28mXmMr1YgQ0ozJ1OwuTdoM",
+                    "cancerkween": "EpzNVAQqQkqPFRaiT6nbTXvWNRIW9xjwnJagcIOiPLIO1Bc",
+                    "Azote": "bXmbhljaXkeKIA5NqOtU5loCKk0iZZfbSjyElSrieruR73s",
+                    "ÇatFood": "6yUsSm7sVzOxasogCBtyYu_5XitMPYMH6ImhPvVgJ8Imq4Q",
+                    "Skrt Skrt Skaarl": "V5nQ3nav3PLrZA8WINbF0MQ7tSrdLdye-lJ3Y9-4YhvknPw",
+                    "Maa san": "4p6IPgfKlB4bxUOVTThObFs65avz47bq8y4uFFuHGIv1gxE",
+                    "NonMaisWallah": "vfescDjzqKyE5JlCyoDbERcl2JlkykKxe7-wHZfqmvR9-hY",
+                    "Mnesia": "nU10JVyDakgBiVfFxkk87T8L8BsczVlcPqshjZ_2w-mMXzE",
+                    "Fonty": "7BMUv4tXI6JEuun6_sz5huI765Uy4QcjlhgsVD5qgsXrZk0",
+                    "Oogli": "qwlwdyJ8JhazKg9vT4lC16xZX6KmpLM6Qr5RJmmoaXK8NzQ",
+                    "Cowboy Codi": "UUds1L0jQitbbmdu59qJASffV1bvMOcw9LaO37bFTvcRo0U",
+                    "nasir2": "m0fr8tpp_XZYazT4LQ4ASMhUDvXbUcp5sYIesRxL_Qu6lWo",
+}
+    return summoner_ids[summoner_name]
 
 
 def get_random_message(old_summoner, new_summoner, position):
@@ -366,6 +431,7 @@ def get_random_message(old_summoner, new_summoner, position):
     new_summoner = get_discord_username(new_summoner)
     old_summoner = get_discord_username(old_summoner)
     gourish_summoner = get_discord_username("Gourish")
+    salsa_king_summoner = get_discord_username("Salsa King")
     messages = [
         f"{new_summoner} just pulled off a spectacular heist {emoji_codes['business']}, ousting {old_summoner} from position {position} like a sneaky mastermind {emoji_codes['cathiago']}!",
         f"Yeah.. {emoji_codes['sadge']} I'm sorry to announce {new_summoner} has dethroned {old_summoner} from position {position}. Don't ask me how. {emoji_codes['pepeshrug']}. Surely this is deserved. {emoji_codes['scam']}",
@@ -397,6 +463,10 @@ def get_random_message(old_summoner, new_summoner, position):
     if old_summoner == gourish_summoner:
         gourish_random = random.choice(gourish_messages)
         return f"{emoji_codes['pogo']} {new_summoner} has just {gourish_random} {old_summoner} to their rightful place… GOURISH LOW! {emoji_codes['aycaramba']}"
+    if old_summoner == salsa_king_summoner:
+        return f"{emoji_codes['pogo']} {new_summoner} has overtaken {old_summoner} to achieve rank {position}, telling {old_summoner} that throughout Heaven and Earth, he alone is The Fraudulent One. {emoji_codes['pogo']}"
+    if new_summoner == salsa_king_summoner:
+        return f"{emoji_codes['pogo']} {new_summoner} has overtaken {old_summoner} to achieve rank {position}, proving once again that throughout Heaven and Earth, he alone is The Honored One. {emoji_codes['pogo']}"
     return random.choice(messages)
 
 
@@ -461,10 +531,13 @@ async def update_tft_leaderboard(previous_rankings, message, updated_tft_ranking
                     if i < previous_rank:
                         print(updated_tft_rankings_list[i])
                         print(previous_rankings[i])
-                        logging.info(f"TFT Rankings have changed! {updated_tft_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
-                        print(f"TFT Rankings have changed! {updated_tft_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
+                        logging.info(
+                            f"TFT Rankings have changed! {updated_tft_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
+                        print(
+                            f"TFT Rankings have changed! {updated_tft_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
                         # Send alert message when rankings have changed and someone ranked up
-                        await general_channel.send(get_random_message(previous_rankings[i][0], updated_tft_rankings_list[i][0], i + 1))
+                        await general_channel.send(
+                            get_random_message(previous_rankings[i][0], updated_tft_rankings_list[i][0], i + 1))
                         logging.info("TFT Rankings update message sent to TFT Leaderboard chat!")
                         print("TFT Rankings update message sent to TFT Leaderboard chat!")
 
@@ -586,8 +659,10 @@ async def update_lol_leaderboard(previous_rankings, message, updated_lol_ranking
                     if i < previous_rank:
                         print(updated_lol_rankings_list[i])
                         print(previous_rankings[i])
-                        logging.info(f"LoL Rankings have changed! {updated_lol_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
-                        print(f"LoL Rankings have changed! {updated_lol_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
+                        logging.info(
+                            f"LoL Rankings have changed! {updated_lol_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
+                        print(
+                            f"LoL Rankings have changed! {updated_lol_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
                         # Send alert message when rankings have changed and someone ranked up
                         # await general_channel.send(
                         #    get_random_message(previous_rankings[i][0], updated_lol_rankings_list[i][0], i + 1))
@@ -859,15 +934,28 @@ async def update_tasks(updated_tft_rankings_list_lock, updated_lol_rankings_list
         # client.loop.create_task(check_match_history_streak())
 
         # Clear the contents of the app.log file every 10 leaderboard updates
-       # if leaderboard_update_count % 10 == 0:
-            # Delete the file if it exists
-       #     if os.path.exists("app.log"):
-       #         os.remove("app.log")
+    # if leaderboard_update_count % 10 == 0:
+    # Delete the file if it exists
+    #     if os.path.exists("app.log"):
+    #         os.remove("app.log")
 
-            # Create a new file with the same name
-        #    with open("app.log", 'w') as file:
-        #        file.write('')
+    # Create a new file with the same name
+    #    with open("app.log", 'w') as file:
+    #        file.write('')
 
+
+#def get_lol_summoner_id(summoner_name, region):
+#    summoner = lol_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
+#    return summoner['id']
+
+#def get_tft_summoner_id(summoner_name, region):
+#    summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
+#    return summoner['id']
+
+#def generate_summoner_id_files(summoner_names_list_tft, summoner_names_list_lol, region):
+#    with open('lol_summoner_ids.txt', 'w') as f:
+#        for name in summoner_names_list_lol:
+#            f.write(f'"{name}": "{get_lol_summoner_id(name, region)}",\n')
 
 # =====================
 # Discord
