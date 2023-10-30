@@ -61,17 +61,17 @@ logging.getLogger("PIL").setLevel(logging.WARNING)
 # Teamfight Tactics
 # =====================
 region = 'na1'
-summoner_names_list_tft = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", "Sehnbon", "Wyatt1", "Gourish",
-                           "Gabyumi", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
+summoner_names_list_tft = ["Sir Mighty Bacon", "Settupss", "Classiq", "Pitt 002 Wallaby", "Sehnbon",  "Gourish",#"Wild Wyatt"
+                           "Gabyumi", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames",
                            "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
-                           "Goosecan", "cancerkween", "Azote", "ÇatFood", "Skrt Skrt Skaarl",
-                           "NonMaisWallah", "Fonty", "Oogli", "Lewis Kane", "Maa san"
+                           "cancerkween", "Azote", "ÇatFood", "Skrt Skrt Skaarl",
+                           "NonMaisWallah", "Fonty", "Oogli", "Lewis Kane", "Maa san", "SETT DEEZ UPSS", "Pitt 001 No Bow"
                            # "Kovannate3" ,"dokudami milk", "Yazeed"
                            ]
-summoner_names_list_lol = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", "Sehnbon", "Wyatt1", "Gourish",
-                           "Gabyumi", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames", "silvah bee",
+summoner_names_list_lol = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", "Sehnbon", "Gourish", "Wild Wyatt",
+                           "Gabyumi", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames",
                            "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
-                           "Goosecan", "cancerkween", "Azote", "ÇatFood", "Skrt Skrt Skaarl", "Maa san",
+                           "cancerkween", "Azote", "ÇatFood", "Skrt Skrt Skaarl", "Maa san",
                            "NonMaisWallah", "Mnesia", "Fonty", "Oogli", "Cowboy Codi", "nasir2"
                            # "Kovannate3" ,"dokudami milk", "Yazeed"
                            ]
@@ -113,8 +113,8 @@ def calculate_tier_division_value(tier_division_rank):
         "DIAMOND II": 27,
         "DIAMOND I": 28,
         "MASTER I": 29,
-        "GRANDMASTER I": 30,
-        "CHALLENGER I": 31
+        "GRANDMASTER I": 29,
+        "CHALLENGER I": 29
     }
     rank_number = ranks[tier_division_rank]
     return rank_number
@@ -137,15 +137,15 @@ async def get_tft_ranked_stats(summoner_names):
             try:
                 await asyncio.sleep(1)
                 # Gets account information
-                #logging.info(f"Making request to Riot API for TFT summoner: {summoner_name}")
-                #print(f"Making request to Riot API for TFT summoner: {summoner_name}")
-                #summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
+                # logging.info(f"Making request to Riot API for TFT summoner: {summoner_name}")
+                # print(f"Making request to Riot API for TFT summoner: {summoner_name}")
+                # summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
                 summoner_id = get_tft_summoner_id(summoner_name)
                 await asyncio.sleep(1)
                 # Gets TFT ranked_stats using summoner's ID
                 logging.info(f"Making request to Riot API for TFT ranked stats of summoner: {summoner_name}")
                 print(f"Making request to Riot API for TFT ranked stats of summoner: {summoner_name}")
-                #ranked_stats = tft_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
+                # ranked_stats = tft_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
                 ranked_stats = tft_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner_id)
                 break
             except ConnectionError:
@@ -189,7 +189,7 @@ async def get_tft_ranked_stats(summoner_names):
             tier_division_lp = tier_division
         rankings_list.append((summoner_name, ranked_value, lp, tier, tier_division_lp))
 
-    rankings_list.sort(key=lambda x: x[1], reverse=True)
+    rankings_list.sort(key=lambda x: (x[1], x[0]), reverse=True)
     return rankings_list
 
 
@@ -203,7 +203,7 @@ async def update_tft_rankings_list(updated_tft_rankings_list_lock):
             try:
                 batch_rankings = await get_tft_ranked_stats(batch)
             except Exception as e:
-                logging.error(f"An error occurred while getting LoL ranked stats for batch {batch}: {e}")
+                logging.error(f"An error occurred while getting TFT ranked stats for batch {batch}: {e}")
                 continue
             async with updated_tft_rankings_list_lock:
                 for ranking in batch_rankings:
@@ -256,15 +256,15 @@ async def get_lol_ranked_stats(summoner_names):
             try:
                 await asyncio.sleep(1)
                 # Gets account information
-                #logging.info(f"Making request to Riot API for LoL summoner: {summoner_name}")
-                #print(f"Making request to Riot API for LoL summoner: {summoner_name}")
-                #summoner = lol_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
+                # logging.info(f"Making request to Riot API for LoL summoner: {summoner_name}")
+                # print(f"Making request to Riot API for LoL summoner: {summoner_name}")
+                # summoner = lol_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
                 summoner_id = get_lol_summoner_id(summoner_name)
                 await asyncio.sleep(1)
                 # Gets LoL ranked_stats using summoner's ID
                 logging.info(f"Making request to Riot API for LoL ranked stats of summoner: {summoner_name}")
                 print(f"Making request to Riot API for LoL ranked stats of summoner: {summoner_name}")
-                #ranked_stats = lol_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
+                # ranked_stats = lol_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
                 ranked_stats = lol_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner_id)
                 break
             except ConnectionError:
@@ -314,8 +314,8 @@ async def get_lol_ranked_stats(summoner_names):
 
 def get_discord_username(summoner_name):
     discord_ids = {"Sir Mighty Bacon": "<@149681004880199681>", "Settupss": "<@144611125391130624>",
-                   "Classiq": "<@155758849582825472>", "Salsa King": "<@315272936053276672>",
-                   "Sehnbon": "<@198960489022095360>", "Wyatt1": "<@86595633288351744>",
+                   "Classiq": "<@155758849582825472>", "Pitt 002 Wallaby": "<@315272936053276672>","Salsa King": "<@315272936053276672>",
+                   "Sehnbon": "<@198960489022095360>", "Wild Wyatt": "<@86595633288351744>","Pitt 001 No Bow": "<@86595633288351744>",
                    "Gourish": "<@700837976544116808>", "Gabyumi": "<@241712679150944257>",
                    "Best Pigeon NA": "<@180136748091834368>", "meyst": "<@153778413646118912>",
                    "Limited": "<@715430081975025687>", "Z3SIeeper": "<@130242869708587008>",
@@ -325,23 +325,26 @@ def get_discord_username(summoner_name):
                    "Nappy": "<@170962579974389762>", "KingNeptun3": "<@275435768661540866>",
                    "Mrs Mighty Bacon": "<@251140411043610625>", "cpt stryder": "<@148338461433135104>",
                    "Yazeed": "<@495380694525280276>", "Kenpachi": "<@263107658762944512>",
-                   "Goosecan": "<@221019724505546752>", "cancerkween": "<@999785244045615224>",
+                   "cancerkween": "<@999785244045615224>",
                    "azote": "<@80372982337241088>", "Kovannate3": "<@1946154    71226617865>",
                    "ÇatFood": "<@160067484559474688>", "Skrt Skrt Skaarl": "<@272440042251616256>",
                    "NonMaisWallah": "<@520754531525459969>", "Mnesia": "<@402638715849146378>",
                    "Fonty": "<@133458482232819712>", "Oogli": "<@173232033772994560>",
                    "Cowboy Codi": "<@115992535855267844>",
                    "Lewis Kane": "<@913637634767716393", "nasir2": "<@1052819643351433268>"}
-    return discord_ids[summoner_name]
+    name = discord_ids[summoner_name]
+    if name is None:
+        name = summoner_name
+    return name
 
 
 def get_tft_summoner_id(summoner_name):
     summoner_ids = {"Sir Mighty Bacon": "0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txqQw6Pxo9o",
                     "Settupss": "w-THN6OPeTdgL2JauMBPkvYaUYgD8WiwiX39mc3Yk4Dcs1k",
                     "Classiq": "FQtC6bnuIM6JzqQGPswTwgoSvEZEa0WucLjaChTRdrKdbAQ",
-                    "Salsa King": "MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg",
+                    "Pitt 002 Wallaby": "MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg",
                     "Sehnbon": "QHuy9eL2GdDcu3erWravRY1rDshpvfMM6EtjeNnYI7r-YIw",
-                    "Wyatt1": "nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b",
+                    "Wild Wyatt": "nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b",
                     "Gourish": "9zX1sJAd7RciO6B7GwQODzAvBaQO634peXMAUtOINuX2y_k",
                     "Gabyumi": "8nLXCqx3oDKEJ4pAceeQSr3L0uUAdY4rdTJgXKHh8OyRzoc",
                     "meyst": "dasfJoEy9c_DNWqG8Y30RzK6Fgm-hdE_6dcx7XzL3MzA-Lw",
@@ -357,7 +360,6 @@ def get_tft_summoner_id(summoner_name):
                     "KingNeptun3": "fPMH_-GawqeVv22Kr5PSAd582K3zRd57C_5m0QZR4Yoy7dw",
                     "Mrs Mighty Bacon": "wMMQdqPaS1ZMobR8SQHcwjbQyB1GpFeg4PoReTKU8HiPpG8",
                     "cpt stryder": "CS5p6zEnufRFlSTe0fF9pQeW_meyyZJmcGN8-ZvmLcQo9LQ",
-                    "Goosecan": "e7Iu-5NCQ73RMxGsxoYeg6zpzI7tPHy_00vGyp44RCBG2uA",
                     "cancerkween": "zAtWP0dciMVlK5XHahuXW3KDsmGjq0PcJBL3LY-B-3N1Aik",
                     "Azote": "hjyAMX0av2nWPtjMEd3GyyrAeWAx6x-E0iBWiXXVMSkaAGw",
                     "ÇatFood": "6E_MKLcjrxZXf-xZ_JumEpHb2qY6vKs5di52SQyCQPIKBjg",
@@ -369,7 +371,9 @@ def get_tft_summoner_id(summoner_name):
                     "Maa san": "1a-PuFsiNRx_b4CrVJzrt4kdmmWZGFCH0AdvpEeKUWcVMH8",
                     "Mnesia": "b7nHdeLVJ7Zl-fazM4k-KJBy88s1cB8zm_nppsPkNSS7KU8",
                     "Cowboy Codi": "JB8H7801QFiu3GFZAN1i0fT_aaJdra2zM7XbghmS93Ntsa4",
-                    "nasir2": "1vJSvGRpUgiltfK1_fY1BaqboL7gCGiuqt8sAAWdRa8brxE"}
+                    "nasir2": "1vJSvGRpUgiltfK1_fY1BaqboL7gCGiuqt8sAAWdRa8brxE",
+                    "SETT DEEZ UPSS": "hvMpHFnx9VqcBkdPTAyAOSqaT7kdY9iCiZekfR5y45oHGMpIHX5Js6jOzQ",
+                    "Pitt 001 No Bow": "qfcL5D4aA73q6741eCc2KUKzaMkp4BZZwVYHbmYwgqeQR4o"}
     return summoner_ids[summoner_name]
 
 
@@ -379,7 +383,7 @@ def get_lol_summoner_id(summoner_name):
                     "Classiq": "yYoauMyQZaUfORAaOybCxcKgToviC5W5Yay_uyhZC-aAzYk",
                     "Salsa King": "y37IGgVEke9uG-LLpZa5mlPanyxZi3x9rtJRXF9OW2B-wc8",
                     "Sehnbon": "EbFaesXSJiOZulgc_peh78EfhbBg_Slk74xJmQAWPuM1N4I",
-                    "Wyatt1": "BxEp90dfHbxrE0aYSgayPLb3eh3wqu7SEoUEHEj1aSWdGso_",
+                    "Wild Wyatt": "BxEp90dfHbxrE0aYSgayPLb3eh3wqu7SEoUEHEj1aSWdGso_",
                     "Gourish": "3dgqr2I7GQmtQCkdLB_calb0h-UmOyWJVQhjCC_bB-U-Ln4",
                     "Gabyumi": "0j2bXO5OOOeFhe4LX1cGAzEYxBSP8x3xZmIqbuFQVd2j8Yw",
                     "meyst": "g0BTZnymywWaJ39n_oE8XCrNy2hN6Zi0ljnYIXBR5jU2ILs",
@@ -395,7 +399,6 @@ def get_lol_summoner_id(summoner_name):
                     "KingNeptun3": "IK9m0nzKywT8QHETKGGo3x84dxHFWAncogb0Lza-jAvtMFQ",
                     "Mrs Mighty Bacon": "9C7cBE25XnHAq5v79I93sHF870IF-gPEUWeL-wG4UJavp2E",
                     "cpt stryder": "AnWANDBFFi5jTDZabqcnCfs9G3USpUyHsCq0ScoWEwMJt14",
-                    "Goosecan": "n029BIV9BGNMyGOdbSZ2Di8n28mXmMr1YgQ0ozJ1OwuTdoM",
                     "cancerkween": "EpzNVAQqQkqPFRaiT6nbTXvWNRIW9xjwnJagcIOiPLIO1Bc",
                     "Azote": "bXmbhljaXkeKIA5NqOtU5loCKk0iZZfbSjyElSrieruR73s",
                     "ÇatFood": "6yUsSm7sVzOxasogCBtyYu_5XitMPYMH6ImhPvVgJ8Imq4Q",
@@ -407,7 +410,7 @@ def get_lol_summoner_id(summoner_name):
                     "Oogli": "qwlwdyJ8JhazKg9vT4lC16xZX6KmpLM6Qr5RJmmoaXK8NzQ",
                     "Cowboy Codi": "UUds1L0jQitbbmdu59qJASffV1bvMOcw9LaO37bFTvcRo0U",
                     "nasir2": "m0fr8tpp_XZYazT4LQ4ASMhUDvXbUcp5sYIesRxL_Qu6lWo",
-}
+                    }
     return summoner_ids[summoner_name]
 
 
@@ -431,7 +434,7 @@ def get_random_message(old_summoner, new_summoner, position):
     new_summoner = get_discord_username(new_summoner)
     old_summoner = get_discord_username(old_summoner)
     gourish_summoner = get_discord_username("Gourish")
-    salsa_king_summoner = get_discord_username("Salsa King")
+    salsa_king_summoner = get_discord_username("Pitt 002 Wallaby")
     messages = [
         f"{new_summoner} just pulled off a spectacular heist {emoji_codes['business']}, ousting {old_summoner} from position {position} like a sneaky mastermind {emoji_codes['cathiago']}!",
         f"Yeah.. {emoji_codes['sadge']} I'm sorry to announce {new_summoner} has dethroned {old_summoner} from position {position}. Don't ask me how. {emoji_codes['pepeshrug']}. Surely this is deserved. {emoji_codes['scam']}",
@@ -830,25 +833,29 @@ async def countdown_timer_tft(time, message):
     # Edit the content of the message object to display the time remaining
     await message.edit(content=f"Next update in: {minutes} minutes")
     while time > 0:
-        await asyncio.sleep(1)
-        time -= 1
-        # logging.info(f"Countdown timer ticked with time={time} and message={message.content}")
-        # Calculate the number of minutes and seconds remaining
-        minutes, seconds = divmod(time, 60)
-        minutes = minutes + 1
-        # Check if the content of the message object has been changed to "refreshing..."
-        if message.content == "Refreshing TFT leaderboard...":
-            logging.info(f"TFT Countdown timer stopped because message content changed to 'refreshing...'")
-            print(f"TFT Countdown timer stopped because message content changed to 'refreshing...'")
-            # Break out of the while loop to stop the countdown timer
-            break
+        try:
+            await asyncio.sleep(1)
+            time -= 1
+            # logging.info(f"Countdown timer ticked with time={time} and message={message.content}")
+            # Calculate the number of minutes and seconds remaining
+            minutes, seconds = divmod(time, 60)
+            minutes = minutes + 1
+            # Check if the content of the message object has been changed to "refreshing..."
+            if message.content == "Refreshing TFT leaderboard...":
+                logging.info(f"TFT Countdown timer stopped because message content changed to 'refreshing...'")
+                print(f"TFT Countdown timer stopped because message content changed to 'refreshing...'")
+                # Break out of the while loop to stop the countdown timer
+                break
 
-        # Edit the content of the message object to display the time remaining
-        if seconds == 59:
-            logging.info(f"TFT Countdown timer updated: {minutes} minutes")
-            await message.edit(content=f"Next update in: {minutes} minutes")
-        elif minutes == 0 and seconds == 10:
-            await message.edit(content=f"Next update in: {seconds:2d} seconds")
+            # Edit the content of the message object to display the time remaining
+            if seconds == 59:
+                logging.info(f"TFT Countdown timer updated: {minutes} minutes")
+                await message.edit(content=f"Next update in: {minutes} minutes")
+            elif minutes == 0 and seconds == 10:
+                await message.edit(content=f"Next update in: {seconds:2d} seconds")
+        except Exception as e:
+            print(f"An error occurred in countdown_timer_tft: {e}. Retrying in 5 seconds...")
+            await asyncio.sleep(5)  # Wait for 5 seconds before retrying
 
     logging.info(f"TFT Countdown timer finished with time={time} and message={message.content}")
     print(f"TFT Countdown timer finished with time={time} and message={message.content}")
@@ -863,25 +870,29 @@ async def countdown_timer_lol(time, message):
     # Edit the content of the message object to display the time remaining
     await message.edit(content=f"Next update in: {minutes} minutes")
     while time > 0:
-        await asyncio.sleep(1)
-        time -= 1
-        # logging.info(f"Countdown timer ticked with time={time} and message={message.content}")
-        # Calculate the number of minutes and seconds remaining
-        minutes, seconds = divmod(time, 60)
-        minutes = minutes + 1
-        # Check if the content of the message object has been changed to "refreshing..."
-        if message.content == "Refreshing Soloq leaderboard...":
-            logging.info(f"LoL Countdown timer stopped because message content changed to 'refreshing...'")
-            print(f"LoL Countdown timer stopped because message content changed to 'refreshing...'")
-            # Break out of the while loop to stop the countdown timer
-            break
+        try:
+            await asyncio.sleep(1)
+            time -= 1
+            # logging.info(f"Countdown timer ticked with time={time} and message={message.content}")
+            # Calculate the number of minutes and seconds remaining
+            minutes, seconds = divmod(time, 60)
+            minutes = minutes + 1
+            # Check if the content of the message object has been changed to "refreshing..."
+            if message.content == "Refreshing Soloq leaderboard...":
+                logging.info(f"LoL Countdown timer stopped because message content changed to 'refreshing...'")
+                print(f"LoL Countdown timer stopped because message content changed to 'refreshing...'")
+                # Break out of the while loop to stop the countdown timer
+                break
 
-        # Edit the content of the message object to display the time remaining
-        if seconds == 59:
-            logging.info(f"LoL Countdown timer updated: {minutes} minutes")
-            await message.edit(content=f"Next update in: {minutes} minutes")
-        elif minutes == 0 and seconds == 10:
-            await message.edit(content=f"Next update in: {seconds:2d} seconds")
+            # Edit the content of the message object to display the time remaining
+            if seconds == 59:
+                logging.info(f"LoL Countdown timer updated: {minutes} minutes")
+                await message.edit(content=f"Next update in: {minutes} minutes")
+            elif minutes == 0 and seconds == 10:
+                await message.edit(content=f"Next update in: {seconds:2d} seconds")
+        except Exception as e:
+            print(f"An error occurred in countdown_timer_lol: {e}. Retrying in 5 seconds...")
+            await asyncio.sleep(5)  # Wait for 5 seconds before retrying
 
     logging.info(f"LoL Countdown timer finished with time={time} and message={message.content}")
     print(f"LoL Countdown timer finished with time={time} and message={message.content}")
@@ -944,15 +955,15 @@ async def update_tasks(updated_tft_rankings_list_lock, updated_lol_rankings_list
     #        file.write('')
 
 
-#def get_lol_summoner_id(summoner_name, region):
+# def get_lol_summoner_id(summoner_name, region):
 #    summoner = lol_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
 #    return summoner['id']
 
-#def get_tft_summoner_id(summoner_name, region):
+# def get_tft_summoner_id(summoner_name, region):
 #    summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
 #    return summoner['id']
 
-#def generate_summoner_id_files(summoner_names_list_tft, summoner_names_list_lol, region):
+# def generate_summoner_id_files(summoner_names_list_tft, summoner_names_list_lol, region):
 #    with open('lol_summoner_ids.txt', 'w') as f:
 #        for name in summoner_names_list_lol:
 #            f.write(f'"{name}": "{get_lol_summoner_id(name, region)}",\n')
