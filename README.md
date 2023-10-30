@@ -1,5 +1,5 @@
 # PogO-Bot
-PogO Bot is a Discord bot mainly for Riot Games related content. It has several features to enhance your Discord server experience.
+PogO Bot is a Discord bot mainly for Riot Games related content. It has several features to enhance Discord server experience.
 
 ## Features
 - **TFT Ranked Leaderboard**: PogO Bot uses the Pillow library to generate and update a TFT ranked leaderboard for the users in your Discord server every 6 minutes. The bot retrieves summoner information and ranked stats for each person on the list through Riot Games API calls. PogO Bot uses a custom algorithm to generate a score for each player based on their ranked data, allowing them to be sorted by rank on the leaderboard.
