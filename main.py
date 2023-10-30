@@ -212,7 +212,7 @@ async def update_tft_rankings_list(updated_tft_rankings_list_lock):
                     if existing_ranking:
                         updated_tft_rankings_list.remove(existing_ranking)
                     updated_tft_rankings_list.append(ranking)
-                updated_tft_rankings_list.sort(key=lambda x: x[1], reverse=True)
+                updated_tft_rankings_list.sort(key=lambda x: (x[1], x[0]), reverse=True)
             logging.info(f"Updated TFT rankings list: {updated_tft_rankings_list}")
             logging.info(f"Waiting 1 minutes until next TFT batch update...")
             await asyncio.sleep(60)
@@ -237,7 +237,7 @@ async def update_lol_rankings_list(updated_lol_rankings_list_lock):
                     if existing_ranking:
                         updated_lol_rankings_list.remove(existing_ranking)
                     updated_lol_rankings_list.append(ranking)
-                updated_lol_rankings_list.sort(key=lambda x: x[1], reverse=True)
+                updated_lol_rankings_list.sort(key=lambda x: (x[1], x[0]), reverse=True)
             logging.info(f"Updated LoL rankings list: {updated_lol_rankings_list}")
             logging.info(f"Waiting 1 minutes until next LoL batch update...")
             print(f"Updated LoL rankings list: {updated_lol_rankings_list}")
@@ -308,7 +308,7 @@ async def get_lol_ranked_stats(summoner_names):
             tier_division_lp = tier_division
         rankings_list.append((summoner_name, ranked_value, lp, tier, tier_division_lp))
 
-    rankings_list.sort(key=lambda x: x[1], reverse=True)
+    rankings_list.sort(key=lambda x: (x[1], x[0]), reverse=True)
     return rankings_list
 
 
