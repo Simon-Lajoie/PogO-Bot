@@ -14,7 +14,7 @@ PogO Bot is a Discord bot mainly for Riot Games related content. It has several 
 
 - **Custom Emotes**: PogO Bot has several typing commands that can replace certain words with custom emotes. For example, typing “PogO” will replace your message with a PogO emote.
 
-## Example of Teamfight Tactcs leaderboard periodically updated by PogO Bot
+## Example of Teamfight Tactics leaderboard periodically updated by PogO Bot
 ![image](https://github.com/Simon-Lajoie/PogO-Bot/assets/123536951/4bc85e0e-860a-47eb-93ef-81fe3edbcca7)
 
 ## Example of League of Legends leaderboard periodically updated by PogO Bot
