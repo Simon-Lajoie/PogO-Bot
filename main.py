@@ -82,7 +82,9 @@ previous_match_history_ids = []
 updated_tft_rankings_list = []
 updated_lol_rankings_list = []
 loop = client.loop
-
+general_channel_id = 1249887657761443841
+tft_leaderboard_channel_id = 1249993766300024842
+lol_leaderboard_channel_id = 1249993747119472693
 
 def calculate_tier_division_value(tier_division_rank):
     ranks = {
@@ -517,8 +519,8 @@ async def update_tft_leaderboard(previous_rankings, message, updated_tft_ranking
     global updated_tft_rankings_list
     async with updated_tft_rankings_list_lock:
         # channel = client.get_channel(1118758206840262686) TESTING SERVER
-        general_channel = client.get_channel(846551161388662789)
-        tft_leaderboard_channel = client.get_channel(1118278946048454726)
+        general_channel = client.get_channel(general_channel_id)
+        tft_leaderboard_channel = client.get_channel(tft_leaderboard_channel_id)
 
         # Edit the content of the message object to display "refreshing..."
         logging.info("TFT Countdown timer: Refreshing leaderboard...")
@@ -645,8 +647,8 @@ async def update_lol_leaderboard(previous_rankings, message, updated_lol_ranking
     global updated_lol_rankings_list
     async with updated_lol_rankings_list_lock:
         # channel = client.get_channel(1118758206840262686) TESTING SERVER
-        general_channel = client.get_channel(846551161388662789)
-        lol_leaderboard_channel = client.get_channel(1129965287131861043)
+        general_channel = client.get_channel(general_channel_id)
+        lol_leaderboard_channel = client.get_channel(lol_leaderboard_channel_id)
 
         # Edit the content of the message object to display "refreshing..."
         logging.info("LoL Countdown timer: Refreshing LoL leaderboard...")
@@ -861,8 +863,8 @@ async def clear_channel(channel):
 
 
 async def update_tasks(updated_tft_rankings_list_lock, updated_lol_rankings_list_lock):
-    tft_leaderboard_channel = client.get_channel(1118278946048454726)
-    lol_leaderboard_channel = client.get_channel(1129965287131861043)
+    tft_leaderboard_channel = client.get_channel(tft_leaderboard_channel_id)
+    lol_leaderboard_channel = client.get_channel(lol_leaderboard_channel_id)
     leaderboard_update_count = 0
     previous_tft_rankings = []
     previous_lol_rankings = []
@@ -894,7 +896,7 @@ async def update_tasks(updated_tft_rankings_list_lock, updated_lol_rankings_list
 BAN_THRESHOLD = 2
 KICK_THRESHOLD = 2
 DELETE_THRESHOLD = 2
-TIME_FRAME = timedelta(minutes=5)  # Adjust as needed
+TIME_FRAME = timedelta(minutes=5)
 
 # Track actions
 action_tracker = defaultdict(list)
@@ -929,16 +931,16 @@ async def on_ready():
     logging.debug("on_ready function called")
     await client.tree.sync()
     print("Success: PogO bot is connected to Discord".format(client))
-    # tft_leaderboard_channel = client.get_channel(1249993766300024842)
-    # lol_leaderboard_channel = client.get_channel(1249993747119472693)
-    # await clear_channel(tft_leaderboard_channel)
-    # await clear_channel(lol_leaderboard_channel)
-    # print("Success: PogO bot has cleared the TFT leaderboard channel")
-    # updated_tft_rankings_list_lock = asyncio.Lock()
-    # updated_lol_rankings_list_lock = asyncio.Lock()
-    # client.loop.create_task(update_tasks(updated_tft_rankings_list_lock, updated_lol_rankings_list_lock))
-    # client.loop.create_task(update_tft_rankings_list(updated_tft_rankings_list_lock))
-    # client.loop.create_task(update_lol_rankings_list(updated_lol_rankings_list_lock))
+    tft_leaderboard_channel = client.get_channel(tft_leaderboard_channel_id)
+    lol_leaderboard_channel = client.get_channel(lol_leaderboard_channel_id)
+    await clear_channel(tft_leaderboard_channel)
+    await clear_channel(lol_leaderboard_channel)
+    print("Success: PogO bot has cleared the TFT leaderboard channel")
+    updated_tft_rankings_list_lock = asyncio.Lock()
+    updated_lol_rankings_list_lock = asyncio.Lock()
+    client.loop.create_task(update_tasks(updated_tft_rankings_list_lock, updated_lol_rankings_list_lock))
+    client.loop.create_task(update_tft_rankings_list(updated_tft_rankings_list_lock))
+    client.loop.create_task(update_lol_rankings_list(updated_lol_rankings_list_lock))
     reset_tracker.start()
 
 
