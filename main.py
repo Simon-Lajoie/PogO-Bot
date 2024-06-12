@@ -4,16 +4,20 @@ from collections import deque
 from datetime import datetime, timedelta
 from time import time
 import discord
+from discord.ext import commands, tasks
+from collections import defaultdict
+from datetime import datetime, timedelta
 import random
 from riotwatcher import LolWatcher, ApiError, TftWatcher, RateLimiter
 from PIL import Image, ImageDraw, ImageFont
-from discord.ext import commands
 from itertools import combinations
 import logging
 import os
 from dotenv import load_dotenv
 
 intents = discord.Intents.default()
+intents.members = True
+intents.guilds = True
 intents.message_content = True
 client = commands.Bot(command_prefix="/", intents=intents)
 load_dotenv()
@@ -61,19 +65,17 @@ logging.getLogger("PIL").setLevel(logging.WARNING)
 # Teamfight Tactics
 # =====================
 region = 'na1'
-summoner_names_list_tft = ["Sir Mighty Bacon", "Settupss", "Classiq", "Pitt 002 Wallaby", "Sehnbon",  "Gourish",#"Wild Wyatt"
+summoner_names_list_tft = ["Sir Mighty Bacon", "Settupss", "Classiq", "Wallaby", "Sehnbon", "Gourish", "Ramza",
                            "Gabyumi", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames",
                            "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
                            "cancerkween", "Azote", "ÇatFood", "Skrt Skrt Skaarl",
-                           "NonMaisWallah", "Fonty", "Oogli", "Lewis Kane", "Maa san", "SETT DEEZ UPSS", "Pitt 001 No Bow"
-                           # "Kovannate3" ,"dokudami milk", "Yazeed"
+                           "NonMaisWallah", "Fonty", "Oogli", "Lewis Kane", "Maa san", "SETT DEEZ UPSS", "Skyhigh2005"
                            ]
-summoner_names_list_lol = ["Sir Mighty Bacon", "Settupss", "Classiq", "Salsa King", "Sehnbon", "Gourish", "Wild Wyatt",
+summoner_names_list_lol = ["Sir Mighty Bacon", "Settupss", "Classiq", "Wallaby", "Sehnbon", "Gourish", "Ramza",
                            "Gabyumi", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames",
                            "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
                            "cancerkween", "Azote", "ÇatFood", "Skrt Skrt Skaarl", "Maa san",
-                           "NonMaisWallah", "Mnesia", "Fonty", "Oogli", "Cowboy Codi", "nasir2"
-                           # "Kovannate3" ,"dokudami milk", "Yazeed"
+                           "NonMaisWallah", "Mnesia", "Fonty", "Oogli", "Cowboy Codi", "nasir2", "Skyhigh2005"
                            ]
 
 previous_match_history_ids = []
@@ -314,8 +316,8 @@ async def get_lol_ranked_stats(summoner_names):
 
 def get_discord_username(summoner_name):
     discord_ids = {"Sir Mighty Bacon": "<@149681004880199681>", "Settupss": "<@144611125391130624>",
-                   "Classiq": "<@155758849582825472>", "Pitt 002 Wallaby": "<@315272936053276672>","Salsa King": "<@315272936053276672>",
-                   "Sehnbon": "<@198960489022095360>", "Wild Wyatt": "<@86595633288351744>","Pitt 001 No Bow": "<@86595633288351744>",
+                   "Classiq": "<@155758849582825472>", "Wallaby": "<@315272936053276672>",
+                   "Sehnbon": "<@198960489022095360>", "Ramza": "<@86595633288351744>",
                    "Gourish": "<@700837976544116808>", "Gabyumi": "<@241712679150944257>",
                    "Best Pigeon NA": "<@180136748091834368>", "meyst": "<@153778413646118912>",
                    "Limited": "<@715430081975025687>", "Z3SIeeper": "<@130242869708587008>",
@@ -331,20 +333,22 @@ def get_discord_username(summoner_name):
                    "NonMaisWallah": "<@520754531525459969>", "Mnesia": "<@402638715849146378>",
                    "Fonty": "<@133458482232819712>", "Oogli": "<@173232033772994560>",
                    "Cowboy Codi": "<@115992535855267844>",
-                   "Lewis Kane": "<@913637634767716393", "nasir2": "<@1052819643351433268>"}
+                   "Lewis Kane": "<@913637634767716393", "nasir2": "<@1052819643351433268>",
+                   "Skyhigh2005": "<@339383907449569281>"}
     name = discord_ids[summoner_name]
     if name is None:
         name = summoner_name
     return name
 
 
+# ID
 def get_tft_summoner_id(summoner_name):
     summoner_ids = {"Sir Mighty Bacon": "0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txqQw6Pxo9o",
                     "Settupss": "w-THN6OPeTdgL2JauMBPkvYaUYgD8WiwiX39mc3Yk4Dcs1k",
                     "Classiq": "FQtC6bnuIM6JzqQGPswTwgoSvEZEa0WucLjaChTRdrKdbAQ",
-                    "Pitt 002 Wallaby": "MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg",
+                    "Wallaby": "MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg",
                     "Sehnbon": "QHuy9eL2GdDcu3erWravRY1rDshpvfMM6EtjeNnYI7r-YIw",
-                    "Wild Wyatt": "nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b",
+                    "Ramza": "nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b",
                     "Gourish": "9zX1sJAd7RciO6B7GwQODzAvBaQO634peXMAUtOINuX2y_k",
                     "Gabyumi": "8nLXCqx3oDKEJ4pAceeQSr3L0uUAdY4rdTJgXKHh8OyRzoc",
                     "meyst": "dasfJoEy9c_DNWqG8Y30RzK6Fgm-hdE_6dcx7XzL3MzA-Lw",
@@ -352,7 +356,6 @@ def get_tft_summoner_id(summoner_name):
                     "Z3SIeeper": "u78gFAF4MJ2J4brtythuTE-uPpYEaFNCRK5hbXDLOOjf_3Ck",
                     "BlackDrag": "cmxCpBLbYX48necTpKLBiTn5IM1J0AYWHKiCAC5OcyuG6_o",
                     "Flames": "APXt68Ogg5-pMLP5vdoq1hwpn-wl4sFxJl6GJg4356U3Vbs",
-                    "silvah bee": "oUBkj0tZr-5IDuqudJruJpZ_O2hiDdYLahwJI8Z2A5ey5yg",
                     "Tiny Cena": "UBLAyVJLtvI0DvNJZc5Ln_ShUKt_DpPJijJNgewxRLTP4Mg",
                     "Aàrón": "hR0VrK_dmuN1_CbI9ea576MSKDKoQfH9_VEd_4iBCjEogLU",
                     "5billon": "C4Ewpnp_HCLtxYT3TXwR-bcQQzIu63dODg7Zc_B298hkm9U",
@@ -373,7 +376,7 @@ def get_tft_summoner_id(summoner_name):
                     "Cowboy Codi": "JB8H7801QFiu3GFZAN1i0fT_aaJdra2zM7XbghmS93Ntsa4",
                     "nasir2": "1vJSvGRpUgiltfK1_fY1BaqboL7gCGiuqt8sAAWdRa8brxE",
                     "SETT DEEZ UPSS": "hvMpHFnx9VqcBkdPTAyAOSqaT7kdY9iCiZekfR5y45oHGMpIHX5Js6jOzQ",
-                    "Pitt 001 No Bow": "qfcL5D4aA73q6741eCc2KUKzaMkp4BZZwVYHbmYwgqeQR4o"}
+                    "Skyhigh2005": "xAm6DMppQhPx0LNH5v6QLAWPJ7LuynhKEVph2GMDPye4MX8"}
     return summoner_ids[summoner_name]
 
 
@@ -381,9 +384,9 @@ def get_lol_summoner_id(summoner_name):
     summoner_ids = {"Sir Mighty Bacon": "BGGUjqEm1nar21U8pP_wj7Bv2uyd1Na-03wy7yeZVMRdEv0",
                     "Settupss": "r6XtQGwiHuXfAHfrfvIXXuhOYpyyoUsm2JgC3r_BAVGWYbs",
                     "Classiq": "yYoauMyQZaUfORAaOybCxcKgToviC5W5Yay_uyhZC-aAzYk",
-                    "Salsa King": "y37IGgVEke9uG-LLpZa5mlPanyxZi3x9rtJRXF9OW2B-wc8",
+                    "Wallaby": "y37IGgVEke9uG-LLpZa5mlPanyxZi3x9rtJRXF9OW2B-wc8",
                     "Sehnbon": "EbFaesXSJiOZulgc_peh78EfhbBg_Slk74xJmQAWPuM1N4I",
-                    "Wild Wyatt": "BxEp90dfHbxrE0aYSgayPLb3eh3wqu7SEoUEHEj1aSWdGso_",
+                    "Ramza": "BxEp90dfHbxrE0aYSgayPLb3eh3wqu7SEoUEHEj1aSWdGso_",
                     "Gourish": "3dgqr2I7GQmtQCkdLB_calb0h-UmOyWJVQhjCC_bB-U-Ln4",
                     "Gabyumi": "0j2bXO5OOOeFhe4LX1cGAzEYxBSP8x3xZmIqbuFQVd2j8Yw",
                     "meyst": "g0BTZnymywWaJ39n_oE8XCrNy2hN6Zi0ljnYIXBR5jU2ILs",
@@ -391,7 +394,6 @@ def get_lol_summoner_id(summoner_name):
                     "Z3SIeeper": "H8mMWxvMNWpxhMoSOaC8m59txmO3ZmLTmAEV1hCIzNrLdZ-b",
                     "BlackDrag": "hLXUGO0f4JSogjsJKhyrXlzzFm27iz5nkLuOczd2YKEOCqw",
                     "Flames": "IZx8e2BrDLu1x7X6pUgzPxMqqKBOMwXrJ59Fgr0W7C3GSjY",
-                    "silvah bee": "t2YrGQw9KgNXXkBg5B6VChMyR0Lw7naQpP8hgsIzkyZtncE",
                     "Tiny Cena": "kr9B4wdzki8INVxOyXrvPDqUcdCxMKoDhUc4ytusynhqn7Q",
                     "Aàrón": "HGVC39mIVJauqT3njok44TNPIxMJp9A8sptkhY0CP__bJSc",
                     "5billon": "PCBqQfKevnh_PwJerhJOFOZ8BEZi90HYOBXduWvJl_pMaPg",
@@ -410,6 +412,7 @@ def get_lol_summoner_id(summoner_name):
                     "Oogli": "qwlwdyJ8JhazKg9vT4lC16xZX6KmpLM6Qr5RJmmoaXK8NzQ",
                     "Cowboy Codi": "UUds1L0jQitbbmdu59qJASffV1bvMOcw9LaO37bFTvcRo0U",
                     "nasir2": "m0fr8tpp_XZYazT4LQ4ASMhUDvXbUcp5sYIesRxL_Qu6lWo",
+                    "Skyhigh2005": "Q0gF9NCFu0Q-z0hsTlZOp41fupflzwGgbGraoQc_0QxbAUs"
                     }
     return summoner_ids[summoner_name]
 
@@ -434,7 +437,7 @@ def get_random_message(old_summoner, new_summoner, position):
     new_summoner = get_discord_username(new_summoner)
     old_summoner = get_discord_username(old_summoner)
     gourish_summoner = get_discord_username("Gourish")
-    salsa_king_summoner = get_discord_username("Pitt 002 Wallaby")
+    salsa_king_summoner = get_discord_username("Wallaby")
     messages = [
         f"{new_summoner} just pulled off a spectacular heist {emoji_codes['business']}, ousting {old_summoner} from position {position} like a sneaky mastermind {emoji_codes['cathiago']}!",
         f"Yeah.. {emoji_codes['sadge']} I'm sorry to announce {new_summoner} has dethroned {old_summoner} from position {position}. Don't ask me how. {emoji_codes['pepeshrug']}. Surely this is deserved. {emoji_codes['scam']}",
@@ -499,13 +502,13 @@ async def balance(ctx, summoner_names):
     # let Discord know that your bot is still processing the request
     await ctx.defer()
     # get a value for each name (replace this with your own code)
-    rankings = get_lol_ranked_stats(names)
+    rankings = await get_lol_ranked_stats(names)
     # balance the teams
     # assign players to teams using the minimax algorithm
     team1, team2 = balance_algorithm(rankings)
     # send the balanced teams back to the user
-    # print(team1)
-    # print(team2)
+    print(team1)
+    print(team2)
     await ctx.send(f'Team 1: {", ".join(team1)}')
     await ctx.send(f'Team 2: {", ".join(team2)}')
 
@@ -766,64 +769,6 @@ async def update_lol_leaderboard(previous_rankings, message, updated_lol_ranking
     await countdown_timer_lol(360, message)
 
 
-async def get_match_history(previous_match_history_ids):
-    match_history_ids = []
-    general_channel = client.get_channel(846551161388662789)
-    for summoner_name in summoner_names_list_tft:
-        # Gets account information
-        summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
-        # Gets last 3 TFT games ids from match history using summoner's PUUID and find the ranked games
-        last_3_games_ids = tft_watcher.match.by_puuid(region=region, puuid=summoner["puuid"], count=3)
-        ranked_games = []
-        for game in last_3_games_ids:
-            match = tft_watcher.match.by_id(region=region, match_id=game)
-            if match["info"]["queue_id"] == 1100:
-                ranked_games.append(match)
-        print(f"Ranked games ID: {ranked_games}")
-        # Check if any ids in last_3_games_ids are present in previous_match_history_ids
-        common_ids = set(last_3_games_ids).intersection(previous_match_history_ids)
-        logging.info(f"{summoner_name} common ids: {common_ids}")
-        print(f"{summoner_name} common ids: {common_ids}")
-        placements = []
-        game_ids = []
-        if not common_ids:
-            for game in ranked_games:
-                # Find the player placements in the every match
-                for participant in game["info"]["participants"]:
-                    if participant["puuid"] == summoner["puuid"]:
-                        placements.append(participant["placement"])
-                        game_ids.append(game["metadata"]["match_id"])
-                        break
-            logging.info(f"{summoner_name} placements: {placements}")
-            print(f"{summoner_name} got the following placements: {placements}")
-            for i in range(len(placements) - 1):
-                if placements[i] == 1 and placements[i + 1] == 1:
-                    pogo_emote = "<:PogO:949833186689568768>"
-                    await general_channel.send(
-                        f"🏆 ATTENTION! {get_discord_username(summoner_name)} got two 1st placements in a row! {pogo_emote} 🏆")
-                    # Add game ids to match_history_ids
-                    match_history_ids.extend(game_ids[i:i + 2])
-                if placements[i] == 8 and placements[i + 1] == 8:
-                    aycaramba_emote = "<:aycaramba:960051307752849448>"
-                    await general_channel.send(
-                        f"📉 ATTENTION! {get_discord_username(summoner_name)} got two 8th placements in a row! {aycaramba_emote} 📉")
-                    # Add game ids to match_history_ids
-                    match_history_ids.extend(game_ids[i:i + 2])
-            else:
-                match_history_ids.extend(common_ids)
-    return match_history_ids
-
-
-async def check_match_history_streak():
-    global previous_match_history_ids
-    logging.info(f"Checking match history...")
-    print(f"Checking match history...")
-    match_history_ids = await get_match_history(previous_match_history_ids)
-    # Save current match history ids
-    previous_match_history_ids = match_history_ids
-    print(f"previous match history ids: {previous_match_history_ids}")
-
-
 async def countdown_timer_tft(time, message):
     logging.info(f"Starting TFT countdown timer with time={time} and message={message.content}")
     print(f"Starting TFT countdown timer with time={time} and message={message.content}")
@@ -941,32 +886,40 @@ async def update_tasks(updated_tft_rankings_list_lock, updated_lol_rankings_list
         # Wait for the update_tft_leaderboard and update_lol_leaderboard task to complete
         await asyncio.gather(task1, task2)
 
-        # Call check_match_history_streak every 10 minutes
-        # client.loop.create_task(check_match_history_streak())
 
-        # Clear the contents of the app.log file every 10 leaderboard updates
-    # if leaderboard_update_count % 10 == 0:
-    # Delete the file if it exists
-    #     if os.path.exists("app.log"):
-    #         os.remove("app.log")
+# ===============================================================
+# ANTI-NUKE (Protects from mass deletion of channels and bans)
+# ===============================================================
+# Define thresholds and timeframes
+BAN_THRESHOLD = 2
+KICK_THRESHOLD = 2
+DELETE_THRESHOLD = 2
+TIME_FRAME = timedelta(minutes=5)  # Adjust as needed
 
-    # Create a new file with the same name
-    #    with open("app.log", 'w') as file:
-    #        file.write('')
+# Track actions
+action_tracker = defaultdict(list)
 
 
-# def get_lol_summoner_id(summoner_name, region):
-#    summoner = lol_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
-#    return summoner['id']
+async def check_actions(user, action_type, threshold):
+    now = datetime.utcnow()
+    # Remove old actions
+    action_tracker[action_type] = [action for action in action_tracker[action_type]
+                                   if now - action[1] < TIME_FRAME]
+    # Add new action
+    action_tracker[action_type].append((user, now))
+    # Count actions by this user
+    user_actions = [action for action in action_tracker[action_type]
+                    if action[0] == user]
+    if len(user_actions) >= threshold:
+        return True
+    return False
 
-# def get_tft_summoner_id(summoner_name, region):
-#    summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
-#    return summoner['id']
+@tasks.loop(minutes=5)
+async def reset_tracker():
+    global action_tracker
+    action_tracker = defaultdict(list)
+    print("Action tracker reset.")
 
-# def generate_summoner_id_files(summoner_names_list_tft, summoner_names_list_lol, region):
-#    with open('lol_summoner_ids.txt', 'w') as f:
-#        for name in summoner_names_list_lol:
-#            f.write(f'"{name}": "{get_lol_summoner_id(name, region)}",\n')
 
 # =====================
 # Discord
@@ -976,16 +929,17 @@ async def on_ready():
     logging.debug("on_ready function called")
     await client.tree.sync()
     print("Success: PogO bot is connected to Discord".format(client))
-    tft_leaderboard_channel = client.get_channel(1118278946048454726)
-    lol_leaderboard_channel = client.get_channel(1129965287131861043)
-    await clear_channel(tft_leaderboard_channel)
-    await clear_channel(lol_leaderboard_channel)
-    print("Success: PogO bot has cleared the TFT leaderboard channel")
-    updated_tft_rankings_list_lock = asyncio.Lock()
-    updated_lol_rankings_list_lock = asyncio.Lock()
-    client.loop.create_task(update_tasks(updated_tft_rankings_list_lock, updated_lol_rankings_list_lock))
-    client.loop.create_task(update_tft_rankings_list(updated_tft_rankings_list_lock))
-    client.loop.create_task(update_lol_rankings_list(updated_lol_rankings_list_lock))
+    # tft_leaderboard_channel = client.get_channel(1249993766300024842)
+    # lol_leaderboard_channel = client.get_channel(1249993747119472693)
+    # await clear_channel(tft_leaderboard_channel)
+    # await clear_channel(lol_leaderboard_channel)
+    # print("Success: PogO bot has cleared the TFT leaderboard channel")
+    # updated_tft_rankings_list_lock = asyncio.Lock()
+    # updated_lol_rankings_list_lock = asyncio.Lock()
+    # client.loop.create_task(update_tasks(updated_tft_rankings_list_lock, updated_lol_rankings_list_lock))
+    # client.loop.create_task(update_tft_rankings_list(updated_tft_rankings_list_lock))
+    # client.loop.create_task(update_lol_rankings_list(updated_lol_rankings_list_lock))
+    reset_tracker.start()
 
 
 @client.hybrid_command()
@@ -1008,5 +962,55 @@ async def on_message(message):
     # if message.content.startswith('test'):
     #    await message.channel.send('test')
 
+
+@client.event
+async def on_member_ban(guild, user):
+    async for entry in guild.audit_logs(limit=1, action=discord.AuditLogAction.ban):
+        if entry.target.id == user.id:
+            print(f"{entry.user} banned {user.name}")
+            if await check_actions(entry.user, "ban", BAN_THRESHOLD):
+                print(f"{entry.user} exceeded ban threshold")
+                # Ban the user
+                await guild.ban(entry.user, reason="Exceeded ban threshold")
+                print(f"{entry.user} banned!")
+                # Get the channel
+                channel = client.get_channel(1118399007992070168)  # general chat
+                # Send banned message to the channel
+                await channel.send(f"{entry.user.mention} was banned! RIP BOZO! <:PogO:949833186689568768>")
+
+
+@client.event
+async def on_member_remove(member):
+    async for entry in member.guild.audit_logs(limit=1, action=discord.AuditLogAction.kick):
+        if entry.target.id == member.id:
+            print(f"{entry.user} kicked {member.name}")
+            if await check_actions(entry.user, "kick", KICK_THRESHOLD):
+                print(f"{entry.user} exceeded kick threshold")
+                # Ban the user
+                await member.guild.ban(entry.user, reason="Exceeded kick threshold")
+                print(f"{entry.user} banned!")
+                # Get the channel
+                channel = client.get_channel(1118399007992070168)  # general chat
+                # Send banned message to the channel
+                await channel.send(f"{entry.user.mention} was banned! RIP BOZO! <:PogO:949833186689568768>")
+
+
+@client.event
+async def on_guild_channel_delete(channel):
+    guild = channel.guild
+    #print(f"Checking audit logs for channel delete in guild: {guild.name}")
+    async for entry in guild.audit_logs(limit=1, action=discord.AuditLogAction.channel_delete):
+        #print(f"Audit log entry found: {entry}")
+        if entry.target.id == channel.id:
+            #print(f"{entry.user} deleted {channel.name}")
+            if await check_actions(entry.user, "delete", DELETE_THRESHOLD):
+                print(f"{entry.user} exceeded delete threshold")
+                # Ban the user
+                await channel.guild.ban(entry.user, reason="Exceeded delete threshold")
+                print(f"{entry.user} banned!")
+                # Get the channel
+                channel = client.get_channel(1118399007992070168)  # general chat
+                # Send banned message to the channel
+                await channel.send(f"{entry.user.mention} was banned! RIP BOZO! <:PogO:949833186689568768>")
 
 client.run(client_id)
