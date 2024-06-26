@@ -916,6 +916,7 @@ async def check_actions(user, action_type, threshold):
         return True
     return False
 
+
 @tasks.loop(minutes=5)
 async def reset_tracker():
     global action_tracker
@@ -976,7 +977,7 @@ async def on_member_ban(guild, user):
                 await guild.ban(entry.user, reason="Exceeded ban threshold")
                 print(f"{entry.user} banned!")
                 # Get the channel
-                channel = client.get_channel(1118399007992070168)  # general chat
+                channel = client.get_channel(general_channel_id)  # general chat
                 # Send banned message to the channel
                 await channel.send(f"{entry.user.mention} was banned! RIP BOZO! <:PogO:949833186689568768>")
 
@@ -992,7 +993,7 @@ async def on_member_remove(member):
                 await member.guild.ban(entry.user, reason="Exceeded kick threshold")
                 print(f"{entry.user} banned!")
                 # Get the channel
-                channel = client.get_channel(1118399007992070168)  # general chat
+                channel = client.get_channel(general_channel_id)  # general chat
                 # Send banned message to the channel
                 await channel.send(f"{entry.user.mention} was banned! RIP BOZO! <:PogO:949833186689568768>")
 
@@ -1011,7 +1012,7 @@ async def on_guild_channel_delete(channel):
                 await channel.guild.ban(entry.user, reason="Exceeded delete threshold")
                 print(f"{entry.user} banned!")
                 # Get the channel
-                channel = client.get_channel(1118399007992070168)  # general chat
+                channel = client.get_channel(general_channel_id)  # general chat
                 # Send banned message to the channel
                 await channel.send(f"{entry.user.mention} was banned! RIP BOZO! <:PogO:949833186689568768>")
 
