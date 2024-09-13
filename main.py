@@ -61,22 +61,139 @@ logging.basicConfig(level=logging.DEBUG, filename='app.log', filemode='w',
                     format='%(name)s - %(levelname)s - %(message)s')
 logging.getLogger("PIL").setLevel(logging.WARNING)
 
-# =====================
-# Teamfight Tactics
-# =====================
 region = 'na1'
 summoner_names_list_tft = ["Sir Mighty Bacon", "Settupss", "Classiq", "Wallaby", "Sehnbon", "Gourish", "Ramza",
                            "Gabyumi", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames",
                            "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
                            "cancerkween", "Azote", "ÇatFood", "Skrt Skrt Skaarl",
-                           "NonMaisWallah", "Fonty", "Oogli", "Lewis Kane", "Maa san", "SETT DEEZ UPSS", "Skyhigh2005"
+                           "NonMaisWallah", "Fonty", "Oogli", "Lewis Kane", "Maa san", "SETT DEEZ UPSS", "Skyhigh2005",
+                           "Zotto", "Evelynn Toes", "Shrektangle", "Wazzai", "Chopin is Bach"
                            ]
 summoner_names_list_lol = ["Sir Mighty Bacon", "Settupss", "Classiq", "Wallaby", "Sehnbon", "Gourish", "Ramza",
                            "Gabyumi", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames",
                            "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
                            "cancerkween", "Azote", "ÇatFood", "Skrt Skrt Skaarl", "Maa san",
-                           "NonMaisWallah", "Mnesia", "Fonty", "Oogli", "Cowboy Codi", "nasir2", "Skyhigh2005"
+                           "NonMaisWallah", "Mnesia", "Fonty", "Oogli", "Cowboy Codi", "nasir2", "Skyhigh2005", "Zotto",
+                           "Evelynn Toes", "Shrektangle", "Wazzai", "Chopin is Bach"
                            ]
+
+
+def get_discord_username(summoner_name):
+    discord_ids = {"Sir Mighty Bacon": "<@149681004880199681>", "Settupss": "<@144611125391130624>",
+                   "Classiq": "<@155758849582825472>", "Wallaby": "<@315272936053276672>",
+                   "Sehnbon": "<@198960489022095360>", "Ramza": "<@86595633288351744>",
+                   "Gourish": "<@700837976544116808>", "Gabyumi": "<@241712679150944257>",
+                   "Best Pigeon NA": "<@180136748091834368>", "meyst": "<@153778413646118912>",
+                   "Limited": "<@715430081975025687>", "Z3SIeeper": "<@130242869708587008>",
+                   "BlackDrag": "<@244390872983011328>", "Flames": "<@80373001006096384>",
+                   "silvah bee": "<@527593111547805696>", "Tiny Cena": "<@154752158854545408>",
+                   "Aàrón": "<@64494156914888704>", "5billon": "<@133779784105721856>",
+                   "Nappy": "<@170962579974389762>", "KingNeptun3": "<@275435768661540866>",
+                   "Mrs Mighty Bacon": "<@251140411043610625>", "cpt stryder": "<@148338461433135104>",
+                   "Yazeed": "<@495380694525280276>", "Kenpachi": "<@263107658762944512>",
+                   "cancerkween": "<@999785244045615224>",
+                   "azote": "<@80372982337241088>", "Kovannate3": "<@1946154    71226617865>",
+                   "ÇatFood": "<@160067484559474688>", "Skrt Skrt Skaarl": "<@272440042251616256>",
+                   "NonMaisWallah": "<@520754531525459969>", "Mnesia": "<@402638715849146378>",
+                   "Fonty": "<@133458482232819712>", "Oogli": "<@173232033772994560>",
+                   "Cowboy Codi": "<@115992535855267844>",
+                   "Lewis Kane": "<@913637634767716393", "nasir2": "<@1052819643351433268>",
+                   "Skyhigh2005": "<@339383907449569281>", "Zotto": "<@148963530262052864>",
+                   "Evelynn Toes": "<@152469092182261761>", "Shrektangle": "<@117811507693223944>",
+                   "Wazzai": "<@399391319300112386>", "Chopin is Bach": "<@112316340844462080>"}
+    name = discord_ids[summoner_name]
+    if name is None:
+        name = summoner_name
+    return name
+
+
+# TFT-SUMMONER-V1 : /tft/summoner/v1/summoners/by-puuid/{encryptedPUUID} :  id
+def get_tft_summoner_id(summoner_name):
+    summoner_ids = {"Sir Mighty Bacon": "0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txqQw6Pxo9o",
+                    "Settupss": "w-THN6OPeTdgL2JauMBPkvYaUYgD8WiwiX39mc3Yk4Dcs1k",
+                    "Classiq": "FQtC6bnuIM6JzqQGPswTwgoSvEZEa0WucLjaChTRdrKdbAQ",
+                    "Wallaby": "MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg",
+                    "Sehnbon": "QHuy9eL2GdDcu3erWravRY1rDshpvfMM6EtjeNnYI7r-YIw",
+                    "Ramza": "nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b",
+                    "Gourish": "9zX1sJAd7RciO6B7GwQODzAvBaQO634peXMAUtOINuX2y_k",
+                    "Gabyumi": "8nLXCqx3oDKEJ4pAceeQSr3L0uUAdY4rdTJgXKHh8OyRzoc",
+                    "meyst": "dasfJoEy9c_DNWqG8Y30RzK6Fgm-hdE_6dcx7XzL3MzA-Lw",
+                    "Limited": "OkZo1rN5o0DDWK5LGwgXDT4k5fd2FHhCRcPv69LulAEqirk",
+                    "Z3SIeeper": "u78gFAF4MJ2J4brtythuTE-uPpYEaFNCRK5hbXDLOOjf_3Ck",
+                    "BlackDrag": "cmxCpBLbYX48necTpKLBiTn5IM1J0AYWHKiCAC5OcyuG6_o",
+                    "Flames": "APXt68Ogg5-pMLP5vdoq1hwpn-wl4sFxJl6GJg4356U3Vbs",
+                    "Tiny Cena": "UBLAyVJLtvI0DvNJZc5Ln_ShUKt_DpPJijJNgewxRLTP4Mg",
+                    "Aàrón": "hR0VrK_dmuN1_CbI9ea576MSKDKoQfH9_VEd_4iBCjEogLU",
+                    "5billon": "C4Ewpnp_HCLtxYT3TXwR-bcQQzIu63dODg7Zc_B298hkm9U",
+                    "Nappy": "4ZG-cOVycckEnl86R8h1h0wl0P9c4ZMkdFBJL9cY_-pm55Y",
+                    "KingNeptun3": "fPMH_-GawqeVv22Kr5PSAd582K3zRd57C_5m0QZR4Yoy7dw",
+                    "Mrs Mighty Bacon": "wMMQdqPaS1ZMobR8SQHcwjbQyB1GpFeg4PoReTKU8HiPpG8",
+                    "cpt stryder": "CS5p6zEnufRFlSTe0fF9pQeW_meyyZJmcGN8-ZvmLcQo9LQ",
+                    "cancerkween": "zAtWP0dciMVlK5XHahuXW3KDsmGjq0PcJBL3LY-B-3N1Aik",
+                    "Azote": "hjyAMX0av2nWPtjMEd3GyyrAeWAx6x-E0iBWiXXVMSkaAGw",
+                    "ÇatFood": "6E_MKLcjrxZXf-xZ_JumEpHb2qY6vKs5di52SQyCQPIKBjg",
+                    "Skrt Skrt Skaarl": "3Hk5eY4OPC9YtMy0wunkJfrU7OJvLjQdPCtpVpuSJe6T59I",
+                    "NonMaisWallah": "O-uH49qtvOCpYCxny_dLNVA8-VP-lg9q8ItA4qjZh7M6RKY",
+                    "Fonty": "cJ4MBSz6cOeG8QsYlGo_d926VRLSRyCPQfPgDLNwIsde68Y",
+                    "Oogli": "oMsxDlJYVyjMafhFYE-DvG_7Tc8R-PUg-DA8Twj88DY_-aU",
+                    "Lewis Kane": "m-a_uIa_oQIaVhliUaITnBLcy0cV01tBQwF04DXxj-9IrEE",
+                    "Maa san": "1a-PuFsiNRx_b4CrVJzrt4kdmmWZGFCH0AdvpEeKUWcVMH8",
+                    "Mnesia": "b7nHdeLVJ7Zl-fazM4k-KJBy88s1cB8zm_nppsPkNSS7KU8",
+                    "Cowboy Codi": "JB8H7801QFiu3GFZAN1i0fT_aaJdra2zM7XbghmS93Ntsa4",
+                    "nasir2": "1vJSvGRpUgiltfK1_fY1BaqboL7gCGiuqt8sAAWdRa8brxE",
+                    "SETT DEEZ UPSS": "hvMpHFnx9VqcBkdPTAyAOSqaT7kdY9iCiZekfR5y45oHGMpIHX5Js6jOzQ",
+                    "Skyhigh2005": "xAm6DMppQhPx0LNH5v6QLAWPJ7LuynhKEVph2GMDPye4MX8",
+                    "Zotto": "9ClJmRzP6E034Fb7MnsVy73uHBJaDfDeg7BX-4om45kfdHM",
+                    "Evelynn Toes": "CZeYa86XVPDYCwF46CyxmIaOzeOhpqF6gGtssVFvTrZU-Oo",
+                    "Shrektangle": "AJeJwbD1HZIGNh6eORY6uGQMmAbCEMrKl-wFdGHhqdEoim0",
+                    "Wazzai": "VRHoW-1rLuVG-YujOOm1Utn7qeAAaEG0yA8e2Y9xpTCwDCn5",
+                    "Chopin is Bach": "6O5aOY2ykeAIPAm0ztZiHtH8Ykm482WEHVDkCTi0K5PA4I0"
+                    }
+    return summoner_ids[summoner_name]
+
+
+# SUMMONER-V4 : /lol/summoner/v4/summoners/by-puuid/{encryptedPUUID} :  id
+def get_lol_summoner_id(summoner_name):
+    summoner_ids = {"Sir Mighty Bacon": "BGGUjqEm1nar21U8pP_wj7Bv2uyd1Na-03wy7yeZVMRdEv0",
+                    "Settupss": "r6XtQGwiHuXfAHfrfvIXXuhOYpyyoUsm2JgC3r_BAVGWYbs",
+                    "Classiq": "yYoauMyQZaUfORAaOybCxcKgToviC5W5Yay_uyhZC-aAzYk",
+                    "Wallaby": "y37IGgVEke9uG-LLpZa5mlPanyxZi3x9rtJRXF9OW2B-wc8",
+                    "Sehnbon": "EbFaesXSJiOZulgc_peh78EfhbBg_Slk74xJmQAWPuM1N4I",
+                    "Ramza": "BxEp90dfHbxrE0aYSgayPLb3eh3wqu7SEoUEHEj1aSWdGso_",
+                    "Gourish": "3dgqr2I7GQmtQCkdLB_calb0h-UmOyWJVQhjCC_bB-U-Ln4",
+                    "Gabyumi": "0j2bXO5OOOeFhe4LX1cGAzEYxBSP8x3xZmIqbuFQVd2j8Yw",
+                    "meyst": "g0BTZnymywWaJ39n_oE8XCrNy2hN6Zi0ljnYIXBR5jU2ILs",
+                    "Limited": "N0LkC1sOwO-9J_fE2_IHpcEc-B4GArYFD11Jhfh21MklKLg",
+                    "Z3SIeeper": "H8mMWxvMNWpxhMoSOaC8m59txmO3ZmLTmAEV1hCIzNrLdZ-b",
+                    "BlackDrag": "hLXUGO0f4JSogjsJKhyrXlzzFm27iz5nkLuOczd2YKEOCqw",
+                    "Flames": "IZx8e2BrDLu1x7X6pUgzPxMqqKBOMwXrJ59Fgr0W7C3GSjY",
+                    "Tiny Cena": "kr9B4wdzki8INVxOyXrvPDqUcdCxMKoDhUc4ytusynhqn7Q",
+                    "Aàrón": "HGVC39mIVJauqT3njok44TNPIxMJp9A8sptkhY0CP__bJSc",
+                    "5billon": "PCBqQfKevnh_PwJerhJOFOZ8BEZi90HYOBXduWvJl_pMaPg",
+                    "Nappy": "6XhgOt9X2zQ_Fe7jo6rsC2d23YCsdPGMygSxjyjQ3dfzMUM",
+                    "KingNeptun3": "IK9m0nzKywT8QHETKGGo3x84dxHFWAncogb0Lza-jAvtMFQ",
+                    "Mrs Mighty Bacon": "9C7cBE25XnHAq5v79I93sHF870IF-gPEUWeL-wG4UJavp2E",
+                    "cpt stryder": "AnWANDBFFi5jTDZabqcnCfs9G3USpUyHsCq0ScoWEwMJt14",
+                    "cancerkween": "EpzNVAQqQkqPFRaiT6nbTXvWNRIW9xjwnJagcIOiPLIO1Bc",
+                    "Azote": "bXmbhljaXkeKIA5NqOtU5loCKk0iZZfbSjyElSrieruR73s",
+                    "ÇatFood": "6yUsSm7sVzOxasogCBtyYu_5XitMPYMH6ImhPvVgJ8Imq4Q",
+                    "Skrt Skrt Skaarl": "V5nQ3nav3PLrZA8WINbF0MQ7tSrdLdye-lJ3Y9-4YhvknPw",
+                    "Maa san": "4p6IPgfKlB4bxUOVTThObFs65avz47bq8y4uFFuHGIv1gxE",
+                    "NonMaisWallah": "vfescDjzqKyE5JlCyoDbERcl2JlkykKxe7-wHZfqmvR9-hY",
+                    "Mnesia": "nU10JVyDakgBiVfFxkk87T8L8BsczVlcPqshjZ_2w-mMXzE",
+                    "Fonty": "7BMUv4tXI6JEuun6_sz5huI765Uy4QcjlhgsVD5qgsXrZk0",
+                    "Oogli": "qwlwdyJ8JhazKg9vT4lC16xZX6KmpLM6Qr5RJmmoaXK8NzQ",
+                    "Cowboy Codi": "UUds1L0jQitbbmdu59qJASffV1bvMOcw9LaO37bFTvcRo0U",
+                    "nasir2": "m0fr8tpp_XZYazT4LQ4ASMhUDvXbUcp5sYIesRxL_Qu6lWo",
+                    "Skyhigh2005": "Q0gF9NCFu0Q-z0hsTlZOp41fupflzwGgbGraoQc_0QxbAUs",
+                    "Zotto": "hEXJtbk_gHgNlYTNCzjEt1RbK5TDLlHTf9SvKoEA_9R14C0",
+                    "Evelynn Toes": "2fOn-Jh1Ywl0rD40dBAwtO31MLRVQTVY7bDEorZok587Wts",
+                    "Shrektangle": "Az2OVpJd1zlChwavlsJJ5smzRVDMVFm1g_chlDdTCNRhk-Q",
+                    "Wazzai": "evGIFNmMh_5XuNf-rbuoSAw2F3XDeTsCp8tj_ARTGhFy5bQy",
+                    "Chopin is Bach": "HqmOUAf20MrW0CDmZN0A_MNpfdBaK4MpJJGhz2SAc3Q7hLk"
+                    }
+    return summoner_ids[summoner_name]
+
 
 previous_match_history_ids = []
 updated_tft_rankings_list = []
@@ -85,6 +202,7 @@ loop = client.loop
 general_channel_id = 1249887657761443841
 tft_leaderboard_channel_id = 1249993766300024842
 lol_leaderboard_channel_id = 1249993747119472693
+
 
 def calculate_tier_division_value(tier_division_rank):
     ranks = {
@@ -316,109 +434,6 @@ async def get_lol_ranked_stats(summoner_names):
     return rankings_list
 
 
-def get_discord_username(summoner_name):
-    discord_ids = {"Sir Mighty Bacon": "<@149681004880199681>", "Settupss": "<@144611125391130624>",
-                   "Classiq": "<@155758849582825472>", "Wallaby": "<@315272936053276672>",
-                   "Sehnbon": "<@198960489022095360>", "Ramza": "<@86595633288351744>",
-                   "Gourish": "<@700837976544116808>", "Gabyumi": "<@241712679150944257>",
-                   "Best Pigeon NA": "<@180136748091834368>", "meyst": "<@153778413646118912>",
-                   "Limited": "<@715430081975025687>", "Z3SIeeper": "<@130242869708587008>",
-                   "BlackDrag": "<@244390872983011328>", "Flames": "<@80373001006096384>",
-                   "silvah bee": "<@527593111547805696>", "Tiny Cena": "<@154752158854545408>",
-                   "Aàrón": "<@64494156914888704>", "5billon": "<@133779784105721856>",
-                   "Nappy": "<@170962579974389762>", "KingNeptun3": "<@275435768661540866>",
-                   "Mrs Mighty Bacon": "<@251140411043610625>", "cpt stryder": "<@148338461433135104>",
-                   "Yazeed": "<@495380694525280276>", "Kenpachi": "<@263107658762944512>",
-                   "cancerkween": "<@999785244045615224>",
-                   "azote": "<@80372982337241088>", "Kovannate3": "<@1946154    71226617865>",
-                   "ÇatFood": "<@160067484559474688>", "Skrt Skrt Skaarl": "<@272440042251616256>",
-                   "NonMaisWallah": "<@520754531525459969>", "Mnesia": "<@402638715849146378>",
-                   "Fonty": "<@133458482232819712>", "Oogli": "<@173232033772994560>",
-                   "Cowboy Codi": "<@115992535855267844>",
-                   "Lewis Kane": "<@913637634767716393", "nasir2": "<@1052819643351433268>",
-                   "Skyhigh2005": "<@339383907449569281>"}
-    name = discord_ids[summoner_name]
-    if name is None:
-        name = summoner_name
-    return name
-
-
-# ID
-def get_tft_summoner_id(summoner_name):
-    summoner_ids = {"Sir Mighty Bacon": "0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txqQw6Pxo9o",
-                    "Settupss": "w-THN6OPeTdgL2JauMBPkvYaUYgD8WiwiX39mc3Yk4Dcs1k",
-                    "Classiq": "FQtC6bnuIM6JzqQGPswTwgoSvEZEa0WucLjaChTRdrKdbAQ",
-                    "Wallaby": "MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg",
-                    "Sehnbon": "QHuy9eL2GdDcu3erWravRY1rDshpvfMM6EtjeNnYI7r-YIw",
-                    "Ramza": "nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b",
-                    "Gourish": "9zX1sJAd7RciO6B7GwQODzAvBaQO634peXMAUtOINuX2y_k",
-                    "Gabyumi": "8nLXCqx3oDKEJ4pAceeQSr3L0uUAdY4rdTJgXKHh8OyRzoc",
-                    "meyst": "dasfJoEy9c_DNWqG8Y30RzK6Fgm-hdE_6dcx7XzL3MzA-Lw",
-                    "Limited": "OkZo1rN5o0DDWK5LGwgXDT4k5fd2FHhCRcPv69LulAEqirk",
-                    "Z3SIeeper": "u78gFAF4MJ2J4brtythuTE-uPpYEaFNCRK5hbXDLOOjf_3Ck",
-                    "BlackDrag": "cmxCpBLbYX48necTpKLBiTn5IM1J0AYWHKiCAC5OcyuG6_o",
-                    "Flames": "APXt68Ogg5-pMLP5vdoq1hwpn-wl4sFxJl6GJg4356U3Vbs",
-                    "Tiny Cena": "UBLAyVJLtvI0DvNJZc5Ln_ShUKt_DpPJijJNgewxRLTP4Mg",
-                    "Aàrón": "hR0VrK_dmuN1_CbI9ea576MSKDKoQfH9_VEd_4iBCjEogLU",
-                    "5billon": "C4Ewpnp_HCLtxYT3TXwR-bcQQzIu63dODg7Zc_B298hkm9U",
-                    "Nappy": "4ZG-cOVycckEnl86R8h1h0wl0P9c4ZMkdFBJL9cY_-pm55Y",
-                    "KingNeptun3": "fPMH_-GawqeVv22Kr5PSAd582K3zRd57C_5m0QZR4Yoy7dw",
-                    "Mrs Mighty Bacon": "wMMQdqPaS1ZMobR8SQHcwjbQyB1GpFeg4PoReTKU8HiPpG8",
-                    "cpt stryder": "CS5p6zEnufRFlSTe0fF9pQeW_meyyZJmcGN8-ZvmLcQo9LQ",
-                    "cancerkween": "zAtWP0dciMVlK5XHahuXW3KDsmGjq0PcJBL3LY-B-3N1Aik",
-                    "Azote": "hjyAMX0av2nWPtjMEd3GyyrAeWAx6x-E0iBWiXXVMSkaAGw",
-                    "ÇatFood": "6E_MKLcjrxZXf-xZ_JumEpHb2qY6vKs5di52SQyCQPIKBjg",
-                    "Skrt Skrt Skaarl": "3Hk5eY4OPC9YtMy0wunkJfrU7OJvLjQdPCtpVpuSJe6T59I",
-                    "NonMaisWallah": "O-uH49qtvOCpYCxny_dLNVA8-VP-lg9q8ItA4qjZh7M6RKY",
-                    "Fonty": "cJ4MBSz6cOeG8QsYlGo_d926VRLSRyCPQfPgDLNwIsde68Y",
-                    "Oogli": "oMsxDlJYVyjMafhFYE-DvG_7Tc8R-PUg-DA8Twj88DY_-aU",
-                    "Lewis Kane": "m-a_uIa_oQIaVhliUaITnBLcy0cV01tBQwF04DXxj-9IrEE",
-                    "Maa san": "1a-PuFsiNRx_b4CrVJzrt4kdmmWZGFCH0AdvpEeKUWcVMH8",
-                    "Mnesia": "b7nHdeLVJ7Zl-fazM4k-KJBy88s1cB8zm_nppsPkNSS7KU8",
-                    "Cowboy Codi": "JB8H7801QFiu3GFZAN1i0fT_aaJdra2zM7XbghmS93Ntsa4",
-                    "nasir2": "1vJSvGRpUgiltfK1_fY1BaqboL7gCGiuqt8sAAWdRa8brxE",
-                    "SETT DEEZ UPSS": "hvMpHFnx9VqcBkdPTAyAOSqaT7kdY9iCiZekfR5y45oHGMpIHX5Js6jOzQ",
-                    "Skyhigh2005": "xAm6DMppQhPx0LNH5v6QLAWPJ7LuynhKEVph2GMDPye4MX8"}
-    return summoner_ids[summoner_name]
-
-
-def get_lol_summoner_id(summoner_name):
-    summoner_ids = {"Sir Mighty Bacon": "BGGUjqEm1nar21U8pP_wj7Bv2uyd1Na-03wy7yeZVMRdEv0",
-                    "Settupss": "r6XtQGwiHuXfAHfrfvIXXuhOYpyyoUsm2JgC3r_BAVGWYbs",
-                    "Classiq": "yYoauMyQZaUfORAaOybCxcKgToviC5W5Yay_uyhZC-aAzYk",
-                    "Wallaby": "y37IGgVEke9uG-LLpZa5mlPanyxZi3x9rtJRXF9OW2B-wc8",
-                    "Sehnbon": "EbFaesXSJiOZulgc_peh78EfhbBg_Slk74xJmQAWPuM1N4I",
-                    "Ramza": "BxEp90dfHbxrE0aYSgayPLb3eh3wqu7SEoUEHEj1aSWdGso_",
-                    "Gourish": "3dgqr2I7GQmtQCkdLB_calb0h-UmOyWJVQhjCC_bB-U-Ln4",
-                    "Gabyumi": "0j2bXO5OOOeFhe4LX1cGAzEYxBSP8x3xZmIqbuFQVd2j8Yw",
-                    "meyst": "g0BTZnymywWaJ39n_oE8XCrNy2hN6Zi0ljnYIXBR5jU2ILs",
-                    "Limited": "N0LkC1sOwO-9J_fE2_IHpcEc-B4GArYFD11Jhfh21MklKLg",
-                    "Z3SIeeper": "H8mMWxvMNWpxhMoSOaC8m59txmO3ZmLTmAEV1hCIzNrLdZ-b",
-                    "BlackDrag": "hLXUGO0f4JSogjsJKhyrXlzzFm27iz5nkLuOczd2YKEOCqw",
-                    "Flames": "IZx8e2BrDLu1x7X6pUgzPxMqqKBOMwXrJ59Fgr0W7C3GSjY",
-                    "Tiny Cena": "kr9B4wdzki8INVxOyXrvPDqUcdCxMKoDhUc4ytusynhqn7Q",
-                    "Aàrón": "HGVC39mIVJauqT3njok44TNPIxMJp9A8sptkhY0CP__bJSc",
-                    "5billon": "PCBqQfKevnh_PwJerhJOFOZ8BEZi90HYOBXduWvJl_pMaPg",
-                    "Nappy": "6XhgOt9X2zQ_Fe7jo6rsC2d23YCsdPGMygSxjyjQ3dfzMUM",
-                    "KingNeptun3": "IK9m0nzKywT8QHETKGGo3x84dxHFWAncogb0Lza-jAvtMFQ",
-                    "Mrs Mighty Bacon": "9C7cBE25XnHAq5v79I93sHF870IF-gPEUWeL-wG4UJavp2E",
-                    "cpt stryder": "AnWANDBFFi5jTDZabqcnCfs9G3USpUyHsCq0ScoWEwMJt14",
-                    "cancerkween": "EpzNVAQqQkqPFRaiT6nbTXvWNRIW9xjwnJagcIOiPLIO1Bc",
-                    "Azote": "bXmbhljaXkeKIA5NqOtU5loCKk0iZZfbSjyElSrieruR73s",
-                    "ÇatFood": "6yUsSm7sVzOxasogCBtyYu_5XitMPYMH6ImhPvVgJ8Imq4Q",
-                    "Skrt Skrt Skaarl": "V5nQ3nav3PLrZA8WINbF0MQ7tSrdLdye-lJ3Y9-4YhvknPw",
-                    "Maa san": "4p6IPgfKlB4bxUOVTThObFs65avz47bq8y4uFFuHGIv1gxE",
-                    "NonMaisWallah": "vfescDjzqKyE5JlCyoDbERcl2JlkykKxe7-wHZfqmvR9-hY",
-                    "Mnesia": "nU10JVyDakgBiVfFxkk87T8L8BsczVlcPqshjZ_2w-mMXzE",
-                    "Fonty": "7BMUv4tXI6JEuun6_sz5huI765Uy4QcjlhgsVD5qgsXrZk0",
-                    "Oogli": "qwlwdyJ8JhazKg9vT4lC16xZX6KmpLM6Qr5RJmmoaXK8NzQ",
-                    "Cowboy Codi": "UUds1L0jQitbbmdu59qJASffV1bvMOcw9LaO37bFTvcRo0U",
-                    "nasir2": "m0fr8tpp_XZYazT4LQ4ASMhUDvXbUcp5sYIesRxL_Qu6lWo",
-                    "Skyhigh2005": "Q0gF9NCFu0Q-z0hsTlZOp41fupflzwGgbGraoQc_0QxbAUs"
-                    }
-    return summoner_ids[summoner_name]
-
-
 def get_random_message(old_summoner, new_summoner, position):
     emoji_codes = {
         "pogo": "<:PogO:949833186689568768>",
@@ -533,6 +548,10 @@ async def update_tft_leaderboard(previous_rankings, message, updated_tft_ranking
         for i in range(4):
             if previous_rankings and updated_tft_rankings_list[i][0] != previous_rankings[i][0]:
                 current_player = updated_tft_rankings_list[i][0]
+                rank= updated_tft_rankings_list[i][1]
+                # Skip if the current player is unranked
+                if rank == 0:
+                    continue
                 player_ranks = [x for x in range(len(previous_rankings)) if previous_rankings[x][0] == current_player]
                 if player_ranks:
                     previous_rank = player_ranks[0]
@@ -952,18 +971,29 @@ async def balance_teams(ctx, summoner_names):
 
 @client.event
 async def on_message(message):
+    message_lower = message.content.lower()
     if message.author == client.user:
         return
 
-    if message.content == 'PogO':
+    if message_lower == 'pogo':
         await message.delete()
         await message.channel.send(file=discord.File("img/UNRANKED.png"))
 
-    if message.content == 'T PogO':
+    if message_lower == 'tpogo':
         await message.delete()
         await message.channel.send(file=discord.File("img/tpogo.png"))
-    # if message.content.startswith('test'):
-    #    await message.channel.send('test')
+
+    if message_lower == 'huhpogo':
+        await message.delete()
+        await message.channel.send(file=discord.File("img/huhpogo.gif"))
+
+    if message_lower == 'caughtpogo':
+        await message.delete()
+        await message.channel.send(file=discord.File("img/caughtpogo.png"))
+
+    if message_lower == 'bigcaughtpogo':
+        await message.delete()
+        await message.channel.send(file=discord.File("img/bigcaughtpogo.png"))
 
 
 @client.event
@@ -1001,11 +1031,11 @@ async def on_member_remove(member):
 @client.event
 async def on_guild_channel_delete(channel):
     guild = channel.guild
-    #print(f"Checking audit logs for channel delete in guild: {guild.name}")
+    # print(f"Checking audit logs for channel delete in guild: {guild.name}")
     async for entry in guild.audit_logs(limit=1, action=discord.AuditLogAction.channel_delete):
-        #print(f"Audit log entry found: {entry}")
+        # print(f"Audit log entry found: {entry}")
         if entry.target.id == channel.id:
-            #print(f"{entry.user} deleted {channel.name}")
+            # print(f"{entry.user} deleted {channel.name}")
             if await check_actions(entry.user, "delete", DELETE_THRESHOLD):
                 print(f"{entry.user} exceeded delete threshold")
                 # Ban the user
@@ -1015,5 +1045,6 @@ async def on_guild_channel_delete(channel):
                 channel = client.get_channel(general_channel_id)  # general chat
                 # Send banned message to the channel
                 await channel.send(f"{entry.user.mention} was banned! RIP BOZO! <:PogO:949833186689568768>")
+
 
 client.run(client_id)
