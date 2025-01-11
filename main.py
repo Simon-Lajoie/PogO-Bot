@@ -724,7 +724,7 @@ async def update_lol_leaderboard(previous_rankings, message, updated_lol_ranking
         BACKGROUND_IMAGE_PATH = "img/leaderboard_soloq.png"
 
         # WIDTH, HEIGHT OF THE BACKGROUND IMAGE FOR LOL LEADERBOARD
-        BACKGROUND_SIZE = (1374, 765)
+        BACKGROUND_SIZE = (1366, 757)
 
         # Load the background image and resize it to the desired size
         background_image = Image.open(BACKGROUND_IMAGE_PATH).convert("RGBA")
