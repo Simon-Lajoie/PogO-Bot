@@ -1,7 +1,7 @@
 import asyncio
 import io
 from collections import deque
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from time import time
 import discord
 from discord.ext import commands, tasks
@@ -67,14 +67,14 @@ summoner_names_list_tft = ["Sir Mighty Bacon", "Settupss", "Classiq", "Wallaby",
                            "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
                            "cancerkween", "Azote", "ÇatFood", "Skrt Skrt Skaarl",
                            "NonMaisWallah", "Fonty", "Oogli", "Lewis Kane", "Maa san", "SETT DEEZ UPSS", "Skyhigh2005",
-                           "Zotto", "Evelynn Toes", "Shrektangle", "Wazzai", "Chopin is Bach"
+                           "Zotto", "Evelynn Toes", "Shrektangle", "Wazzaii", "Chopin is Bach", "Andrei"
                            ]
 summoner_names_list_lol = ["Sir Mighty Bacon", "Settupss", "Classiq", "Wallaby", "Sehnbon", "Gourish", "Ramza",
                            "Gabyumi", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames",
                            "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
                            "cancerkween", "Azote", "ÇatFood", "Skrt Skrt Skaarl", "Maa san",
                            "NonMaisWallah", "Mnesia", "Fonty", "Oogli", "Cowboy Codi", "nasir2", "Skyhigh2005", "Zotto",
-                           "Evelynn Toes", "Shrektangle", "Wazzai", "Chopin is Bach"
+                           "Evelynn Toes", "Shrektangle", "Wazzaii", "Chopin is Bach", "Andrei"
                            ]
 
 
@@ -100,7 +100,8 @@ def get_discord_username(summoner_name):
                    "Lewis Kane": "<@913637634767716393", "nasir2": "<@1052819643351433268>",
                    "Skyhigh2005": "<@339383907449569281>", "Zotto": "<@148963530262052864>",
                    "Evelynn Toes": "<@152469092182261761>", "Shrektangle": "<@117811507693223944>",
-                   "Wazzai": "<@399391319300112386>", "Chopin is Bach": "<@112316340844462080>"}
+                   "Wazzaii": "<@399391319300112386>", "Chopin is Bach": "<@112316340844462080>",
+                   "Andrei": "<@125330438515458048>"}
     name = discord_ids[summoner_name]
     if name is None:
         name = summoner_name
@@ -146,8 +147,9 @@ def get_tft_summoner_id(summoner_name):
                     "Zotto": "9ClJmRzP6E034Fb7MnsVy73uHBJaDfDeg7BX-4om45kfdHM",
                     "Evelynn Toes": "CZeYa86XVPDYCwF46CyxmIaOzeOhpqF6gGtssVFvTrZU-Oo",
                     "Shrektangle": "AJeJwbD1HZIGNh6eORY6uGQMmAbCEMrKl-wFdGHhqdEoim0",
-                    "Wazzai": "VRHoW-1rLuVG-YujOOm1Utn7qeAAaEG0yA8e2Y9xpTCwDCn5",
-                    "Chopin is Bach": "6O5aOY2ykeAIPAm0ztZiHtH8Ykm482WEHVDkCTi0K5PA4I0"
+                    "Wazzaii": "zUdGoQbWL0X0t-D49NvukUU2uKYL-eFE8MBVuxMjU2yYn-C9",
+                    "Chopin is Bach": "6O5aOY2ykeAIPAm0ztZiHtH8Ykm482WEHVDkCTi0K5PA4I0",
+                    "Andrei": "3eBPR6YQ2UeXMLDWmwtO1mxkdzWvMcA4sX3r7tYfNi4QZew"
                     }
     return summoner_ids[summoner_name]
 
@@ -189,8 +191,9 @@ def get_lol_summoner_id(summoner_name):
                     "Zotto": "hEXJtbk_gHgNlYTNCzjEt1RbK5TDLlHTf9SvKoEA_9R14C0",
                     "Evelynn Toes": "2fOn-Jh1Ywl0rD40dBAwtO31MLRVQTVY7bDEorZok587Wts",
                     "Shrektangle": "Az2OVpJd1zlChwavlsJJ5smzRVDMVFm1g_chlDdTCNRhk-Q",
-                    "Wazzai": "evGIFNmMh_5XuNf-rbuoSAw2F3XDeTsCp8tj_ARTGhFy5bQy",
-                    "Chopin is Bach": "HqmOUAf20MrW0CDmZN0A_MNpfdBaK4MpJJGhz2SAc3Q7hLk"
+                    "Wazzaii": "Q_HNTT3UYCFsbSTeDn-85p0H20fsbgpJ8Lpwh_1R6eeDdoEA",
+                    "Chopin is Bach": "HqmOUAf20MrW0CDmZN0A_MNpfdBaK4MpJJGhz2SAc3Q7hLk",
+                    "Andrei": "jyIqP2051PUgj1HSH9kY0nhPc3h8mzU-zvsf3k2CqJWAl1c"
                     }
     return summoner_ids[summoner_name]
 
@@ -485,7 +488,7 @@ def get_random_message(old_summoner, new_summoner, position):
                         "ousted", "lowered", "removed", "cast out", "dethroned", "ejected", "displaced", "deposed"]
     if old_summoner == gourish_summoner:
         gourish_random = random.choice(gourish_messages)
-        return f"{emoji_codes['pogo']} {new_summoner} has just {gourish_random} {old_summoner} to their rightful place… GOURISH LOW! {emoji_codes['aycaramba']}"
+        return f"{emoji_codes['pogo']} {new_summoner} has just {gourish_random} {old_summoner} to their rightful place… NOOB! GOOGOO IS A NOOB! AGREED!  {emoji_codes['aycaramba']}"
     if old_summoner == salsa_king_summoner:
         return f"{emoji_codes['pogo']} {new_summoner} has overtaken {old_summoner} to achieve rank {position}, telling {old_summoner} that throughout Heaven and Earth, he alone is The Fraudulent One. {emoji_codes['pogo']}"
     if new_summoner == salsa_king_summoner:
@@ -589,6 +592,8 @@ async def update_tft_leaderboard(previous_rankings, message, updated_tft_ranking
         RANK_IMAGE_SIZE = (55, 55)
         POGO_IMAGE_SIZE = (40, 40)
         BACKGROUND_IMAGE_PATH = "img/leaderboard_tft.png"
+
+        # WIDTH, HEIGHT OF THE BACKGROUND IMAGE FOR TFT LEADERBOARD
         BACKGROUND_SIZE = (1366, 757)
 
         # Load the background image and resize it to the desired size
@@ -717,7 +722,9 @@ async def update_lol_leaderboard(previous_rankings, message, updated_lol_ranking
         RANK_IMAGE_SIZE = (55, 55)
         POGO_IMAGE_SIZE = (40, 40)
         BACKGROUND_IMAGE_PATH = "img/leaderboard_soloq.png"
-        BACKGROUND_SIZE = (1366, 757)
+
+        # WIDTH, HEIGHT OF THE BACKGROUND IMAGE FOR LOL LEADERBOARD
+        BACKGROUND_SIZE = (1374, 765)
 
         # Load the background image and resize it to the desired size
         background_image = Image.open(BACKGROUND_IMAGE_PATH).convert("RGBA")
@@ -884,28 +891,31 @@ async def clear_channel(channel):
 async def update_tasks(updated_tft_rankings_list_lock, updated_lol_rankings_list_lock):
     tft_leaderboard_channel = client.get_channel(tft_leaderboard_channel_id)
     lol_leaderboard_channel = client.get_channel(lol_leaderboard_channel_id)
-    leaderboard_update_count = 0
     previous_tft_rankings = []
     previous_lol_rankings = []
-    # Send the initial message
-    message_tft = await tft_leaderboard_channel.send("Starting TFT leaderboard...")
-    message_lol = await lol_leaderboard_channel.send("Starting LoL leaderboard...")
+
+    # Send the initial message once
+    try:
+        message_tft = await tft_leaderboard_channel.send("Starting TFT leaderboard...")
+        message_lol = await lol_leaderboard_channel.send("Starting LoL leaderboard...")
+    except Exception as e:
+        logging.error(f"Failed to send initial leaderboard messages: {e}")
+        return  # Exit if initial messages cannot be sent
+
     while True:
-        # Call update_tft_leaderboard every 5 minutes and pass the message object as a parameter
-        task1 = client.loop.create_task(
+        task1 = asyncio.create_task(
             update_tft_leaderboard(previous_tft_rankings, message_tft, updated_tft_rankings_list_lock))
-        task2 = client.loop.create_task(
+        task2 = asyncio.create_task(
             update_lol_leaderboard(previous_lol_rankings, message_lol, updated_lol_rankings_list_lock))
-        leaderboard_update_count += 1
 
-        # Reset the leaderboard_update_count variable after it reaches a certain value
-        if leaderboard_update_count >= 1000000:
-            leaderboard_update_count = 0
-
-        logging.info(f"Waiting for update_tft_leaderboard and update_lol_leaderboard task to complete...")
-        print(f"Waiting for update_tft_leaderboard and update_lol_leaderboard task to complete...")
-        # Wait for the update_tft_leaderboard and update_lol_leaderboard task to complete
-        await asyncio.gather(task1, task2)
+        try:
+            await asyncio.gather(task1, task2)
+        except Exception as e:
+            logging.error(f"An error occurred during leaderboard updates: {e}")
+            print(f"An error occurred during leaderboard updates: {e}")
+            # Optionally, add a delay before retrying to prevent rapid failure loops
+            await asyncio.sleep(10)
+            continue  # Continue the loop to attempt updates again
 
 
 # ===============================================================
@@ -922,7 +932,7 @@ action_tracker = defaultdict(list)
 
 
 async def check_actions(user, action_type, threshold):
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     # Remove old actions
     action_tracker[action_type] = [action for action in action_tracker[action_type]
                                    if now - action[1] < TIME_FRAME]
@@ -963,7 +973,6 @@ async def on_ready():
     client.loop.create_task(update_lol_rankings_list(updated_lol_rankings_list_lock))
     reset_tracker.start()
 
-
 @client.hybrid_command()
 async def balance_teams(ctx, summoner_names):
     await balance(ctx, summoner_names)
@@ -994,6 +1003,27 @@ async def on_message(message):
     if message_lower == 'bigcaughtpogo':
         await message.delete()
         await message.channel.send(file=discord.File("img/bigcaughtpogo.png"))
+
+    #if message.author.id == 80373001006096384:
+    #    await message.delete()
+    #    await message.channel.send(file=discord.File("img/tpogo.png"))
+
+    ''' SPOILERS TEMPLATE '''
+    # Check for "arcane" outside of the specific channel
+    #if "arcane" in message_lower and message.channel.id != 1304878343329550396:
+    #    await message.delete()
+    #    target_channel = client.get_channel(1304878343329550396)
+    #    if target_channel is not None:
+    #        await message.channel.send(file=discord.File("img/tpogo.png"))
+    #        await message.channel.send(f"NO ARCANE SPOILERS ALLOWED! DISCUSS HERE: {target_channel.mention}")
+
+    if message_lower == "is gourish a noob ?":
+        target_user = client.get_user(700837976544116808)
+        await message.channel.send(file=discord.File("img/tpogo.png"))
+        await message.channel.send(f"YES! {target_user.mention} IS A NOOB! AGREED!")
+
+
+
 
 
 @client.event
@@ -1046,5 +1076,10 @@ async def on_guild_channel_delete(channel):
                 # Send banned message to the channel
                 await channel.send(f"{entry.user.mention} was banned! RIP BOZO! <:PogO:949833186689568768>")
 
+#Temporarily to silence user
+#@client.event
+#async def on_reaction_add(reaction, user):
+    #if user.id == 80373001006096384:
+    #    await reaction.remove(user)
 
 client.run(client_id)
