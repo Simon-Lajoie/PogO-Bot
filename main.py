@@ -1,108 +1,71 @@
 import asyncio
 import io
-from collections import deque
 from datetime import datetime, timedelta, timezone
-from time import time
 import discord
 from discord.ext import commands, tasks
 from collections import defaultdict
 from datetime import datetime, timedelta
 import random
-from riotwatcher import LolWatcher, ApiError, TftWatcher, RateLimiter
+
+from riotwatcher import LolWatcher, TftWatcher
 from PIL import Image, ImageDraw, ImageFont
-from itertools import combinations
 import logging
 import os
 from dotenv import load_dotenv
+from data import discord_ids, tft_summoner_ids, lol_summoner_ids, ranks, summoner_names_list, emoji_codes
 
-intents = discord.Intents.default()
-intents.members = True
-intents.guilds = True
-intents.message_content = True
-client = commands.Bot(command_prefix="/", intents=intents)
+# --- Riot API Setup ---
 load_dotenv()
-
-
-class CustomRateLimiter(RateLimiter):
-    def __init__(self):
-        super().__init__()
-        self.short_requests = deque(maxlen=20)
-        self.long_requests = deque(maxlen=100)
-
-    def record_response(self, region, endpoint_name, method_name, url, response):
-        pass
-
-    def wait_until(self, region, endpoint_name, method_name):
-        current_time = time()
-        while self.short_requests and current_time - self.short_requests[0] > 1:
-            self.short_requests.popleft()
-        while self.long_requests and current_time - self.long_requests[0] > 120:
-            self.long_requests.popleft()
-        if len(self.short_requests) == 20:
-            wait_time = 1 - (current_time - self.short_requests[0])
-            logging.info(f"Rate limit exceeded for short requests. Waiting for {wait_time} seconds before retrying.")
-            return datetime.now() + timedelta(seconds=wait_time)
-        if len(self.long_requests) == 100:
-            wait_time = 120 - (current_time - self.long_requests[0])
-            logging.info(f"Rate limit exceeded for long requests. Waiting for {wait_time} seconds before retrying.")
-            return datetime.now() + timedelta(seconds=wait_time)
-        self.short_requests.append(current_time)
-        self.long_requests.append(current_time)
-        return None
-
-
 lol_watcher_key = os.environ.get('LOL_WATCHER_KEY')
 tft_watcher_key = os.environ.get('TFT_WATCHER_KEY')
-client_id = os.environ.get('CLIENT_ID')
-tft_watcher = TftWatcher(api_key=tft_watcher_key, rate_limiter=CustomRateLimiter())
-lol_watcher = LolWatcher(api_key=lol_watcher_key, rate_limiter=CustomRateLimiter())
+tft_watcher = TftWatcher(api_key=tft_watcher_key)
+lol_watcher = LolWatcher(api_key=lol_watcher_key)
 
-logging.basicConfig(level=logging.DEBUG, filename='app.log', filemode='w',
-                    format='%(name)s - %(levelname)s - %(message)s')
+# --- Logging ---
+logging.basicConfig(level=logging.INFO, filename='app.log', filemode='w',
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logging.getLogger("PIL").setLevel(logging.WARNING)
+logging.getLogger("discord").setLevel(logging.WARNING)
 
-region = 'na1'
-summoner_names_list_tft = ["Sir Mighty Bacon", "Settupss", "Classiq", "Wallaby", "Sehnbon", "Gourish", "Ramza",
-                           "Gabyumi", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames",
-                           "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
-                           "cancerkween", "Azote", "ÇatFood", "Skrt Skrt Skaarl",
-                           "NonMaisWallah", "Fonty", "Oogli", "Lewis Kane", "Maa san", "SETT DEEZ UPSS", "Skyhigh2005",
-                           "Zotto", "Evelynn Toes", "Shrektangle", "Wazzaii", "Chopin is Bach", "Andrei"
-                           ]
-summoner_names_list_lol = ["Sir Mighty Bacon", "Settupss", "Classiq", "Wallaby", "Sehnbon", "Gourish", "Ramza",
-                           "Gabyumi", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames",
-                           "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
-                           "cancerkween", "Azote", "ÇatFood", "Skrt Skrt Skaarl", "Maa san",
-                           "NonMaisWallah", "Mnesia", "Fonty", "Oogli", "Cowboy Codi", "nasir2", "Skyhigh2005", "Zotto",
-                           "Evelynn Toes", "Shrektangle", "Wazzaii", "Chopin is Bach", "Andrei"
-                           ]
+# --- Constants ---
+REGION = 'na1'
+GENERAL_CHANNEL_ID = 1249887657761443841
+TFT_LEADERBOARD_CHANNEL_ID = 1249993766300024842
+LOL_LEADERBOARD_CHANNEL_ID = 1249993747119472693
 
+RANK_FETCH_INTERVAL_SECONDS = 60 # How often to wait between batches of rank fetching
+LEADERBOARD_UPDATE_INTERVAL_SECONDS = 360 # 6 minutes for leaderboard image update
+
+API_BATCH_SIZE = 8
+API_RETRY_ATTEMPTS = 3 # Number of retries on connection errors
+TFT_QUEUE_TYPE = "RANKED_TFT"
+LOL_QUEUE_TYPE = "RANKED_SOLO_5x5"
+
+# Image Constants
+NORMAL_FONT_SIZE = 25
+MEDIUM_FONT_SIZE = 23
+SMALL_FONT_SIZE = 21
+RANK_IMAGE_SIZE = (55, 55)
+POGO_IMAGE_SIZE = (40, 40)
+BACKGROUND_SIZE = (1366, 757)
+TFT_BACKGROUND_PATH = "img/leaderboard_tft.png"
+LOL_BACKGROUND_PATH = "img/leaderboard_soloq.png"
+FONT_PATH = "fonts/BebasNeue-Regular.ttf"
+
+# --- Global State ---
+leaderboard_status_messages = {"TFT": None, "LoL": None}
+previous_leaderboard_rankings = {"TFT": [], "LoL": []}
+last_leaderboard_messages = {"TFT": None, "LoL": None}
+
+# In-memory storage for the latest fetched rankings
+updated_tft_rankings_list = []
+updated_lol_rankings_list = []
+# Locks for concurrent access to the ranking lists
+updated_tft_rankings_list_lock = asyncio.Lock()
+updated_lol_rankings_list_lock = asyncio.Lock()
 
 def get_discord_username(summoner_name):
-    discord_ids = {"Sir Mighty Bacon": "<@149681004880199681>", "Settupss": "<@144611125391130624>",
-                   "Classiq": "<@155758849582825472>", "Wallaby": "<@315272936053276672>",
-                   "Sehnbon": "<@198960489022095360>", "Ramza": "<@86595633288351744>",
-                   "Gourish": "<@700837976544116808>", "Gabyumi": "<@241712679150944257>",
-                   "Best Pigeon NA": "<@180136748091834368>", "meyst": "<@153778413646118912>",
-                   "Limited": "<@715430081975025687>", "Z3SIeeper": "<@130242869708587008>",
-                   "BlackDrag": "<@244390872983011328>", "Flames": "<@80373001006096384>",
-                   "silvah bee": "<@527593111547805696>", "Tiny Cena": "<@154752158854545408>",
-                   "Aàrón": "<@64494156914888704>", "5billon": "<@133779784105721856>",
-                   "Nappy": "<@170962579974389762>", "KingNeptun3": "<@275435768661540866>",
-                   "Mrs Mighty Bacon": "<@251140411043610625>", "cpt stryder": "<@148338461433135104>",
-                   "Yazeed": "<@495380694525280276>", "Kenpachi": "<@263107658762944512>",
-                   "cancerkween": "<@999785244045615224>",
-                   "azote": "<@80372982337241088>", "Kovannate3": "<@1946154    71226617865>",
-                   "ÇatFood": "<@160067484559474688>", "Skrt Skrt Skaarl": "<@272440042251616256>",
-                   "NonMaisWallah": "<@520754531525459969>", "Mnesia": "<@402638715849146378>",
-                   "Fonty": "<@133458482232819712>", "Oogli": "<@173232033772994560>",
-                   "Cowboy Codi": "<@115992535855267844>",
-                   "Lewis Kane": "<@913637634767716393", "nasir2": "<@1052819643351433268>",
-                   "Skyhigh2005": "<@339383907449569281>", "Zotto": "<@148963530262052864>",
-                   "Evelynn Toes": "<@152469092182261761>", "Shrektangle": "<@117811507693223944>",
-                   "Wazzaii": "<@399391319300112386>", "Chopin is Bach": "<@112316340844462080>",
-                   "Andrei": "<@125330438515458048>"}
-    name = discord_ids[summoner_name]
+    name = discord_ids.get(summoner_name)
     if name is None:
         name = summoner_name
     return name
@@ -110,139 +73,14 @@ def get_discord_username(summoner_name):
 
 # TFT-SUMMONER-V1 : /tft/summoner/v1/summoners/by-puuid/{encryptedPUUID} :  id
 def get_tft_summoner_id(summoner_name):
-    summoner_ids = {"Sir Mighty Bacon": "0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txqQw6Pxo9o",
-                    "Settupss": "w-THN6OPeTdgL2JauMBPkvYaUYgD8WiwiX39mc3Yk4Dcs1k",
-                    "Classiq": "FQtC6bnuIM6JzqQGPswTwgoSvEZEa0WucLjaChTRdrKdbAQ",
-                    "Wallaby": "MSI8zoZGAnDB6NpMBEHYQwCLvtx_aKmC6fyxBj1mEM55dmg",
-                    "Sehnbon": "QHuy9eL2GdDcu3erWravRY1rDshpvfMM6EtjeNnYI7r-YIw",
-                    "Ramza": "nkWVBsYJO1fWVq1Wtfx-Bx03fKSo7APYyCxpXzwR5FK_h55b",
-                    "Gourish": "9zX1sJAd7RciO6B7GwQODzAvBaQO634peXMAUtOINuX2y_k",
-                    "Gabyumi": "8nLXCqx3oDKEJ4pAceeQSr3L0uUAdY4rdTJgXKHh8OyRzoc",
-                    "meyst": "dasfJoEy9c_DNWqG8Y30RzK6Fgm-hdE_6dcx7XzL3MzA-Lw",
-                    "Limited": "OkZo1rN5o0DDWK5LGwgXDT4k5fd2FHhCRcPv69LulAEqirk",
-                    "Z3SIeeper": "u78gFAF4MJ2J4brtythuTE-uPpYEaFNCRK5hbXDLOOjf_3Ck",
-                    "BlackDrag": "cmxCpBLbYX48necTpKLBiTn5IM1J0AYWHKiCAC5OcyuG6_o",
-                    "Flames": "APXt68Ogg5-pMLP5vdoq1hwpn-wl4sFxJl6GJg4356U3Vbs",
-                    "Tiny Cena": "UBLAyVJLtvI0DvNJZc5Ln_ShUKt_DpPJijJNgewxRLTP4Mg",
-                    "Aàrón": "hR0VrK_dmuN1_CbI9ea576MSKDKoQfH9_VEd_4iBCjEogLU",
-                    "5billon": "C4Ewpnp_HCLtxYT3TXwR-bcQQzIu63dODg7Zc_B298hkm9U",
-                    "Nappy": "4ZG-cOVycckEnl86R8h1h0wl0P9c4ZMkdFBJL9cY_-pm55Y",
-                    "KingNeptun3": "fPMH_-GawqeVv22Kr5PSAd582K3zRd57C_5m0QZR4Yoy7dw",
-                    "Mrs Mighty Bacon": "wMMQdqPaS1ZMobR8SQHcwjbQyB1GpFeg4PoReTKU8HiPpG8",
-                    "cpt stryder": "CS5p6zEnufRFlSTe0fF9pQeW_meyyZJmcGN8-ZvmLcQo9LQ",
-                    "cancerkween": "zAtWP0dciMVlK5XHahuXW3KDsmGjq0PcJBL3LY-B-3N1Aik",
-                    "Azote": "hjyAMX0av2nWPtjMEd3GyyrAeWAx6x-E0iBWiXXVMSkaAGw",
-                    "ÇatFood": "6E_MKLcjrxZXf-xZ_JumEpHb2qY6vKs5di52SQyCQPIKBjg",
-                    "Skrt Skrt Skaarl": "3Hk5eY4OPC9YtMy0wunkJfrU7OJvLjQdPCtpVpuSJe6T59I",
-                    "NonMaisWallah": "O-uH49qtvOCpYCxny_dLNVA8-VP-lg9q8ItA4qjZh7M6RKY",
-                    "Fonty": "cJ4MBSz6cOeG8QsYlGo_d926VRLSRyCPQfPgDLNwIsde68Y",
-                    "Oogli": "oMsxDlJYVyjMafhFYE-DvG_7Tc8R-PUg-DA8Twj88DY_-aU",
-                    "Lewis Kane": "m-a_uIa_oQIaVhliUaITnBLcy0cV01tBQwF04DXxj-9IrEE",
-                    "Maa san": "1a-PuFsiNRx_b4CrVJzrt4kdmmWZGFCH0AdvpEeKUWcVMH8",
-                    "Mnesia": "b7nHdeLVJ7Zl-fazM4k-KJBy88s1cB8zm_nppsPkNSS7KU8",
-                    "Cowboy Codi": "JB8H7801QFiu3GFZAN1i0fT_aaJdra2zM7XbghmS93Ntsa4",
-                    "nasir2": "1vJSvGRpUgiltfK1_fY1BaqboL7gCGiuqt8sAAWdRa8brxE",
-                    "SETT DEEZ UPSS": "hvMpHFnx9VqcBkdPTAyAOSqaT7kdY9iCiZekfR5y45oHGMpIHX5Js6jOzQ",
-                    "Skyhigh2005": "xAm6DMppQhPx0LNH5v6QLAWPJ7LuynhKEVph2GMDPye4MX8",
-                    "Zotto": "9ClJmRzP6E034Fb7MnsVy73uHBJaDfDeg7BX-4om45kfdHM",
-                    "Evelynn Toes": "CZeYa86XVPDYCwF46CyxmIaOzeOhpqF6gGtssVFvTrZU-Oo",
-                    "Shrektangle": "AJeJwbD1HZIGNh6eORY6uGQMmAbCEMrKl-wFdGHhqdEoim0",
-                    "Wazzaii": "zUdGoQbWL0X0t-D49NvukUU2uKYL-eFE8MBVuxMjU2yYn-C9",
-                    "Chopin is Bach": "6O5aOY2ykeAIPAm0ztZiHtH8Ykm482WEHVDkCTi0K5PA4I0",
-                    "Andrei": "3eBPR6YQ2UeXMLDWmwtO1mxkdzWvMcA4sX3r7tYfNi4QZew"
-                    }
-    return summoner_ids[summoner_name]
-
+    return tft_summoner_ids.get(summoner_name)
 
 # SUMMONER-V4 : /lol/summoner/v4/summoners/by-puuid/{encryptedPUUID} :  id
 def get_lol_summoner_id(summoner_name):
-    summoner_ids = {"Sir Mighty Bacon": "BGGUjqEm1nar21U8pP_wj7Bv2uyd1Na-03wy7yeZVMRdEv0",
-                    "Settupss": "r6XtQGwiHuXfAHfrfvIXXuhOYpyyoUsm2JgC3r_BAVGWYbs",
-                    "Classiq": "yYoauMyQZaUfORAaOybCxcKgToviC5W5Yay_uyhZC-aAzYk",
-                    "Wallaby": "y37IGgVEke9uG-LLpZa5mlPanyxZi3x9rtJRXF9OW2B-wc8",
-                    "Sehnbon": "EbFaesXSJiOZulgc_peh78EfhbBg_Slk74xJmQAWPuM1N4I",
-                    "Ramza": "BxEp90dfHbxrE0aYSgayPLb3eh3wqu7SEoUEHEj1aSWdGso_",
-                    "Gourish": "3dgqr2I7GQmtQCkdLB_calb0h-UmOyWJVQhjCC_bB-U-Ln4",
-                    "Gabyumi": "0j2bXO5OOOeFhe4LX1cGAzEYxBSP8x3xZmIqbuFQVd2j8Yw",
-                    "meyst": "g0BTZnymywWaJ39n_oE8XCrNy2hN6Zi0ljnYIXBR5jU2ILs",
-                    "Limited": "N0LkC1sOwO-9J_fE2_IHpcEc-B4GArYFD11Jhfh21MklKLg",
-                    "Z3SIeeper": "H8mMWxvMNWpxhMoSOaC8m59txmO3ZmLTmAEV1hCIzNrLdZ-b",
-                    "BlackDrag": "hLXUGO0f4JSogjsJKhyrXlzzFm27iz5nkLuOczd2YKEOCqw",
-                    "Flames": "IZx8e2BrDLu1x7X6pUgzPxMqqKBOMwXrJ59Fgr0W7C3GSjY",
-                    "Tiny Cena": "kr9B4wdzki8INVxOyXrvPDqUcdCxMKoDhUc4ytusynhqn7Q",
-                    "Aàrón": "HGVC39mIVJauqT3njok44TNPIxMJp9A8sptkhY0CP__bJSc",
-                    "5billon": "PCBqQfKevnh_PwJerhJOFOZ8BEZi90HYOBXduWvJl_pMaPg",
-                    "Nappy": "6XhgOt9X2zQ_Fe7jo6rsC2d23YCsdPGMygSxjyjQ3dfzMUM",
-                    "KingNeptun3": "IK9m0nzKywT8QHETKGGo3x84dxHFWAncogb0Lza-jAvtMFQ",
-                    "Mrs Mighty Bacon": "9C7cBE25XnHAq5v79I93sHF870IF-gPEUWeL-wG4UJavp2E",
-                    "cpt stryder": "AnWANDBFFi5jTDZabqcnCfs9G3USpUyHsCq0ScoWEwMJt14",
-                    "cancerkween": "EpzNVAQqQkqPFRaiT6nbTXvWNRIW9xjwnJagcIOiPLIO1Bc",
-                    "Azote": "bXmbhljaXkeKIA5NqOtU5loCKk0iZZfbSjyElSrieruR73s",
-                    "ÇatFood": "6yUsSm7sVzOxasogCBtyYu_5XitMPYMH6ImhPvVgJ8Imq4Q",
-                    "Skrt Skrt Skaarl": "V5nQ3nav3PLrZA8WINbF0MQ7tSrdLdye-lJ3Y9-4YhvknPw",
-                    "Maa san": "4p6IPgfKlB4bxUOVTThObFs65avz47bq8y4uFFuHGIv1gxE",
-                    "NonMaisWallah": "vfescDjzqKyE5JlCyoDbERcl2JlkykKxe7-wHZfqmvR9-hY",
-                    "Mnesia": "nU10JVyDakgBiVfFxkk87T8L8BsczVlcPqshjZ_2w-mMXzE",
-                    "Fonty": "7BMUv4tXI6JEuun6_sz5huI765Uy4QcjlhgsVD5qgsXrZk0",
-                    "Oogli": "qwlwdyJ8JhazKg9vT4lC16xZX6KmpLM6Qr5RJmmoaXK8NzQ",
-                    "Cowboy Codi": "UUds1L0jQitbbmdu59qJASffV1bvMOcw9LaO37bFTvcRo0U",
-                    "nasir2": "m0fr8tpp_XZYazT4LQ4ASMhUDvXbUcp5sYIesRxL_Qu6lWo",
-                    "Skyhigh2005": "Q0gF9NCFu0Q-z0hsTlZOp41fupflzwGgbGraoQc_0QxbAUs",
-                    "Zotto": "hEXJtbk_gHgNlYTNCzjEt1RbK5TDLlHTf9SvKoEA_9R14C0",
-                    "Evelynn Toes": "2fOn-Jh1Ywl0rD40dBAwtO31MLRVQTVY7bDEorZok587Wts",
-                    "Shrektangle": "Az2OVpJd1zlChwavlsJJ5smzRVDMVFm1g_chlDdTCNRhk-Q",
-                    "Wazzaii": "Q_HNTT3UYCFsbSTeDn-85p0H20fsbgpJ8Lpwh_1R6eeDdoEA",
-                    "Chopin is Bach": "HqmOUAf20MrW0CDmZN0A_MNpfdBaK4MpJJGhz2SAc3Q7hLk",
-                    "Andrei": "jyIqP2051PUgj1HSH9kY0nhPc3h8mzU-zvsf3k2CqJWAl1c"
-                    }
-    return summoner_ids[summoner_name]
-
-
-previous_match_history_ids = []
-updated_tft_rankings_list = []
-updated_lol_rankings_list = []
-loop = client.loop
-general_channel_id = 1249887657761443841
-tft_leaderboard_channel_id = 1249993766300024842
-lol_leaderboard_channel_id = 1249993747119472693
-
+    return lol_summoner_ids.get(summoner_name)
 
 def calculate_tier_division_value(tier_division_rank):
-    ranks = {
-        "IRON IV": 1,
-        "IRON III": 2,
-        "IRON II": 3,
-        "IRON I": 4,
-        "BRONZE IV": 5,
-        "BRONZE III": 6,
-        "BRONZE II": 7,
-        "BRONZE I": 8,
-        "SILVER IV": 9,
-        "SILVER III": 10,
-        "SILVER II": 11,
-        "SILVER I": 12,
-        "GOLD IV": 13,
-        "GOLD III": 14,
-        "GOLD II": 15,
-        "GOLD I": 16,
-        "PLATINUM IV": 17,
-        "PLATINUM III": 18,
-        "PLATINUM II": 19,
-        "PLATINUM I": 20,
-        "EMERALD IV": 21,
-        "EMERALD III": 22,
-        "EMERALD II": 23,
-        "EMERALD I": 24,
-        "DIAMOND IV": 25,
-        "DIAMOND III": 26,
-        "DIAMOND II": 27,
-        "DIAMOND I": 28,
-        "MASTER I": 29,
-        "GRANDMASTER I": 29,
-        "CHALLENGER I": 29
-    }
-    rank_number = ranks[tier_division_rank]
-    return rank_number
+    return ranks.get(tier_division_rank, 0)
 
 
 def rank_to_value(tier_division_rank, lp):
@@ -250,28 +88,20 @@ def rank_to_value(tier_division_rank, lp):
     final_ranked_value = tier_division_value * 100 + lp
     return final_ranked_value
 
-
-async def get_tft_ranked_stats(summoner_names):
+async def get_ranked_stats(summoner_names, get_summoner_id_func, watcher, queue_type, game_name=""):
     from requests.exceptions import HTTPError
     rankings_list = []
+
     for summoner_name in summoner_names:
         max_attempts = 2
         attempt = 0
         ranked_stats = None
         while attempt < max_attempts:
             try:
-                await asyncio.sleep(1)
-                # Gets account information
-                # logging.info(f"Making request to Riot API for TFT summoner: {summoner_name}")
-                # print(f"Making request to Riot API for TFT summoner: {summoner_name}")
-                # summoner = tft_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
-                summoner_id = get_tft_summoner_id(summoner_name)
-                await asyncio.sleep(1)
-                # Gets TFT ranked_stats using summoner's ID
-                logging.info(f"Making request to Riot API for TFT ranked stats of summoner: {summoner_name}")
-                print(f"Making request to Riot API for TFT ranked stats of summoner: {summoner_name}")
-                # ranked_stats = tft_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
-                ranked_stats = tft_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner_id)
+                summoner_id = get_summoner_id_func(summoner_name)
+                logging.info(f"Making request to Riot API for {game_name} ranked stats of summoner: {summoner_name}")
+                print(f"Making request to Riot API for {game_name} ranked stats of summoner: {summoner_name}")
+                ranked_stats = watcher.league.by_summoner(region=REGION, encrypted_summoner_id=summoner_id)
                 break
             except ConnectionError:
                 attempt += 1
@@ -287,202 +117,140 @@ async def get_tft_ranked_stats(summoner_names):
                 else:
                     raise e
         else:
-            # handle the case where all attempts failed
             logging.error(f"Failed to get data from Riot API after {max_attempts} attempts")
 
-        # Find the object with the "queueType" value of "RANKED_TFT"
-        ranked_stats = next((stats for stats in ranked_stats if stats["queueType"] == "RANKED_TFT"), None)
+        ranked_stats = next((stats for stats in ranked_stats if stats["queueType"] == queue_type), None)
 
         if ranked_stats:
             tier = ranked_stats["tier"]
             rank = ranked_stats["rank"]
             lp = ranked_stats["leaguePoints"]
-            tier_division = tier + " " + rank
+            tier_division = f"{tier} {rank}"
             ranked_value = rank_to_value(tier_division, lp)
-            if tier == "MASTER" or tier == "GRANDMASTER" or tier == "CHALLENGER":
+            if tier in ["MASTER", "GRANDMASTER", "CHALLENGER"]:
                 rank = ""
-                tier_division_lp = tier + " " + str(lp)
+                tier_division_lp = f"{tier} {lp}"
             else:
-                tier_division_lp = tier + " " + rank + " " + str(lp)
-            print(f" {summoner_name} : {ranked_value} : {tier} {rank} {lp} LP ")
-        else:
-            tier_division = "UNRANKED"
-            tier = "UNRANKED"
-            lp = 0
-            ranked_value = 0
-            print(f" {summoner_name} : {tier}")
-            tier_division_lp = tier_division
-        rankings_list.append((summoner_name, ranked_value, lp, tier, tier_division_lp))
-
-    rankings_list.sort(key=lambda x: (x[1], x[0]), reverse=True)
-    return rankings_list
-
-
-async def update_tft_rankings_list(updated_tft_rankings_list_lock):
-    global updated_tft_rankings_list
-    while True:
-        for i in range(0, len(summoner_names_list_tft), 8):
-            batch = summoner_names_list_tft[i:i + 8]
-            logging.info(f"Updating TFT rankings for batch: {batch}")
-            print(f"Updating TFT rankings for batch: {batch}")
-            try:
-                batch_rankings = await get_tft_ranked_stats(batch)
-            except Exception as e:
-                logging.error(f"An error occurred while getting TFT ranked stats for batch {batch}: {e}")
-                continue
-            async with updated_tft_rankings_list_lock:
-                for ranking in batch_rankings:
-                    summoner_name = ranking[0]
-                    existing_ranking = next((r for r in updated_tft_rankings_list if r[0] == summoner_name), None)
-                    if existing_ranking:
-                        updated_tft_rankings_list.remove(existing_ranking)
-                    updated_tft_rankings_list.append(ranking)
-                updated_tft_rankings_list.sort(key=lambda x: (x[1], x[0]), reverse=True)
-            logging.info(f"Updated TFT rankings list: {updated_tft_rankings_list}")
-            logging.info(f"Waiting 1 minutes until next TFT batch update...")
-            await asyncio.sleep(60)
-
-
-async def update_lol_rankings_list(updated_lol_rankings_list_lock):
-    global updated_lol_rankings_list
-    while True:
-        for i in range(0, len(summoner_names_list_lol), 8):
-            batch = summoner_names_list_lol[i:i + 8]
-            logging.info(f"Updating LoL rankings for batch: {batch}")
-            print(f"Updating LoL rankings for batch: {batch}")
-            try:
-                batch_rankings = await get_lol_ranked_stats(batch)
-            except Exception as e:
-                logging.error(f"An error occurred while getting LoL ranked stats for batch {batch}: {e}")
-                continue
-            async with updated_lol_rankings_list_lock:
-                for ranking in batch_rankings:
-                    summoner_name = ranking[0]
-                    existing_ranking = next((r for r in updated_lol_rankings_list if r[0] == summoner_name), None)
-                    if existing_ranking:
-                        updated_lol_rankings_list.remove(existing_ranking)
-                    updated_lol_rankings_list.append(ranking)
-                updated_lol_rankings_list.sort(key=lambda x: (x[1], x[0]), reverse=True)
-            logging.info(f"Updated LoL rankings list: {updated_lol_rankings_list}")
-            logging.info(f"Waiting 1 minutes until next LoL batch update...")
-            print(f"Updated LoL rankings list: {updated_lol_rankings_list}")
-            print(f"Waiting 1 minutes until next LoL batch update...")
-            await asyncio.sleep(60)
-
-
-async def get_lol_ranked_stats(summoner_names):
-    from requests.exceptions import HTTPError
-    rankings_list = []
-    for summoner_name in summoner_names:
-        max_attempts = 2
-        attempt = 0
-        ranked_stats = None
-        while attempt < max_attempts:
-            try:
-                await asyncio.sleep(1)
-                # Gets account information
-                # logging.info(f"Making request to Riot API for LoL summoner: {summoner_name}")
-                # print(f"Making request to Riot API for LoL summoner: {summoner_name}")
-                # summoner = lol_watcher.summoner.by_name(region=region, summoner_name=summoner_name)
-                summoner_id = get_lol_summoner_id(summoner_name)
-                await asyncio.sleep(1)
-                # Gets LoL ranked_stats using summoner's ID
-                logging.info(f"Making request to Riot API for LoL ranked stats of summoner: {summoner_name}")
-                print(f"Making request to Riot API for LoL ranked stats of summoner: {summoner_name}")
-                # ranked_stats = lol_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner["id"])
-                ranked_stats = lol_watcher.league.by_summoner(region=region, encrypted_summoner_id=summoner_id)
-                break
-            except ConnectionError:
-                attempt += 1
-                wait_time = 2 ** attempt
-                logging.warning(f"ConnectionError occurred, retrying in {wait_time} seconds...")
-                await asyncio.sleep(wait_time)
-            except HTTPError as e:
-                if e.response.status_code == 429:
-                    retry_after = int(e.response.headers.get('Retry-After', 0))
-                    logging.warning(f"429 ClientError: TooManyRequests, retrying in {retry_after} seconds...")
-                    await asyncio.sleep(retry_after)
-                    continue
-                else:
-                    raise e
-        else:
-            # handle the case where all attempts failed
-            logging.error(f"Failed to get data from Riot API after {max_attempts} attempts")
-
-        # Find the object with the "queueType" value of "RANKED_SOLO_5x5"
-        ranked_stats = next((stats for stats in ranked_stats if stats["queueType"] == "RANKED_SOLO_5x5"), None)
-
-        if ranked_stats:
-            tier = ranked_stats["tier"]
-            rank = ranked_stats["rank"]
-            lp = ranked_stats["leaguePoints"]
-            tier_division = tier + " " + rank
-            ranked_value = rank_to_value(tier_division, lp)
-            if tier == "MASTER" or tier == "GRANDMASTER" or tier == "CHALLENGER":
-                rank = ""
-                tier_division_lp = tier + " " + str(lp)
-            else:
-                tier_division_lp = tier + " " + rank + " " + str(lp)
+                tier_division_lp = f"{tier} {rank} {lp}"
             print(f"{summoner_name}: {ranked_value}: {tier} {rank} {lp} LP")
         else:
-            tier_division = "UNRANKED"
             tier = "UNRANKED"
             lp = 0
             ranked_value = 0
+            tier_division_lp = tier
             print(f"{summoner_name}: {tier}")
-            tier_division_lp = tier_division
+
         rankings_list.append((summoner_name, ranked_value, lp, tier, tier_division_lp))
 
     rankings_list.sort(key=lambda x: (x[1], x[0]), reverse=True)
     return rankings_list
 
+async def update_rankings_list_task(
+    lock: asyncio.Lock,
+    rankings_list_to_update: list,
+    game_type_name: str
+):
+    """
+    Continuously fetches rankings in batches for a specific game type.
+    Determines which API functions/constants to use based on game_type_name.
+    """
+    logging.info(f"Starting continuous rank fetching task for {game_type_name}...")
+    print(f"Starting background rank fetching for {game_type_name}...")
+
+    # Determine the correct functions and constants based on game_type_name ONCE
+    if game_type_name == "TFT":
+        id_func = get_tft_summoner_id
+        watcher_instance = tft_watcher
+        q_type = TFT_QUEUE_TYPE
+    elif game_type_name == "LoL":
+        id_func = get_lol_summoner_id
+        watcher_instance = lol_watcher
+        q_type = LOL_QUEUE_TYPE
+    else:
+        logging.error(f"[{game_type_name} Fetcher] Invalid game_type_name provided. Stopping task.")
+        print(f"Error: Invalid game type '{game_type_name}' for fetching task.")
+        return # Stop the task if the game type is unknown
+
+    # --- Main Loop ---
+    while True:
+        logging.info(f"[{game_type_name} Fetcher] Starting new full pass...")
+        all_summoners = summoner_names_list[:]
+        random.shuffle(all_summoners)
+
+        for i in range(0, len(all_summoners), API_BATCH_SIZE):
+            batch = all_summoners[i:i + API_BATCH_SIZE]
+            logging.info(f"[{game_type_name} Fetcher] Fetching rankings for batch: {batch}")
+            print(f"Fetching {game_type_name} batch: {batch}")
+
+            try:
+                # Call the generic get_ranked_stats with the correct parameters
+                batch_rankings = await get_ranked_stats(
+                    summoner_names=batch,
+                    get_summoner_id_func=id_func,           # Use determined function
+                    watcher=watcher_instance,               # Use determined watcher
+                    queue_type=q_type,                      # Use determined queue type
+                    game_name=game_type_name
+                )
+            except Exception as e:
+                logging.exception(f"[{game_type_name} Fetcher] Unhandled error calling get_ranked_stats for batch {batch}: {e}")
+                print(f"Error fetching {game_type_name} batch: {e}")
+                await asyncio.sleep(10)
+                continue
+
+            if not batch_rankings:
+                logging.warning(f"[{game_type_name} Fetcher] Received no ranking data for batch: {batch}")
+                await asyncio.sleep(RANK_FETCH_INTERVAL_SECONDS)
+                continue
+
+            # --- Update shared list (logic remains the same) ---
+            async with lock:
+                new_data_map = {ranking[0]: ranking for ranking in batch_rankings}
+                for idx, existing_ranking in enumerate(rankings_list_to_update):
+                    summoner_name = existing_ranking[0]
+                    if summoner_name in new_data_map:
+                        rankings_list_to_update[idx] = new_data_map[summoner_name]
+                        del new_data_map[summoner_name]
+                rankings_list_to_update.extend(new_data_map.values())
+                rankings_list_to_update.sort(key=lambda x: (x[1], x[0]), reverse=True)
+
+            logging.info(f"[{game_type_name} Fetcher] Updated rankings list ({len(rankings_list_to_update)} players).")
+
+            # --- Wait interval ---
+            logging.debug(f"[{game_type_name} Fetcher] Waiting {RANK_FETCH_INTERVAL_SECONDS}s until next batch...")
+            await asyncio.sleep(RANK_FETCH_INTERVAL_SECONDS)
+
+        logging.info(f"[{game_type_name} Fetcher] Completed full pass. Repeating loop.")
 
 def get_random_message(old_summoner, new_summoner, position):
-    emoji_codes = {
-        "pogo": "<:PogO:949833186689568768>",
-        "huh": "<:HUH:972927428638949416>",
-        "pantsgrab": "<:pantsgrab:986381093815066674>",
-        "deadge": "<:deadge:980719694032015401>",
-        "scam": "<:scam:1079216347252265060>",
-        "business": "<:business:1074568868309258292>",
-        "yeahboi": "<:yeahboi:986385284419702784>",
-        "aycaramba": "<:aycaramba:960051307752849448>",
-        "dongerj": "<:dongerj:1038990718036889641>",
-        "cathiago": "<:CATHIAGO:926136030871060500>",
-        "peepoflor": "<:peepoflor:974826396641808414>",
-        "pepeshrug": "<:pepeshrug:847289938253053952>",
-        "sadge": "<:sadge:1119499660638306416>",
-        "pepestrong": "<:PepeStrong:958637692583817226>"
-    }
     new_summoner = get_discord_username(new_summoner)
     old_summoner = get_discord_username(old_summoner)
     gourish_summoner = get_discord_username("Gourish")
     salsa_king_summoner = get_discord_username("Wallaby")
     messages = [
-        f"{new_summoner} just pulled off a spectacular heist {emoji_codes['business']}, ousting {old_summoner} from position {position} like a sneaky mastermind {emoji_codes['cathiago']}!",
-        f"Yeah.. {emoji_codes['sadge']} I'm sorry to announce {new_summoner} has dethroned {old_summoner} from position {position}. Don't ask me how. {emoji_codes['pepeshrug']}. Surely this is deserved. {emoji_codes['scam']}",
-        f"{emoji_codes['pogo']} {new_summoner} has kicked {old_summoner} from position {position}. Did you really expect me to praise you for that ? Take this instead: {emoji_codes['pantsgrab']}",
-        f"Ladies and gentlemen, let's gather 'round and give a thunderous round of applause to {new_summoner} for a breathtaking achievement! {emoji_codes['peepoflor']} With sheer grace and undeniable skill, {new_summoner} has claimed a well-deserved position in the prestigious top 4 of the illustrious PogO TFT Leaderboard. {emoji_codes['business']} Like a shining star ascending the heavens, they gracefully surpassed the formidable {old_summoner} at position {position}, leaving us all in awe of their remarkable talent. It's a triumph that deserves a standing ovation, a testament to the heights one can reach with unwavering dedication and unparalleled expertise. Let the celebration begin for this TFT maestro, a true master of the arena! {emoji_codes['yeahboi']}",
-        f"{emoji_codes['pogo']} ALERT! ALERT! {emoji_codes['pogo']} {new_summoner} has executed a flawless takedown, banishing {old_summoner} from position {position}. It's time to rally the troops and show our support to {new_summoner} by showering them with a barrage of {emoji_codes['pogo']}.",
-        f"{emoji_codes['pogo']} {new_summoner} has decisively toppled {old_summoner} from position {position}, leaving no doubt of their supremacy. {emoji_codes['cathiago']}",
-        f"NAHHHH THIS {new_summoner} PLAYER MIGHT JUST THE THE BEST PLAYER IN THE WORLD.{emoji_codes['dongerj']} HE LITERALLY JUST TOOK POSITION {position} FROM {old_summoner} JUST LIKE THAT ? {emoji_codes['huh']} IT'S WAY TOO FREE. {new_summoner} IS JUST BUILT DIFFERENT! {emoji_codes['pepestrong']}",
-        f"{new_summoner} --> {position} {emoji_codes['pogo']} {old_summoner} --> {emoji_codes['deadge']}",
-        f"{emoji_codes['pogo']} BREAKING NEWS! BREAKING NEWS! {emoji_codes['pogo']} A major upset has just occurred in the TFT scene. {new_summoner} has just dethroned {old_summoner} from position {position}. It's a shocking turn of events, a stunning upset, a colossal blunder. {emoji_codes['aycaramba']} How did this happen? How did this travesty occur? How did this abomination come to be? {emoji_codes['pepeshrug']} We may never know. All we know is that {old_summoner} has just lost their dignity, their honor, their pride. {emoji_codes['sadge']}",
-        f"{emoji_codes['pogo']} Hold on as {new_summoner} shakes things up and steals the glory from {old_summoner} at position {position}. {old_summoner} has just been humiliated, disgraced, destroyed. {emoji_codes['huh']} They have been reduced to nothing. {emoji_codes['huh']} They are now irrelevant. {emoji_codes['huh']} They are now forgotten. {emoji_codes['huh']} They are now dead to us. {emoji_codes['deadge']} All hail our new TFT overlord! {new_summoner}",
-        f"{emoji_codes['pogo']} Unbelievable chaos has erupted in the TFT realm! Brace yourselves as {new_summoner} shatters the status quo and snatches the crown from {old_summoner} at position {position}. It's an absolute whirlwind of confusion, a mind-bending plot twist, an inexplicable mishap. The world is left scratching its head, questioning the very fabric of reality. {emoji_codes['pogo']} How did the stars align for this calamity? {emoji_codes['huh']} How did the TFT gods allow such an unfathomable catastrophe? {emoji_codes['aycaramba']} How did this confounding enigma come to pass? {emoji_codes['scam']}",
-        f"{emoji_codes['pogo']} Attention, esteemed individuals, assemble and be captivated for a momentous announcement! {emoji_codes['pogo']} We stand in awe as {new_summoner} emerges as the undisputed victor, toppling {old_summoner} from their exalted position {position}. {emoji_codes['dongerj']} The path to this remarkable achievement remains shrouded in mystery, with scant details divulged on the hows and whys. {emoji_codes['pepeshrug']} The precise methods and strategies employed may forever elude our understanding, leaving us in awe of the enigma that surrounds this monumental accomplishment. {emoji_codes['yeahboi']} Such is the nature of this astounding feat, a tale woven with threads of intrigue and bewilderment, forever etched in the annals of TFT history. {emoji_codes['business']}",
-        f"Well, well, well... Look who's the new ruler of the TFT kingdom!👑 {new_summoner} has cunningly snatched the crown from {old_summoner} at position {position}. It's a classic case of 'outplayed and outwitted.' {emoji_codes['scam']} Bow down to the new TFT mastermind, for they have left their opponents scratching their heads in utter disbelief. {emoji_codes['pogo']}",
-        f"{emoji_codes['pogo']} Ladies and gentlemen, gather 'round! Witness the rise of {new_summoner} as they conquer position {position} and send {old_summoner} packing! {emoji_codes['pantsgrab']} It's like watching a legendary underdog story unfold before our eyes. {emoji_codes['business']} Let's give a standing ovation to {new_summoner} for defying the odds and proving that dreams do come true in the realm of TFT!",
-        f"{emoji_codes['pogo']} Hey {old_summoner}, guess who just took your spot at position {position}? {emoji_codes['scam']} Oh right, it's {new_summoner}! {emoji_codes['deadge']} They strategically outplayed you, leaving you in a state of utter confusion and embarrassment. {emoji_codes['aycaramba']} Looks like someone could use a lesson or two... Get ready to learn TFT buddy. {emoji_codes['pogo']}",
-        f"{emoji_codes['pogo']} Brace yourselves, TFT enthusiasts, for the rise of {new_summoner}! They've outshined {old_summoner} at position {position} like a radiant sun emerging from the clouds. {emoji_codes['peepoflor']} Meanwhile, {old_summoner} seems to be lost in the shadows of defeat. {emoji_codes['sadge']} Better luck next time, {old_summoner}, you'll need it! {emoji_codes['pogo']}",
-        f"{emoji_codes['pogo']} Brace yourselves, ladies and gentlemen, because we have a new champion in town! {emoji_codes['pepestrong']} {new_summoner} has just obliterated {old_summoner} from position {position}, leaving no room for doubt. It's a devastating blow, a crushing defeat, a humiliating loss. {emoji_codes['deadge']} How did this happen? How did this disaster strike? How did this nightmare unfold? {emoji_codes['scam']} We may never know the full story, but we can all witness the aftermath. {emoji_codes['pantsgrab']}",
-        f"{emoji_codes['pogo']} Hold on to your seats, folks, because we have a wild ride ahead of us! {emoji_codes['pogo']} {new_summoner} has just pulled off a miraculous feat, snatching position {position} from {old_summoner} in a nail-biting showdown. It's a jaw-dropping spectacle, a mind-blowing display, a heart-stopping performance. {emoji_codes['peepoflor']} How did they do it? How did they pull it off? How did they defy the odds? {emoji_codes['pepestrong']} We may never understand the secrets of their genius, but we can all admire their brilliance. {emoji_codes['yeahboi']}",
-        f"{emoji_codes['pogo']} Wow! Wow! Wow! {emoji_codes['pogo']} {new_summoner} has just outplayed {old_summoner} from position {position}, showing us all what TFT is all about. {emoji_codes['yeahboi']} It's a dazzling show, a thrilling game, a spectacular victory. {emoji_codes['dongerj']} How did they do it? How did they win? How did they conquer? {emoji_codes['business']} We may never know the details, but we can all appreciate the results. 📈 {emoji_codes['peepoflor']}",
-        f"{emoji_codes['pogo']} {new_summoner} has just taken position {position} from {old_summoner}. {emoji_codes['business']} In a cruel display of humiliation, {new_summoner} has left a message for us: This game is just all luck no skills, unlucky buddy {emoji_codes['scam']}",
-        f"{emoji_codes['pogo']} OOF! {old_summoner} just got destroyed by {new_summoner}, who took position {position} from them. {emoji_codes['aycaramba']} Mortdog sends his regards, unlucky buddy {emoji_codes['pantsgrab']}",
-        f"{emoji_codes['huh']} HUH... {old_summoner} just got outplayed by {new_summoner}, who snatched position {position} from them. Maybe you just didn’t hit this game, surely you will hit next game {emoji_codes['scam']} 📉",
-        f"{emoji_codes['pogo']} What a tragedy.. Surely. {emoji_codes['pogo']} {old_summoner} just got annihilated by {new_summoner}, who claimed position {position} from them. Who balances this game? {emoji_codes['pepeshrug']} Unlucky buddy. Take this L {emoji_codes['sadge']}",
-        f"{emoji_codes['pogo']} {old_summoner} just got humiliated by {new_summoner}, who kicked them from position {position}. RIP BOZO. 🤡 You won’t be missed {emoji_codes['deadge']}"
+        f"{new_summoner} just pulled off a spectacular heist {emoji_codes.get('business')}, ousting {old_summoner} from position {position} like a sneaky mastermind {emoji_codes.get('cathiago')}!",
+        f"Yeah.. {emoji_codes.get('sadge')} I'm sorry to announce {new_summoner} has dethroned {old_summoner} from position {position}. Don't ask me how. {emoji_codes.get('pepeshrug')}. Surely this is deserved. {emoji_codes.get('scam')}",
+        f"{emoji_codes.get('pogo')} {new_summoner} has kicked {old_summoner} from position {position}. Did you really expect me to praise you for that ? Take this instead: {emoji_codes.get('pantsgrab')}",
+        f"Ladies and gentlemen, let's gather 'round and give a thunderous round of applause to {new_summoner} for a breathtaking achievement! {emoji_codes.get('peepoflor')} With sheer grace and undeniable skill, {new_summoner} has claimed a well-deserved position in the prestigious top 4 of the illustrious PogO TFT Leaderboard. {emoji_codes.get('business')} Like a shining star ascending the heavens, they gracefully surpassed the formidable {old_summoner} at position {position}, leaving us all in awe of their remarkable talent. It's a triumph that deserves a standing ovation, a testament to the heights one can reach with unwavering dedication and unparalleled expertise. Let the celebration begin for this TFT maestro, a true master of the arena! {emoji_codes.get('yeahboi')}",
+        f"{emoji_codes.get('pogo')} ALERT! ALERT! {emoji_codes.get('pogo')} {new_summoner} has executed a flawless takedown, banishing {old_summoner} from position {position}. It's time to rally the troops and show our support to {new_summoner} by showering them with a barrage of {emoji_codes.get('pogo')}.",
+        f"{emoji_codes.get('pogo')} {new_summoner} has decisively toppled {old_summoner} from position {position}, leaving no doubt of their supremacy. {emoji_codes.get('cathiago')}",
+        f"NAHHHH THIS {new_summoner} PLAYER MIGHT JUST THE THE BEST PLAYER IN THE WORLD.{emoji_codes.get('dongerj')} HE LITERALLY JUST TOOK POSITION {position} FROM {old_summoner} JUST LIKE THAT ? {emoji_codes.get('huh')} IT'S WAY TOO FREE. {new_summoner} IS JUST BUILT DIFFERENT! {emoji_codes.get('pepestrong')}",
+        f"{new_summoner} --> {position} {emoji_codes.get('pogo')} {old_summoner} --> {emoji_codes.get('deadge')}",
+        f"{emoji_codes.get('pogo')} BREAKING NEWS! BREAKING NEWS! {emoji_codes.get('pogo')} A major upset has just occurred in the TFT scene. {new_summoner} has just dethroned {old_summoner} from position {position}. It's a shocking turn of events, a stunning upset, a colossal blunder. {emoji_codes.get('aycaramba')} How did this happen? How did this travesty occur? How did this abomination come to be? {emoji_codes.get('pepeshrug')} We may never know. All we know is that {old_summoner} has just lost their dignity, their honor, their pride. {emoji_codes.get('sadge')}",
+        f"{emoji_codes.get('pogo')} Hold on as {new_summoner} shakes things up and steals the glory from {old_summoner} at position {position}. {old_summoner} has just been humiliated, disgraced, destroyed. {emoji_codes.get('huh')} They have been reduced to nothing. {emoji_codes.get('huh')} They are now irrelevant. {emoji_codes.get('huh')} They are now forgotten. {emoji_codes.get('huh')} They are now dead to us. {emoji_codes.get('deadge')} All hail our new TFT overlord! {new_summoner}",
+        f"{emoji_codes.get('pogo')} Unbelievable chaos has erupted in the TFT realm! Brace yourselves as {new_summoner} shatters the status quo and snatches the crown from {old_summoner} at position {position}. It's an absolute whirlwind of confusion, a mind-bending plot twist, an inexplicable mishap. The world is left scratching its head, questioning the very fabric of reality. {emoji_codes.get('pogo')} How did the stars align for this calamity? {emoji_codes.get('huh')} How did the TFT gods allow such an unfathomable catastrophe? {emoji_codes.get('aycaramba')} How did this confounding enigma come to pass? {emoji_codes.get('scam')}",
+        f"{emoji_codes.get('pogo')} Attention, esteemed individuals, assemble and be captivated for a momentous announcement! {emoji_codes.get('pogo')} We stand in awe as {new_summoner} emerges as the undisputed victor, toppling {old_summoner} from their exalted position {position}. {emoji_codes.get('dongerj')} The path to this remarkable achievement remains shrouded in mystery, with scant details divulged on the hows and whys. {emoji_codes.get('pepeshrug')} The precise methods and strategies employed may forever elude our understanding, leaving us in awe of the enigma that surrounds this monumental accomplishment. {emoji_codes.get('yeahboi')} Such is the nature of this astounding feat, a tale woven with threads of intrigue and bewilderment, forever etched in the annals of TFT history. {emoji_codes.get('business')}",
+        f"Well, well, well... Look who's the new ruler of the TFT kingdom!👑 {new_summoner} has cunningly snatched the crown from {old_summoner} at position {position}. It's a classic case of 'outplayed and outwitted.' {emoji_codes.get('scam')} Bow down to the new TFT mastermind, for they have left their opponents scratching their heads in utter disbelief. {emoji_codes.get('pogo')}",
+        f"{emoji_codes.get('pogo')} Ladies and gentlemen, gather 'round! Witness the rise of {new_summoner} as they conquer position {position} and send {old_summoner} packing! {emoji_codes.get('pantsgrab')} It's like watching a legendary underdog story unfold before our eyes. {emoji_codes.get('business')} Let's give a standing ovation to {new_summoner} for defying the odds and proving that dreams do come true in the realm of TFT!",
+        f"{emoji_codes.get('pogo')} Hey {old_summoner}, guess who just took your spot at position {position}? {emoji_codes.get('scam')} Oh right, it's {new_summoner}! {emoji_codes.get('deadge')} They strategically outplayed you, leaving you in a state of utter confusion and embarrassment. {emoji_codes.get('aycaramba')} Looks like someone could use a lesson or two... Get ready to learn TFT buddy. {emoji_codes.get('pogo')}",
+        f"{emoji_codes.get('pogo')} Brace yourselves, TFT enthusiasts, for the rise of {new_summoner}! They've outshined {old_summoner} at position {position} like a radiant sun emerging from the clouds. {emoji_codes.get('peepoflor')} Meanwhile, {old_summoner} seems to be lost in the shadows of defeat. {emoji_codes.get('sadge')} Better luck next time, {old_summoner}, you'll need it! {emoji_codes.get('pogo')}",
+        f"{emoji_codes.get('pogo')} Brace yourselves, ladies and gentlemen, because we have a new champion in town! {emoji_codes.get('pepestrong')} {new_summoner} has just obliterated {old_summoner} from position {position}, leaving no room for doubt. It's a devastating blow, a crushing defeat, a humiliating loss. {emoji_codes.get('deadge')} How did this happen? How did this disaster strike? How did this nightmare unfold? {emoji_codes.get('scam')} We may never know the full story, but we can all witness the aftermath. {emoji_codes.get('pantsgrab')}",
+        f"{emoji_codes.get('pogo')} Hold on to your seats, folks, because we have a wild ride ahead of us! {emoji_codes.get('pogo')} {new_summoner} has just pulled off a miraculous feat, snatching position {position} from {old_summoner} in a nail-biting showdown. It's a jaw-dropping spectacle, a mind-blowing display, a heart-stopping performance. {emoji_codes.get('peepoflor')} How did they do it? How did they pull it off? How did they defy the odds? {emoji_codes.get('pepestrong')} We may never understand the secrets of their genius, but we can all admire their brilliance. {emoji_codes.get('yeahboi')}",
+        f"{emoji_codes.get('pogo')} Wow! Wow! Wow! {emoji_codes.get('pogo')} {new_summoner} has just outplayed {old_summoner} from position {position}, showing us all what TFT is all about. {emoji_codes.get('yeahboi')} It's a dazzling show, a thrilling game, a spectacular victory. {emoji_codes.get('dongerj')} How did they do it? How did they win? How did they conquer? {emoji_codes.get('business')} We may never know the details, but we can all appreciate the results. 📈 {emoji_codes.get('peepoflor')}",
+        f"{emoji_codes.get('pogo')} {new_summoner} has just taken position {position} from {old_summoner}. {emoji_codes.get('business')} In a cruel display of humiliation, {new_summoner} has left a message for us: This game is just all luck no skills, unlucky buddy {emoji_codes.get('scam')}",
+        f"{emoji_codes.get('pogo')} OOF! {old_summoner} just got destroyed by {new_summoner}, who took position {position} from them. {emoji_codes.get('aycaramba')} Mortdog sends his regards, unlucky buddy {emoji_codes.get('pantsgrab')}",
+        f"{emoji_codes.get('huh')} HUH... {old_summoner} just got outplayed by {new_summoner}, who snatched position {position} from them. Maybe you just didn’t hit this game, surely you will hit next game {emoji_codes.get('scam')} 📉",
+        f"{emoji_codes.get('pogo')} What a tragedy.. Surely. {emoji_codes.get('pogo')} {old_summoner} just got annihilated by {new_summoner}, who claimed position {position} from them. Who balances this game? {emoji_codes.get('pepeshrug')} Unlucky buddy. Take this L {emoji_codes.get('sadge')}",
+        f"{emoji_codes.get('pogo')} {old_summoner} just got humiliated by {new_summoner}, who kicked them from position {position}. RIP BOZO. 🤡 You won’t be missed {emoji_codes.get('deadge')}"
     ]
     gourish_messages = ["demoted", "banished", "relegated", "exiled", "downgraded", "dismissed", "degraded", "expelled",
                         "ousted", "lowered", "removed", "cast out", "dethroned", "ejected", "displaced", "deposed"]
@@ -494,381 +262,6 @@ def get_random_message(old_summoner, new_summoner, position):
     if new_summoner == salsa_king_summoner:
         return f"{emoji_codes['pogo']} {new_summoner} has overtaken {old_summoner} to achieve rank {position}, proving once again that throughout Heaven and Earth, he alone is The Honored One. {emoji_codes['pogo']}"
     return random.choice(messages)
-
-
-def balance_algorithm(rankings):
-    # extract the values from the rankings
-    values = [ranking[1] for ranking in rankings]
-    # compute all possible combinations of players
-    n = len(values)
-    best_team1 = None
-    best_team2 = None
-    best_diff = float('inf')
-    for team1 in combinations(range(n), n // 2):
-        team2 = [i for i in range(n) if i not in team1]
-        value1 = sum(values[i] for i in team1)
-        value2 = sum(values[i] for i in team2)
-        diff = abs(value1 - value2)
-        if diff < best_diff:
-            best_team1 = [rankings[i][0] for i in team1]
-            best_team2 = [rankings[i][0] for i in team2]
-            best_diff = diff
-    return best_team1, best_team2
-
-
-async def balance(ctx, summoner_names):
-    # split the names by comma to get the individual names
-    names = summoner_names.split(',')
-    # let Discord know that your bot is still processing the request
-    await ctx.defer()
-    # get a value for each name (replace this with your own code)
-    rankings = await get_lol_ranked_stats(names)
-    # balance the teams
-    # assign players to teams using the minimax algorithm
-    team1, team2 = balance_algorithm(rankings)
-    # send the balanced teams back to the user
-    print(team1)
-    print(team2)
-    await ctx.send(f'Team 1: {", ".join(team1)}')
-    await ctx.send(f'Team 2: {", ".join(team2)}')
-
-
-async def update_tft_leaderboard(previous_rankings, message, updated_tft_rankings_list_lock):
-    global updated_tft_rankings_list
-    async with updated_tft_rankings_list_lock:
-        # channel = client.get_channel(1118758206840262686) TESTING SERVER
-        general_channel = client.get_channel(general_channel_id)
-        tft_leaderboard_channel = client.get_channel(tft_leaderboard_channel_id)
-
-        # Edit the content of the message object to display "refreshing..."
-        logging.info("TFT Countdown timer: Refreshing leaderboard...")
-        print("Refreshing leaderboard...")
-        await message.edit(content="Refreshing leaderboard...")
-
-        logging.info(f"Previous TFT rankings: {previous_rankings}")
-        print("Collecting TFT ranked stats...")
-        # Compare the top 4 summoners in the previous rankings with the top 3 summoners in the new rankings
-        for i in range(4):
-            if previous_rankings and updated_tft_rankings_list[i][0] != previous_rankings[i][0]:
-                current_player = updated_tft_rankings_list[i][0]
-                rank= updated_tft_rankings_list[i][1]
-                # Skip if the current player is unranked
-                if rank == 0:
-                    continue
-                player_ranks = [x for x in range(len(previous_rankings)) if previous_rankings[x][0] == current_player]
-                if player_ranks:
-                    previous_rank = player_ranks[0]
-                    if i < previous_rank:
-                        print(updated_tft_rankings_list[i])
-                        print(previous_rankings[i])
-                        logging.info(
-                            f"TFT Rankings have changed! {updated_tft_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
-                        print(
-                            f"TFT Rankings have changed! {updated_tft_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
-                        # Send alert message when rankings have changed and someone ranked up
-                        await general_channel.send(
-                            get_random_message(previous_rankings[i][0], updated_tft_rankings_list[i][0], i + 1))
-                        logging.info("TFT Rankings update message sent to TFT Leaderboard chat!")
-                        print("TFT Rankings update message sent to TFT Leaderboard chat!")
-
-        # Clear the contents of the previous_rankings list
-        previous_rankings.clear()
-        # Add the new rankings to the previous_rankings list
-        previous_rankings.extend(updated_tft_rankings_list)
-
-        logging.info(f"Newly TFT updated rankings: {previous_rankings}")
-        print("Updating TFT leaderboard...")
-        # Delete the last leaderboard message if it exists
-        if hasattr(update_tft_leaderboard, "last_message") and update_tft_leaderboard.last_message:
-            try:
-                print("Deleting last TFT message...")
-                await update_tft_leaderboard.last_message.delete()
-            except:
-                pass
-        # Set up some constants
-        NORMAL_FONT_SIZE = 25
-        MEDIUM_FONT_SIZE = 23
-        SMALL_FONT_SIZE = 21
-        RANK_IMAGE_SIZE = (55, 55)
-        POGO_IMAGE_SIZE = (40, 40)
-        BACKGROUND_IMAGE_PATH = "img/leaderboard_tft.png"
-
-        # WIDTH, HEIGHT OF THE BACKGROUND IMAGE FOR TFT LEADERBOARD
-        BACKGROUND_SIZE = (1366, 757)
-
-        # Load the background image and resize it to the desired size
-        background_image = Image.open(BACKGROUND_IMAGE_PATH).convert("RGBA")
-        background_image = background_image.resize(BACKGROUND_SIZE)
-
-        # Create a new image with the same size as the background image and convert it to RGBA mode
-        image = Image.new("RGB", BACKGROUND_SIZE, "white").convert("RGBA")
-        image.alpha_composite(background_image)
-
-        draw = ImageDraw.Draw(image)
-
-        # Draw the summoner names, tier images, and tier text
-        x_offsets = [70, 513, 956]
-        y_offsets = [0, 73, 146, 219, 292, 364, 439]
-        for i in range(3):
-            for j in range(7):
-                index = i * 7 + j
-                if index >= len(updated_tft_rankings_list):
-                    break
-                summoner = updated_tft_rankings_list[index]
-                x = x_offsets[i]
-                y = y_offsets[j]
-
-                if len(summoner[0]) > 12:
-                    # Load the font smaller size for summoner name
-                    font = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", SMALL_FONT_SIZE)
-                else:
-                    # Load the font normal size for summoner name
-                    font = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", NORMAL_FONT_SIZE)
-                # Draw summoner name
-                draw.text((x + 45, y + 235), summoner[0], fill="white", font=font)
-
-                # Draw tier image
-                image_path = f"img/{summoner[3]}.png"
-                tier_image = Image.open(image_path).convert("RGBA")
-                if summoner[3] == "UNRANKED":
-                    image_size = POGO_IMAGE_SIZE
-                else:
-                    image_size = RANK_IMAGE_SIZE
-                tier_image.thumbnail(image_size)
-                tier_image_x = x + 165
-                if summoner[3] == "UNRANKED" or summoner[3] == "PLATINUM" or summoner[3] == "DIAMOND" or summoner[
-                    3] == "MASTER" or summoner[3] == "GRANDMASTER" or summoner[3] == "CHALLENGER":
-                    tier_image_y = y + 225
-                else:
-                    tier_image_y = y + 220
-                image.alpha_composite(tier_image, dest=(tier_image_x, tier_image_y))
-
-                # Load the font normal size for the tier & rank text
-                font = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", NORMAL_FONT_SIZE)
-                # Load the font small size for the tier GM+ & rank text
-                small_font = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", MEDIUM_FONT_SIZE)
-                # Draw tier & rank text
-                if summoner[3] == "GRANDMASTER" or summoner[3] == "CHALLENGER":
-                    draw.text((x + 237, y + 235), f"{summoner[4]}", fill="white", font=small_font)
-                else:
-                    draw.text((x + 237, y + 235), f"{summoner[4]}", fill="white", font=font)
-
-        # Save the image to a file-like object in memory
-        with io.BytesIO() as output:
-            image.save(output, format="PNG")
-            output.seek(0)
-            print("Sending updated TFT leaderboard...")
-            update_tft_leaderboard.last_message = await tft_leaderboard_channel.send(
-                file=discord.File(output, filename="leaderboard.png"))
-
-    # Start the countdown timer and pass the message object as a parameter
-    logging.info("Starting TFT countdown timer...")
-    print("Starting TFT countdown timer...")
-    await countdown_timer_tft(360, message)
-
-
-async def update_lol_leaderboard(previous_rankings, message, updated_lol_rankings_list_lock):
-    global updated_lol_rankings_list
-    async with updated_lol_rankings_list_lock:
-        # channel = client.get_channel(1118758206840262686) TESTING SERVER
-        general_channel = client.get_channel(general_channel_id)
-        lol_leaderboard_channel = client.get_channel(lol_leaderboard_channel_id)
-
-        # Edit the content of the message object to display "refreshing..."
-        logging.info("LoL Countdown timer: Refreshing LoL leaderboard...")
-        print("Refreshing LoL leaderboard...")
-        await message.edit(content="Refreshing leaderboard...")
-
-        logging.info(f"LoL Previous rankings: {previous_rankings}")
-        print("Collecting LoL ranked stats...")
-        # Compare the top 4 summoners in the previous rankings with the top 3 summoners in the new rankings
-        for i in range(4):
-            if previous_rankings and updated_lol_rankings_list[i][0] != previous_rankings[i][0]:
-                current_player = updated_lol_rankings_list[i][0]
-                player_ranks = [x for x in range(len(previous_rankings)) if previous_rankings[x][0] == current_player]
-                if player_ranks:
-                    previous_rank = player_ranks[0]
-                    if i < previous_rank:
-                        print(updated_lol_rankings_list[i])
-                        print(previous_rankings[i])
-                        logging.info(
-                            f"LoL Rankings have changed! {updated_lol_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
-                        print(
-                            f"LoL Rankings have changed! {updated_lol_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
-                        # Send alert message when rankings have changed and someone ranked up
-                        # await general_channel.send(
-                        #    get_random_message(previous_rankings[i][0], updated_lol_rankings_list[i][0], i + 1))
-                        logging.info("LoL Rankings changed message sent!")
-                        print("LoL Rankings changed message sent!")
-
-        # Clear the contents of the previous_rankings list
-        previous_rankings.clear()
-        # Add the new rankings to the previous_rankings list
-        previous_rankings.extend(updated_lol_rankings_list)
-
-        logging.info(f"Newly LoL updated rankings: {previous_rankings}")
-        print("Updating LoL leaderboard...")
-        # Delete the last leaderboard message if it exists
-        if hasattr(update_lol_leaderboard, "last_message") and update_lol_leaderboard.last_message:
-            try:
-                print("Deleting last LoL message...")
-                await update_lol_leaderboard.last_message.delete()
-            except:
-                pass
-        # Set up some constants
-        NORMAL_FONT_SIZE = 25
-        MEDIUM_FONT_SIZE = 23
-        SMALL_FONT_SIZE = 21
-        RANK_IMAGE_SIZE = (55, 55)
-        POGO_IMAGE_SIZE = (40, 40)
-        BACKGROUND_IMAGE_PATH = "img/leaderboard_soloq.png"
-
-        # WIDTH, HEIGHT OF THE BACKGROUND IMAGE FOR LOL LEADERBOARD
-        BACKGROUND_SIZE = (1366, 757)
-
-        # Load the background image and resize it to the desired size
-        background_image = Image.open(BACKGROUND_IMAGE_PATH).convert("RGBA")
-        background_image = background_image.resize(BACKGROUND_SIZE)
-
-        # Create a new image with the same size as the background image and convert it to RGBA mode
-        image = Image.new("RGB", BACKGROUND_SIZE, "white").convert("RGBA")
-        image.alpha_composite(background_image)
-
-        draw = ImageDraw.Draw(image)
-
-        # Draw the summoner names, tier images, and tier text
-        x_offsets = [70, 513, 956]
-        y_offsets = [0, 73, 146, 219, 292, 364, 439]
-        for i in range(3):
-            for j in range(7):
-                index = i * 7 + j
-                if index >= len(updated_lol_rankings_list):
-                    break
-                summoner = updated_lol_rankings_list[index]
-                x = x_offsets[i]
-                y = y_offsets[j]
-
-                if len(summoner[0]) > 12:
-                    # Load the font smaller size for summoner name
-                    font = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", SMALL_FONT_SIZE)
-                else:
-                    # Load the font normal size for summoner name
-                    font = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", NORMAL_FONT_SIZE)
-                # Draw summoner name
-                draw.text((x + 45, y + 235), summoner[0], fill="white", font=font)
-
-                # Draw tier image
-                image_path = f"img/{summoner[3]}.png"
-                tier_image = Image.open(image_path).convert("RGBA")
-                if summoner[3] == "UNRANKED":
-                    image_size = POGO_IMAGE_SIZE
-                else:
-                    image_size = RANK_IMAGE_SIZE
-                tier_image.thumbnail(image_size)
-                tier_image_x = x + 165
-                if summoner[3] == "UNRANKED" or summoner[3] == "PLATINUM" or summoner[3] == "DIAMOND" or summoner[
-                    3] == "MASTER" or summoner[3] == "GRANDMASTER" or summoner[3] == "CHALLENGER":
-                    tier_image_y = y + 225
-                else:
-                    tier_image_y = y + 220
-                image.alpha_composite(tier_image, dest=(tier_image_x, tier_image_y))
-
-                # Load the font normal size for the tier & rank text
-                font = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", NORMAL_FONT_SIZE)
-                # Load the font small size for the tier GM+ & rank text
-                small_font = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", MEDIUM_FONT_SIZE)
-                # Draw tier & rank text
-                if summoner[3] == "GRANDMASTER" or summoner[3] == "CHALLENGER":
-                    draw.text((x + 237, y + 235), f"{summoner[4]}", fill="white", font=small_font)
-                else:
-                    draw.text((x + 237, y + 235), f"{summoner[4]}", fill="white", font=font)
-
-        # Save the image to a file-like object in memory
-        with io.BytesIO() as output:
-            image.save(output, format="PNG")
-            output.seek(0)
-            print("Sending updated LoL leaderboard...")
-            update_lol_leaderboard.last_message = await lol_leaderboard_channel.send(
-                file=discord.File(output, filename="leaderboard.png"))
-
-    # Start the countdown timer and pass the message object as a parameter
-    logging.info("Starting LoL countdown timer...")
-    print("Starting LoL countdown timer...")
-    await countdown_timer_lol(360, message)
-
-
-async def countdown_timer_tft(time, message):
-    logging.info(f"Starting TFT countdown timer with time={time} and message={message.content}")
-    print(f"Starting TFT countdown timer with time={time} and message={message.content}")
-    # Calculate the number of minutes remaining
-    minutes = time // 60
-
-    # Edit the content of the message object to display the time remaining
-    await message.edit(content=f"Next update in: {minutes} minutes")
-    while time > 0:
-        try:
-            await asyncio.sleep(1)
-            time -= 1
-            # logging.info(f"Countdown timer ticked with time={time} and message={message.content}")
-            # Calculate the number of minutes and seconds remaining
-            minutes, seconds = divmod(time, 60)
-            minutes = minutes + 1
-            # Check if the content of the message object has been changed to "refreshing..."
-            if message.content == "Refreshing TFT leaderboard...":
-                logging.info(f"TFT Countdown timer stopped because message content changed to 'refreshing...'")
-                print(f"TFT Countdown timer stopped because message content changed to 'refreshing...'")
-                # Break out of the while loop to stop the countdown timer
-                break
-
-            # Edit the content of the message object to display the time remaining
-            if seconds == 59:
-                logging.info(f"TFT Countdown timer updated: {minutes} minutes")
-                await message.edit(content=f"Next update in: {minutes} minutes")
-            elif minutes == 0 and seconds == 10:
-                await message.edit(content=f"Next update in: {seconds:2d} seconds")
-        except Exception as e:
-            print(f"An error occurred in countdown_timer_tft: {e}. Retrying in 5 seconds...")
-            await asyncio.sleep(5)  # Wait for 5 seconds before retrying
-
-    logging.info(f"TFT Countdown timer finished with time={time} and message={message.content}")
-    print(f"TFT Countdown timer finished with time={time} and message={message.content}")
-
-
-async def countdown_timer_lol(time, message):
-    logging.info(f"Starting LoL countdown timer with time={time} and message={message.content}")
-    print(f"Starting LoL countdown timer with time={time} and message={message.content}")
-    # Calculate the number of minutes remaining
-    minutes = time // 60
-
-    # Edit the content of the message object to display the time remaining
-    await message.edit(content=f"Next update in: {minutes} minutes")
-    while time > 0:
-        try:
-            await asyncio.sleep(1)
-            time -= 1
-            # logging.info(f"Countdown timer ticked with time={time} and message={message.content}")
-            # Calculate the number of minutes and seconds remaining
-            minutes, seconds = divmod(time, 60)
-            minutes = minutes + 1
-            # Check if the content of the message object has been changed to "refreshing..."
-            if message.content == "Refreshing Soloq leaderboard...":
-                logging.info(f"LoL Countdown timer stopped because message content changed to 'refreshing...'")
-                print(f"LoL Countdown timer stopped because message content changed to 'refreshing...'")
-                # Break out of the while loop to stop the countdown timer
-                break
-
-            # Edit the content of the message object to display the time remaining
-            if seconds == 59:
-                logging.info(f"LoL Countdown timer updated: {minutes} minutes")
-                await message.edit(content=f"Next update in: {minutes} minutes")
-            elif minutes == 0 and seconds == 10:
-                await message.edit(content=f"Next update in: {seconds:2d} seconds")
-        except Exception as e:
-            print(f"An error occurred in countdown_timer_lol: {e}. Retrying in 5 seconds...")
-            await asyncio.sleep(5)  # Wait for 5 seconds before retrying
-
-    logging.info(f"LoL Countdown timer finished with time={time} and message={message.content}")
-    print(f"LoL Countdown timer finished with time={time} and message={message.content}")
 
 
 async def clear_channel(channel):
@@ -887,36 +280,278 @@ async def clear_channel(channel):
         await message.delete()
         logging.debug(f"Message deleted: {message.content}")
 
+async def update_leaderboard(
+    game_type: str,
+    previous_rankings: list,
+    message: discord.Message,
+    updated_rankings_list_lock: asyncio.Lock,
+    updated_rankings_list: list,
+    leaderboard_channel_id: int,
+    background_image_path: str,
+    send_alert_message: bool = True # Flag to control rank change alert
+):
+    """
+    Generic function to update a game leaderboard (TFT or LoL).
+    """
+    global last_leaderboard_messages # Access the dictionary storing last messages
 
-async def update_tasks(updated_tft_rankings_list_lock, updated_lol_rankings_list_lock):
-    tft_leaderboard_channel = client.get_channel(tft_leaderboard_channel_id)
-    lol_leaderboard_channel = client.get_channel(lol_leaderboard_channel_id)
-    previous_tft_rankings = []
-    previous_lol_rankings = []
+    async with updated_rankings_list_lock:
+        general_channel = client.get_channel(GENERAL_CHANNEL_ID)
+        leaderboard_channel = client.get_channel(leaderboard_channel_id)
 
-    # Send the initial message once
-    try:
-        message_tft = await tft_leaderboard_channel.send("Starting TFT leaderboard...")
-        message_lol = await lol_leaderboard_channel.send("Starting LoL leaderboard...")
-    except Exception as e:
-        logging.error(f"Failed to send initial leaderboard messages: {e}")
-        return  # Exit if initial messages cannot be sent
+        if not general_channel or not leaderboard_channel:
+            logging.error(f"Could not find required channels for {game_type} leaderboard.")
+            print(f"Error: Could not find required channels for {game_type} leaderboard.")
+            # Potentially edit message to show error and stop?
+            # await message.edit(content=f"Error updating {game_type} leaderboard: Channel not found.")
+            return # Stop execution if channels aren't found
 
-    while True:
-        task1 = asyncio.create_task(
-            update_tft_leaderboard(previous_tft_rankings, message_tft, updated_tft_rankings_list_lock))
-        task2 = asyncio.create_task(
-            update_lol_leaderboard(previous_lol_rankings, message_lol, updated_lol_rankings_list_lock))
+        # Edit the content of the message object to display "refreshing..."
+        logging.info(f"{game_type} Countdown timer: Refreshing {game_type} leaderboard...")
+        print(f"Refreshing {game_type} leaderboard...")
+        try:
+            await message.edit(content=f"Refreshing {game_type} leaderboard...")
+        except discord.NotFound:
+            logging.warning(f"Message for {game_type} leaderboard update not found. It might have been deleted.")
+            # Decide how to handle this - maybe just log and continue, or stop?
+            # For now, we'll log and continue, assuming a new message might be needed later.
+            pass
+        except discord.HTTPException as e:
+            logging.error(f"Failed to edit message for {game_type} leaderboard refresh: {e}")
+            print(f"Failed to edit message for {game_type} leaderboard refresh: {e}")
+            # Continue, but refreshing state won't be shown on the old message.
+
+
+        logging.info(f"Previous {game_type} rankings: {previous_rankings}")
+        print(f"Collecting {game_type} ranked stats...")
+        # Compare the top 4 summoners in the previous rankings with the top 4 summoners in the new rankings
+        # Ensure we don't go out of bounds if lists are shorter than 4
+        comparison_range = min(4, len(updated_rankings_list), len(previous_rankings) if previous_rankings else 0)
+        if previous_rankings: # Only compare if there are previous rankings
+            for i in range(comparison_range):
+                 # Check if player at rank i has changed
+                if updated_rankings_list[i][0] != previous_rankings[i][0]:
+                    current_player = updated_rankings_list[i][0]
+                    rank = updated_rankings_list[i][1] # Assuming index 1 is numerical rank or similar
+
+                    # Skip if the current player is unranked (assuming rank 0 means unranked as in TFT example)
+                    # Adjust this condition if 'unranked' is represented differently
+                    if rank == 0:
+                         continue
+
+                    # Find the previous rank of the current player
+                    player_ranks = [idx for idx, p_rank in enumerate(previous_rankings) if p_rank[0] == current_player]
+
+                    if player_ranks:
+                        previous_rank_index = player_ranks[0]
+                        # Check if the player moved up in the rankings (lower index means higher rank)
+                        if i < previous_rank_index:
+                            logging.info(f"{game_type} Rankings have changed! {updated_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
+                            print(f"{game_type} Rankings have changed! {updated_rankings_list[i][0]} has passed {previous_rankings[i][0]}")
+                            # Send alert message if enabled
+                            if send_alert_message:
+                                try:
+                                    await general_channel.send(
+                                        get_random_message(previous_rankings[i][0], updated_rankings_list[i][0], i + 1))
+                                    logging.info(f"{game_type} Rankings update message sent to General chat!")
+                                    print(f"{game_type} Rankings update message sent to General chat!")
+                                except discord.HTTPException as e:
+                                     logging.error(f"Failed to send {game_type} rank change alert: {e}")
+                                     print(f"Failed to send {game_type} rank change alert: {e}")
+                            else:
+                                logging.info(f"{game_type} Rankings changed message (alert disabled).")
+                                print(f"{game_type} Rankings changed message (alert disabled).")
+
+        # Clear the contents of the previous_rankings list
+        previous_rankings.clear()
+        # Add the new rankings to the previous_rankings list
+        previous_rankings.extend(updated_rankings_list)
+
+        logging.info(f"Newly {game_type} updated rankings: {previous_rankings}")
+        print(f"Updating {game_type} leaderboard...")
+
+        # Delete the last leaderboard message for this specific game_type if it exists
+        last_message_for_game = last_leaderboard_messages.get(game_type)
+        if last_message_for_game:
+            try:
+                print(f"Deleting last {game_type} message...")
+                await last_message_for_game.delete()
+                last_leaderboard_messages[game_type] = None # Clear it after successful deletion
+            except discord.NotFound:
+                print(f"Last {game_type} message already deleted or not found.")
+                last_leaderboard_messages[game_type] = None # Clear it as it's gone
+            except discord.HTTPException as e:
+                logging.error(f"Failed to delete previous {game_type} leaderboard message: {e}")
+                print(f"Failed to delete previous {game_type} leaderboard message: {e}")
+                # Keep the reference in case deletion works next time? Or clear it? Let's clear it.
+                last_leaderboard_messages[game_type] = None
+
+
+        # --- Image Generation (Identical logic, uses parameters) ---
+        NORMAL_FONT_SIZE = 25
+        MEDIUM_FONT_SIZE = 23
+        SMALL_FONT_SIZE = 21
+        RANK_IMAGE_SIZE = (55, 55)
+        POGO_IMAGE_SIZE = (40, 40) # Assuming "POGO" was for unranked?
+        BACKGROUND_SIZE = (1366, 757) # Assuming size is same for both
 
         try:
-            await asyncio.gather(task1, task2)
-        except Exception as e:
-            logging.error(f"An error occurred during leaderboard updates: {e}")
-            print(f"An error occurred during leaderboard updates: {e}")
-            # Optionally, add a delay before retrying to prevent rapid failure loops
-            await asyncio.sleep(10)
-            continue  # Continue the loop to attempt updates again
+            # Load the background image and resize it
+            background_image = Image.open(background_image_path).convert("RGBA")
+            background_image = background_image.resize(BACKGROUND_SIZE)
 
+            # Create a new image
+            image = Image.new("RGB", BACKGROUND_SIZE, "white").convert("RGBA")
+            image.alpha_composite(background_image)
+
+            draw = ImageDraw.Draw(image)
+
+            # Load fonts (consider loading only once outside the loop if performance matters)
+            font_bebas_normal = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", NORMAL_FONT_SIZE)
+            font_bebas_medium = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", MEDIUM_FONT_SIZE)
+            font_bebas_small = ImageFont.truetype("fonts/BebasNeue-Regular.ttf", SMALL_FONT_SIZE)
+
+            # Draw the summoner names, tier images, and tier text
+            x_offsets = [70, 513, 956]
+            y_offsets = [0, 73, 146, 219, 292, 364, 439] # Offsets relative to top-left of each player slot area
+
+            for i in range(3): # Columns
+                for j in range(7): # Rows
+                    index = i * 7 + j
+                    if index >= len(updated_rankings_list):
+                        break
+                    summoner = updated_rankings_list[index] # Assumes format [name, rank_value, ?, tier_str, rank_division_str]
+                    x_base = x_offsets[i]
+                    y_base = y_offsets[j]
+
+                    # Determine font size for name
+                    name_font = font_bebas_small if len(summoner[0]) > 12 else font_bebas_normal
+                    # Draw summoner name (Adjust coordinates based on your template image)
+                    # These coordinates (x+45, y+235) looked specific to the template structure
+                    draw.text((x_base + 45, y_base + 235), summoner[0], fill="white", font=name_font)
+
+                    # Draw tier image
+                    tier_str = summoner[3].upper() # Ensure consistent casing (e.g., "UNRANKED")
+                    try:
+                        image_path = f"img/{tier_str}.png"
+                        tier_image = Image.open(image_path).convert("RGBA")
+
+                        # Determine image size and position
+                        image_size = POGO_IMAGE_SIZE if tier_str == "UNRANKED" else RANK_IMAGE_SIZE
+                        tier_image.thumbnail(image_size) # Use thumbnail to resize while preserving aspect ratio
+
+                        tier_image_x = x_base + 165
+                        # Adjust y position based on tier - refine this logic if needed
+                        if tier_str in ["UNRANKED", "PLATINUM", "DIAMOND", "MASTER", "GRANDMASTER", "CHALLENGER"]:
+                            tier_image_y = y_base + 225
+                        else: # IRON, BRONZE, SILVER, GOLD, EMERALD?
+                            tier_image_y = y_base + 220
+
+                        image.alpha_composite(tier_image, dest=(tier_image_x, tier_image_y))
+                    except FileNotFoundError:
+                        logging.warning(f"Tier image not found: {image_path}")
+                        print(f"Warning: Tier image not found: {image_path}")
+                    except Exception as img_err:
+                        logging.error(f"Error processing tier image {image_path}: {img_err}")
+                        print(f"Error processing tier image {image_path}: {img_err}")
+
+
+                    # Draw tier & rank text
+                    # Determine font size for rank text (GM/Challenger smaller?)
+                    rank_font = font_bebas_medium if tier_str in ["GRANDMASTER", "CHALLENGER"] else font_bebas_normal
+                    rank_text = f"{summoner[4]}" # Assuming index 4 holds rank/division like "I", "IV", "250 LP"
+                    # Adjust coordinates based on template
+                    draw.text((x_base + 237, y_base + 235), rank_text, fill="white", font=rank_font)
+
+            # Save the image to a file-like object in memory
+            with io.BytesIO() as output:
+                image.save(output, format="PNG")
+                output.seek(0)
+                print(f"Sending updated {game_type} leaderboard...")
+                # Send the image and store the message object
+                sent_message = await leaderboard_channel.send(
+                    file=discord.File(output, filename="leaderboard.png"))
+                last_leaderboard_messages[game_type] = sent_message # Store the message object
+
+        except FileNotFoundError:
+            logging.error(f"Background image not found: {background_image_path}")
+            print(f"Error: Background image not found: {background_image_path}")
+            await message.edit(content=f"Error updating {game_type} leaderboard: Image asset missing.")
+            return # Stop if background is missing
+        except Exception as e:
+            logging.exception(f"An error occurred during {game_type} leaderboard image generation or sending: {e}")
+            print(f"An error occurred during {game_type} leaderboard image generation or sending: {e}")
+            try:
+                 await message.edit(content=f"Error updating {game_type} leaderboard. Please check logs.")
+            except discord.HTTPException:
+                 pass # Ignore if editing fails
+            return # Stop if image generation/sending failed
+
+
+    # Start the countdown timer using the passed function
+    logging.info(f"Starting {game_type} countdown timer...")
+    print(f"Starting {game_type} countdown timer...")
+    # Pass game_type and the specific refreshing message content to the generic timer
+    await countdown_timer(360, message, game_type)
+
+async def countdown_timer(time: int, message: discord.Message, game_type: str):
+    """Generic countdown timer for leaderboard updates."""
+    log_prefix = f"[{game_type} Countdown]"
+    logging.info(f"{log_prefix} Starting timer ({time}s) for message {message.id}")
+    print(f"Starting {game_type} countdown timer ({time}s)")
+
+    # Ensure time is at least 1 to avoid instant loop exit
+    time = max(1, time)
+
+    # Calculate the initial number of minutes remaining
+    initial_minutes = (time + 59) // 60 # Round up
+
+    # Edit the status message to display the initial time
+    try:
+        await message.edit(content=f"Next update in: {initial_minutes} minutes")
+    except discord.NotFound:
+        logging.warning(f"{log_prefix} Status message {message.id} not found at start. Stopping timer.")
+        return
+    except discord.HTTPException as e:
+        logging.error(f"{log_prefix} Failed to edit status message at start: {e}. Stopping timer.")
+        return
+
+    last_displayed_minute = initial_minutes
+    seconds_mode = False # Flag to track if we are showing seconds
+
+    while time > 0:
+        await asyncio.sleep(1)
+        time -= 1
+
+        if time <= 0: # Check if timer ended
+            break
+
+        # Update display logic
+        minutes_remaining = (time + 59) // 60
+
+        try:
+            if time <= 10 and not seconds_mode:
+                logging.info(f"{log_prefix} Switching to seconds display.")
+                await message.edit(content=f"Next update in: {time} seconds")
+                seconds_mode = True
+            elif seconds_mode and time > 0: # Update seconds if already in seconds mode
+                 if time % 2 == 0: # Update every 2 seconds when below 10
+                    await message.edit(content=f"Next update in: {time} seconds")
+            elif minutes_remaining < last_displayed_minute and not seconds_mode:
+                logging.info(f"{log_prefix} Updating minutes: {minutes_remaining}")
+                await message.edit(content=f"Next update in: {minutes_remaining} minutes")
+                last_displayed_minute = minutes_remaining
+
+        except discord.NotFound:
+            logging.warning(f"{log_prefix} Status message {message.id} not found during update. Stopping timer.")
+            return # Exit function cleanly
+        except discord.HTTPException as e:
+             logging.error(f"{log_prefix} Failed to edit status message during update: {e}")
+             # Continue timer, user just won't see update
+
+    # Timer finished naturally
+    logging.info(f"{log_prefix} Countdown timer finished naturally for message {message.id}")
+    print(f"{game_type} Countdown timer finished.")
 
 # ===============================================================
 # ANTI-NUKE (Protects from mass deletion of channels and bans)
@@ -938,6 +573,7 @@ async def check_actions(user, action_type, threshold):
                                    if now - action[1] < TIME_FRAME]
     # Add new action
     action_tracker[action_type].append((user, now))
+
     # Count actions by this user
     user_actions = [action for action in action_tracker[action_type]
                     if action[0] == user]
@@ -945,38 +581,154 @@ async def check_actions(user, action_type, threshold):
         return True
     return False
 
-
-@tasks.loop(minutes=5)
-async def reset_tracker():
-    global action_tracker
-    action_tracker = defaultdict(list)
-    print("Action tracker reset.")
-
-
 # =====================
-# Discord
+# Discord Bot Setup & Loops
 # =====================
+
+intents = discord.Intents.default()
+intents.members = True
+intents.guilds = True
+intents.message_content = True
+client = commands.Bot(command_prefix="!", intents=intents) # Use Bot for tasks
+
+# --- Scheduled Task: TFT Leaderboard Update ---
+@tasks.loop(seconds=LEADERBOARD_UPDATE_INTERVAL_SECONDS)
+async def tft_leaderboard_update_loop():
+    logging.info("[TFT Loop] Task triggered.")
+    game_type = "TFT"
+    status_message = leaderboard_status_messages.get(game_type)
+    prev_ranks = previous_leaderboard_rankings.get(game_type) # Get the mutable list
+
+    if status_message is None or prev_ranks is None:
+        logging.error(f"[TFT Loop] State not initialized (message or prev_ranks missing). Skipping cycle.")
+        return
+
+    await update_leaderboard(
+        game_type=game_type,
+        previous_rankings=prev_ranks, # Pass the list
+        message=status_message,
+        updated_rankings_list_lock=updated_tft_rankings_list_lock,
+        updated_rankings_list=updated_tft_rankings_list, # Pass the global list
+        leaderboard_channel_id=TFT_LEADERBOARD_CHANNEL_ID,
+        background_image_path=TFT_BACKGROUND_PATH,
+        send_alert_message=True # Enable alerts for TFT
+    )
+    logging.info("[TFT Loop] Task cycle completed.")
+
+@tft_leaderboard_update_loop.before_loop
+async def before_tft_loop():
+    logging.info("TFT Loop: Waiting for bot to be ready...")
+    await client.wait_until_ready()
+    logging.info("TFT Loop: Bot ready, loop starting.")
+
+# --- Scheduled Task: LoL Leaderboard Update ---
+@tasks.loop(seconds=LEADERBOARD_UPDATE_INTERVAL_SECONDS)
+async def lol_leaderboard_update_loop():
+    logging.info("[LoL Loop] Task triggered.")
+    game_type = "LoL"
+    status_message = leaderboard_status_messages.get(game_type)
+    prev_ranks = previous_leaderboard_rankings.get(game_type) # Get the mutable list
+
+    if status_message is None or prev_ranks is None:
+        logging.error(f"[LoL Loop] State not initialized (message or prev_ranks missing). Skipping cycle.")
+        return
+
+    await update_leaderboard(
+        game_type=game_type,
+        previous_rankings=prev_ranks, # Pass the list
+        message=status_message,
+        updated_rankings_list_lock=updated_lol_rankings_list_lock,
+        updated_rankings_list=updated_lol_rankings_list, # Pass the global list
+        leaderboard_channel_id=LOL_LEADERBOARD_CHANNEL_ID,
+        background_image_path=LOL_BACKGROUND_PATH,
+        send_alert_message=False # Disable alerts for LoL (as per original)
+    )
+    logging.info("[LoL Loop] Task cycle completed.")
+
+@lol_leaderboard_update_loop.before_loop
+async def before_lol_loop():
+    logging.info("LoL Loop: Waiting for bot to be ready...")
+    await client.wait_until_ready()
+    logging.info("LoL Loop: Bot ready, loop starting.")
+
+# --- Bot Event: On Ready ---
 @client.event
 async def on_ready():
-    logging.debug("on_ready function called")
-    await client.tree.sync()
-    print("Success: PogO bot is connected to Discord".format(client))
-    tft_leaderboard_channel = client.get_channel(tft_leaderboard_channel_id)
-    lol_leaderboard_channel = client.get_channel(lol_leaderboard_channel_id)
-    await clear_channel(tft_leaderboard_channel)
-    await clear_channel(lol_leaderboard_channel)
-    print("Success: PogO bot has cleared the TFT leaderboard channel")
-    updated_tft_rankings_list_lock = asyncio.Lock()
-    updated_lol_rankings_list_lock = asyncio.Lock()
-    client.loop.create_task(update_tasks(updated_tft_rankings_list_lock, updated_lol_rankings_list_lock))
-    client.loop.create_task(update_tft_rankings_list(updated_tft_rankings_list_lock))
-    client.loop.create_task(update_lol_rankings_list(updated_lol_rankings_list_lock))
-    reset_tracker.start()
+    print(f'Logged in as {client.user.name} ({client.user.id})')
+    logging.info(f"Bot logged in as {client.user.name}")
+    print('------')
 
-@client.hybrid_command()
-async def balance_teams(ctx, summoner_names):
-    await balance(ctx, summoner_names)
+    # --- Channel Setup ---
+    tft_lb_channel = client.get_channel(TFT_LEADERBOARD_CHANNEL_ID)
+    lol_lb_channel = client.get_channel(LOL_LEADERBOARD_CHANNEL_ID)
 
+    if not tft_lb_channel:
+        logging.error(f"FATAL: TFT Leaderboard Channel (ID: {TFT_LEADERBOARD_CHANNEL_ID}) not found.")
+        print(f"Error: TFT Leaderboard Channel (ID: {TFT_LEADERBOARD_CHANNEL_ID}) not found.")
+        # Consider stopping the bot if critical channels are missing
+        # await client.close()
+        # return
+    if not lol_lb_channel:
+        logging.error(f"FATAL: LoL Leaderboard Channel (ID: {LOL_LEADERBOARD_CHANNEL_ID}) not found.")
+        print(f"Error: LoL Leaderboard Channel (ID: {LOL_LEADERBOARD_CHANNEL_ID}) not found.")
+        # await client.close()
+        # return
+
+    # Clear Channels on Startup
+    await clear_channel(tft_lb_channel)
+    await clear_channel(lol_lb_channel)
+    await asyncio.sleep(1)
+
+    # --- Send Initial Status Messages ---
+    try:
+        if tft_lb_channel:
+            tft_message = await tft_lb_channel.send("Initializing TFT Leaderboard...")
+            leaderboard_status_messages["TFT"] = tft_message
+            logging.info(f"Sent initial TFT status message (ID: {tft_message.id})")
+        if lol_lb_channel:
+            lol_message = await lol_lb_channel.send("Initializing LoL Leaderboard...")
+            leaderboard_status_messages["LoL"] = lol_message
+            logging.info(f"Sent initial LoL status message (ID: {lol_message.id})")
+    except discord.Forbidden:
+        logging.error("Bot lacks permission to send messages in one or more leaderboard channels.")
+        print("Error: Bot cannot send messages in leaderboard channels.")
+        # Decide if you want to stop the bot here
+    except discord.HTTPException as e:
+        logging.error(f"Failed to send initial status messages: {e}")
+        print(f"Error sending initial status messages: {e}")
+
+
+    # --- Start Background Data Fetching Tasks ---
+    client.loop.create_task(
+        update_rankings_list_task(
+            lock=updated_tft_rankings_list_lock,
+            rankings_list_to_update=updated_tft_rankings_list,
+            game_type_name="TFT"
+        ),
+        name="TFT Rank Fetcher"
+    )
+    logging.info("Launched background task: TFT Rank Fetcher")
+
+    client.loop.create_task(
+        update_rankings_list_task(
+            lock=updated_lol_rankings_list_lock,
+            rankings_list_to_update=updated_lol_rankings_list,
+            game_type_name="LoL"
+        ),
+        name="LoL Rank Fetcher"
+    )
+    logging.info("Launched background task: LoL Rank Fetcher")
+
+    # --- Start Scheduled Leaderboard Update Loops ---
+    if not tft_leaderboard_update_loop.is_running():
+        tft_leaderboard_update_loop.start()
+    logging.info("Started TFT leaderboard update loop.")
+
+    if not lol_leaderboard_update_loop.is_running():
+        lol_leaderboard_update_loop.start()
+    logging.info("Started LoL leaderboard update loop.")
+
+    print("Bot is ready and tasks are running.")
 
 @client.event
 async def on_message(message):
@@ -1017,13 +769,23 @@ async def on_message(message):
     #        await message.channel.send(file=discord.File("img/tpogo.png"))
     #        await message.channel.send(f"NO ARCANE SPOILERS ALLOWED! DISCUSS HERE: {target_channel.mention}")
 
+    #if message_lower == "xdd123":
+    #    target_channel = client.get_channel(1305241451734634506)
+    #    target_user = client.get_user(315272936053276672)
+    #    await message.delete()
+    #    await message.channel.send(file=discord.File("img/tpogo.png"))
+    #    await message.channel.send(f"FINAL WARNING {target_user.mention}!! NO POKEMON SCREENSHOTS IN GENERAL CHAT! DISCUSS HERE: {target_channel.mention}")
+
+    #if message_lower == "flameswtf123":
+    #    target_user = client.get_user(80373001006096384)
+    #    await message.delete()
+    #    await message.channel.send(file=discord.File("img/tpogo.png"))
+    #    await message.channel.send(f"FINAL WARNING {target_user.mention}!! NO THREATS TOWARDS ME!")
+
     if message_lower == "is gourish a noob ?":
         target_user = client.get_user(700837976544116808)
         await message.channel.send(file=discord.File("img/tpogo.png"))
         await message.channel.send(f"YES! {target_user.mention} IS A NOOB! AGREED!")
-
-
-
 
 
 @client.event
@@ -1037,7 +799,7 @@ async def on_member_ban(guild, user):
                 await guild.ban(entry.user, reason="Exceeded ban threshold")
                 print(f"{entry.user} banned!")
                 # Get the channel
-                channel = client.get_channel(general_channel_id)  # general chat
+                channel = client.get_channel(GENERAL_CHANNEL_ID)  # general chat
                 # Send banned message to the channel
                 await channel.send(f"{entry.user.mention} was banned! RIP BOZO! <:PogO:949833186689568768>")
 
@@ -1053,7 +815,7 @@ async def on_member_remove(member):
                 await member.guild.ban(entry.user, reason="Exceeded kick threshold")
                 print(f"{entry.user} banned!")
                 # Get the channel
-                channel = client.get_channel(general_channel_id)  # general chat
+                channel = client.get_channel(GENERAL_CHANNEL_ID)  # general chat
                 # Send banned message to the channel
                 await channel.send(f"{entry.user.mention} was banned! RIP BOZO! <:PogO:949833186689568768>")
 
@@ -1072,14 +834,27 @@ async def on_guild_channel_delete(channel):
                 await channel.guild.ban(entry.user, reason="Exceeded delete threshold")
                 print(f"{entry.user} banned!")
                 # Get the channel
-                channel = client.get_channel(general_channel_id)  # general chat
+                channel = client.get_channel(GENERAL_CHANNEL_ID)  # general chat
                 # Send banned message to the channel
                 await channel.send(f"{entry.user.mention} was banned! RIP BOZO! <:PogO:949833186689568768>")
 
-#Temporarily to silence user
+#Temporarily to silence user reaction
 #@client.event
 #async def on_reaction_add(reaction, user):
     #if user.id == 80373001006096384:
     #    await reaction.remove(user)
 
-client.run(client_id)
+# --- Run the Bot ---
+if __name__ == "__main__":
+    bot_token = os.environ.get('DISCORD_TOKEN')
+    if not bot_token:
+        print("Error: DISCORD_TOKEN not found in .env file.")
+    else:
+        try:
+            client.run(bot_token)
+        except discord.LoginFailure:
+            logging.error("FATAL: Improper token passed.")
+            print("Error: Improper Discord token provided.")
+        except Exception as e:
+            logging.exception(f"An unexpected error occurred during bot execution: {e}")
+            print(f"An unexpected error occurred: {e}")
