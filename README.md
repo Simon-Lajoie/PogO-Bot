@@ -6,8 +6,6 @@ PogO Bot is a Discord bot mainly for Riot Games related content. It has several 
 
 - **Top 4 Spot Notifications**: The top 4 spots on the leaderboard are highly coveted. Whenever a player overtakes another player in the top 4, the bot will post a humorous message in the general chat to praise or roast the players involved.
 
-- **Auto Team Balancer for League of Legends**: The bot features an auto team balancer command for League of Legends. The balance_teams command takes summoner names as input and retrieves each player’s Solo Q ranked stats through API calls. The bot then creates 2 teams that offer the most balanced matchup.
-
 - **Custom Emotes**: PogO Bot has several typing commands that can replace certain words with custom emotes. For example, typing “PogO” will replace your message with a PogO emote.
 
 ## Example of Teamfight Tactics leaderboard by PogO Bot
@@ -22,7 +20,6 @@ PogO Bot is a Discord bot mainly for Riot Games related content. It has several 
 ## Commands
 - PogO: Replaces your message with a PogO emote.
 - T PogO: Replaces your message with a T PogO emote.
-- /balance_teams: Takes summoner names as input and returns 2 teams balanced based on each player’s Solo Q rank.
 
 ## Technologies
 * Python
