@@ -221,7 +221,7 @@ async def update_rankings_list_task(
 
         logging.info(f"[{game_type_name} Fetcher] Completed full pass. Repeating loop.")
 
-def get_random_message(old_summoner, new_summoner, position):
+def get_random_message(old_summoner, new_summoner, position, game_type):
     new_summoner = get_discord_username(new_summoner)
     old_summoner = get_discord_username(old_summoner)
     gourish_summoner = get_discord_username("Gourish")
@@ -230,38 +230,58 @@ def get_random_message(old_summoner, new_summoner, position):
         f"{new_summoner} just pulled off a spectacular heist {emoji_codes.get('business')}, ousting {old_summoner} from position {position} like a sneaky mastermind {emoji_codes.get('cathiago')}!",
         f"Yeah.. {emoji_codes.get('sadge')} I'm sorry to announce {new_summoner} has dethroned {old_summoner} from position {position}. Don't ask me how. {emoji_codes.get('pepeshrug')}. Surely this is deserved. {emoji_codes.get('scam')}",
         f"{emoji_codes.get('pogo')} {new_summoner} has kicked {old_summoner} from position {position}. Did you really expect me to praise you for that ? Take this instead: {emoji_codes.get('pantsgrab')}",
-        f"Ladies and gentlemen, let's gather 'round and give a thunderous round of applause to {new_summoner} for a breathtaking achievement! {emoji_codes.get('peepoflor')} With sheer grace and undeniable skill, {new_summoner} has claimed a well-deserved position in the prestigious top 4 of the illustrious PogO TFT Leaderboard. {emoji_codes.get('business')} Like a shining star ascending the heavens, they gracefully surpassed the formidable {old_summoner} at position {position}, leaving us all in awe of their remarkable talent. It's a triumph that deserves a standing ovation, a testament to the heights one can reach with unwavering dedication and unparalleled expertise. Let the celebration begin for this TFT maestro, a true master of the arena! {emoji_codes.get('yeahboi')}",
         f"{emoji_codes.get('pogo')} ALERT! ALERT! {emoji_codes.get('pogo')} {new_summoner} has executed a flawless takedown, banishing {old_summoner} from position {position}. It's time to rally the troops and show our support to {new_summoner} by showering them with a barrage of {emoji_codes.get('pogo')}.",
         f"{emoji_codes.get('pogo')} {new_summoner} has decisively toppled {old_summoner} from position {position}, leaving no doubt of their supremacy. {emoji_codes.get('cathiago')}",
         f"NAHHHH THIS {new_summoner} PLAYER MIGHT JUST THE THE BEST PLAYER IN THE WORLD.{emoji_codes.get('dongerj')} HE LITERALLY JUST TOOK POSITION {position} FROM {old_summoner} JUST LIKE THAT ? {emoji_codes.get('huh')} IT'S WAY TOO FREE. {new_summoner} IS JUST BUILT DIFFERENT! {emoji_codes.get('pepestrong')}",
         f"{new_summoner} --> {position} {emoji_codes.get('pogo')} {old_summoner} --> {emoji_codes.get('deadge')}",
-        f"{emoji_codes.get('pogo')} BREAKING NEWS! BREAKING NEWS! {emoji_codes.get('pogo')} A major upset has just occurred in the TFT scene. {new_summoner} has just dethroned {old_summoner} from position {position}. It's a shocking turn of events, a stunning upset, a colossal blunder. {emoji_codes.get('aycaramba')} How did this happen? How did this travesty occur? How did this abomination come to be? {emoji_codes.get('pepeshrug')} We may never know. All we know is that {old_summoner} has just lost their dignity, their honor, their pride. {emoji_codes.get('sadge')}",
-        f"{emoji_codes.get('pogo')} Hold on as {new_summoner} shakes things up and steals the glory from {old_summoner} at position {position}. {old_summoner} has just been humiliated, disgraced, destroyed. {emoji_codes.get('huh')} They have been reduced to nothing. {emoji_codes.get('huh')} They are now irrelevant. {emoji_codes.get('huh')} They are now forgotten. {emoji_codes.get('huh')} They are now dead to us. {emoji_codes.get('deadge')} All hail our new TFT overlord! {new_summoner}",
-        f"{emoji_codes.get('pogo')} Unbelievable chaos has erupted in the TFT realm! Brace yourselves as {new_summoner} shatters the status quo and snatches the crown from {old_summoner} at position {position}. It's an absolute whirlwind of confusion, a mind-bending plot twist, an inexplicable mishap. The world is left scratching its head, questioning the very fabric of reality. {emoji_codes.get('pogo')} How did the stars align for this calamity? {emoji_codes.get('huh')} How did the TFT gods allow such an unfathomable catastrophe? {emoji_codes.get('aycaramba')} How did this confounding enigma come to pass? {emoji_codes.get('scam')}",
-        f"{emoji_codes.get('pogo')} Attention, esteemed individuals, assemble and be captivated for a momentous announcement! {emoji_codes.get('pogo')} We stand in awe as {new_summoner} emerges as the undisputed victor, toppling {old_summoner} from their exalted position {position}. {emoji_codes.get('dongerj')} The path to this remarkable achievement remains shrouded in mystery, with scant details divulged on the hows and whys. {emoji_codes.get('pepeshrug')} The precise methods and strategies employed may forever elude our understanding, leaving us in awe of the enigma that surrounds this monumental accomplishment. {emoji_codes.get('yeahboi')} Such is the nature of this astounding feat, a tale woven with threads of intrigue and bewilderment, forever etched in the annals of TFT history. {emoji_codes.get('business')}",
-        f"Well, well, well... Look who's the new ruler of the TFT kingdom!👑 {new_summoner} has cunningly snatched the crown from {old_summoner} at position {position}. It's a classic case of 'outplayed and outwitted.' {emoji_codes.get('scam')} Bow down to the new TFT mastermind, for they have left their opponents scratching their heads in utter disbelief. {emoji_codes.get('pogo')}",
-        f"{emoji_codes.get('pogo')} Ladies and gentlemen, gather 'round! Witness the rise of {new_summoner} as they conquer position {position} and send {old_summoner} packing! {emoji_codes.get('pantsgrab')} It's like watching a legendary underdog story unfold before our eyes. {emoji_codes.get('business')} Let's give a standing ovation to {new_summoner} for defying the odds and proving that dreams do come true in the realm of TFT!",
-        f"{emoji_codes.get('pogo')} Hey {old_summoner}, guess who just took your spot at position {position}? {emoji_codes.get('scam')} Oh right, it's {new_summoner}! {emoji_codes.get('deadge')} They strategically outplayed you, leaving you in a state of utter confusion and embarrassment. {emoji_codes.get('aycaramba')} Looks like someone could use a lesson or two... Get ready to learn TFT buddy. {emoji_codes.get('pogo')}",
-        f"{emoji_codes.get('pogo')} Brace yourselves, TFT enthusiasts, for the rise of {new_summoner}! They've outshined {old_summoner} at position {position} like a radiant sun emerging from the clouds. {emoji_codes.get('peepoflor')} Meanwhile, {old_summoner} seems to be lost in the shadows of defeat. {emoji_codes.get('sadge')} Better luck next time, {old_summoner}, you'll need it! {emoji_codes.get('pogo')}",
-        f"{emoji_codes.get('pogo')} Brace yourselves, ladies and gentlemen, because we have a new champion in town! {emoji_codes.get('pepestrong')} {new_summoner} has just obliterated {old_summoner} from position {position}, leaving no room for doubt. It's a devastating blow, a crushing defeat, a humiliating loss. {emoji_codes.get('deadge')} How did this happen? How did this disaster strike? How did this nightmare unfold? {emoji_codes.get('scam')} We may never know the full story, but we can all witness the aftermath. {emoji_codes.get('pantsgrab')}",
-        f"{emoji_codes.get('pogo')} Hold on to your seats, folks, because we have a wild ride ahead of us! {emoji_codes.get('pogo')} {new_summoner} has just pulled off a miraculous feat, snatching position {position} from {old_summoner} in a nail-biting showdown. It's a jaw-dropping spectacle, a mind-blowing display, a heart-stopping performance. {emoji_codes.get('peepoflor')} How did they do it? How did they pull it off? How did they defy the odds? {emoji_codes.get('pepestrong')} We may never understand the secrets of their genius, but we can all admire their brilliance. {emoji_codes.get('yeahboi')}",
-        f"{emoji_codes.get('pogo')} Wow! Wow! Wow! {emoji_codes.get('pogo')} {new_summoner} has just outplayed {old_summoner} from position {position}, showing us all what TFT is all about. {emoji_codes.get('yeahboi')} It's a dazzling show, a thrilling game, a spectacular victory. {emoji_codes.get('dongerj')} How did they do it? How did they win? How did they conquer? {emoji_codes.get('business')} We may never know the details, but we can all appreciate the results. 📈 {emoji_codes.get('peepoflor')}",
+        f"{emoji_codes.get('pogo')} BREAKING NEWS! BREAKING NEWS! {emoji_codes.get('pogo')} A major upset has just occurred. {new_summoner} has just dethroned {old_summoner} from position {position}. It's a shocking turn of events, a stunning upset, a colossal blunder. {emoji_codes.get('aycaramba')}",
+        f"{emoji_codes.get('pogo')} Hold on as {new_summoner} shakes things up and steals the glory from {old_summoner} at position {position}. {old_summoner} has just been humiliated, disgraced, destroyed. {emoji_codes.get('huh')} They have been reduced to nothing. {emoji_codes.get('huh')} They are now forgotten. {emoji_codes.get('huh')}",
+        f"{emoji_codes.get('pogo')} Ladies and gentlemen, gather 'round! Witness the rise of {new_summoner} as they conquer position {position} and send {old_summoner} packing! {emoji_codes.get('pantsgrab')} It's like watching a legendary underdog story unfold before our eyes. {emoji_codes.get('business')}",
+        f"{emoji_codes.get('pogo')} Hey {old_summoner}, guess who just took your spot at position {position}? {emoji_codes.get('scam')} Oh right, it's {new_summoner}! {emoji_codes.get('deadge')} {emoji_codes.get('aycaramba')} Looks like someone could use a lesson or two... Get ready to learn TFT buddy. {emoji_codes.get('pogo')}",
+        f"{emoji_codes.get('pogo')} Brace yourselves for the rise of {new_summoner}! They've outshined {old_summoner} at position {position}. {emoji_codes.get('peepoflor')} Meanwhile, {old_summoner} seems to be lost in the shadows of defeat. {emoji_codes.get('sadge')} Better luck next time, {old_summoner}, you'll need it! {emoji_codes.get('pogo')}",
+        f"{emoji_codes.get('pogo')} Brace yourselves, ladies and gentlemen, because we have a new champion in town! {emoji_codes.get('pepestrong')} {new_summoner} has just obliterated {old_summoner} from position {position}, leaving no room for doubt. It's a devastating blow, a crushing defeat, a humiliating loss. {emoji_codes.get('deadge')}",
+        f"{emoji_codes.get('pogo')} Hold on to your seats, folks, because we have a wild ride ahead of us! {emoji_codes.get('pogo')} {new_summoner} has just pulled off a miraculous feat, snatching position {position} from {old_summoner} in a nail-biting showdown.",
+        f"{emoji_codes.get('pogo')} Wow! Wow! Wow! {emoji_codes.get('pogo')} {new_summoner} has just outplayed {old_summoner} from position {position}, showing us all what this game is all about. {emoji_codes.get('yeahboi')} It's a dazzling show, a thrilling game, a spectacular victory. {emoji_codes.get('dongerj')}",
         f"{emoji_codes.get('pogo')} {new_summoner} has just taken position {position} from {old_summoner}. {emoji_codes.get('business')} In a cruel display of humiliation, {new_summoner} has left a message for us: This game is just all luck no skills, unlucky buddy {emoji_codes.get('scam')}",
         f"{emoji_codes.get('pogo')} OOF! {old_summoner} just got destroyed by {new_summoner}, who took position {position} from them. {emoji_codes.get('aycaramba')} Mortdog sends his regards, unlucky buddy {emoji_codes.get('pantsgrab')}",
         f"{emoji_codes.get('huh')} HUH... {old_summoner} just got outplayed by {new_summoner}, who snatched position {position} from them. Maybe you just didn’t hit this game, surely you will hit next game {emoji_codes.get('scam')} 📉",
         f"{emoji_codes.get('pogo')} What a tragedy.. Surely. {emoji_codes.get('pogo')} {old_summoner} just got annihilated by {new_summoner}, who claimed position {position} from them. Who balances this game? {emoji_codes.get('pepeshrug')} Unlucky buddy. Take this L {emoji_codes.get('sadge')}",
-        f"{emoji_codes.get('pogo')} {old_summoner} just got humiliated by {new_summoner}, who kicked them from position {position}. RIP BOZO. 🤡 You won’t be missed {emoji_codes.get('deadge')}"
+        f"{emoji_codes.get('pogo')} {old_summoner} just got humiliated by {new_summoner}, who kicked them from position {position}. RIP BOZO. 🤡 You won’t be missed {emoji_codes.get('deadge')}",
+        f"{old_summoner} got yeeted from {position} by {new_summoner}! {emoji_codes.get('pogo')} Take this L. {emoji_codes.get('pantsgrab')}",
+        f"{new_summoner} humiliated {old_summoner} for {position}! {emoji_codes.get('absolutecinema')} Get lost, noob. {emoji_codes.get('pogo')}",
+        f"{new_summoner} clowning {old_summoner} at {position}! {emoji_codes.get('pogo')} Bald move, bro. {emoji_codes.get('wallabyBald')}",
+        f"{new_summoner} rolled {old_summoner} for {position}! {emoji_codes.get('pogo')} You're washed up. {emoji_codes.get('pepestrong')}",
+        f"{old_summoner} got scammed by {new_summoner} at {position}! {emoji_codes.get('scam')} Unlucky, buddy. {emoji_codes.get('pogo')}",
+        f"{new_summoner} dunked {old_summoner} from {position}! {emoji_codes.get('pogo')} You're irrelevant now. {emoji_codes.get('deadge')}",
+        f"{old_summoner} got smoked by {new_summoner} at {position}! {emoji_codes.get('pogo')} What was that? {emoji_codes.get('huh')}",
+        f"{new_summoner} toppled {old_summoner} at {position}! {emoji_codes.get('dongerj')} You're done for. {emoji_codes.get('pogo')}",
+        f"{old_summoner} got kicked from {position} by {new_summoner}! {emoji_codes.get('pogo')} See ya, bud. {emoji_codes.get('salute')}",
+        f"{new_summoner} crushed {old_summoner} at {position}! {emoji_codes.get('pogo')} It's over for you. {emoji_codes.get('joever')}",
+        f"{new_summoner} outplayed {old_summoner} at {position}! {emoji_codes.get('icant')} Can't believe you choked. {emoji_codes.get('pogo')}",
+        f"{new_summoner} snatched {position} from {old_summoner}! {emoji_codes.get('xdd')} You're irrelevant now. {emoji_codes.get('pogo')}",
+        f"{old_summoner} got bodied by {new_summoner} at {position}! {emoji_codes.get('pogo')} What's your excuse? {emoji_codes.get('yamesy')}",
+        f"{new_summoner} sent {old_summoner} packing from {position}! {emoji_codes.get('barack')} You're history. {emoji_codes.get('pogo')}",
+        f"{old_summoner} got laughed off {position} by {new_summoner}! {emoji_codes.get('hah')} Pathetic showing. {emoji_codes.get('pogo')}",
+        f"{new_summoner} slapped {old_summoner} from {position}! {emoji_codes.get('pogo')} Here's your flowers. {emoji_codes.get('peepoflor')}",
+        f"{new_summoner} owned {old_summoner} at {position}! {emoji_codes.get('business')} You're a ghost now. {emoji_codes.get('pogo')}",
+        f"{old_summoner} got wrecked by {new_summoner} at {position}! {emoji_codes.get('pogo')} Take this L. {emoji_codes.get('sadge')}",
+        f"{new_summoner} erased {old_summoner} from {position}! {emoji_codes.get('pogo')} Really, dude? {emoji_codes.get('buffet')}",
+        f"{new_summoner} dethroned {old_summoner} at {position}! {emoji_codes.get('pogo')} Smirky victory. {emoji_codes.get('cathiago')}",
+        f"{old_summoner} got outplayed by {new_summoner} at {position}! {emoji_codes.get('yeahboi')} You're finished. {emoji_codes.get('pogo')}",
+        f"{new_summoner} annihilated {old_summoner} at {position}! {emoji_codes.get('pogo')} Total disaster. {emoji_codes.get('aycaramba')}",
+        f"{old_summoner} got clowned by {new_summoner} at {position}! {emoji_codes.get('pogo')} You're irrelevant. {emoji_codes.get('pepeshrug')}",
+        f"{new_summoner} crushed {old_summoner} from {position}! {emoji_codes.get('pogo')} RIP, you're gone. {emoji_codes.get('deadge')}"
     ]
     gourish_messages = ["demoted", "banished", "relegated", "exiled", "downgraded", "dismissed", "degraded", "expelled",
                         "ousted", "lowered", "removed", "cast out", "dethroned", "ejected", "displaced", "deposed"]
-    if old_summoner == gourish_summoner:
-        gourish_random = random.choice(gourish_messages)
-        return f"{emoji_codes['pogo']} {new_summoner} has just {gourish_random} {old_summoner} to their rightful place… NOOB! GOOGOO IS A NOOB! AGREED!  {emoji_codes['aycaramba']}"
-    if old_summoner == salsa_king_summoner:
-        return f"{emoji_codes['pogo']} {new_summoner} has overtaken {old_summoner} to achieve rank {position}, telling {old_summoner} that throughout Heaven and Earth, he alone is The Fraudulent One. {emoji_codes['pogo']}"
-    if new_summoner == salsa_king_summoner:
-        return f"{emoji_codes['pogo']} {new_summoner} has overtaken {old_summoner} to achieve rank {position}, proving once again that throughout Heaven and Earth, he alone is The Honored One. {emoji_codes['pogo']}"
-    return random.choice(messages)
+    #if old_summoner == gourish_summoner:
+    #    gourish_random = random.choice(gourish_messages)
+    #    return f"{emoji_codes['pogo']} {new_summoner} has just {gourish_random} {old_summoner} to their rightful place… NOOB! GOOGOO IS A NOOB! AGREED!  {emoji_codes['aycaramba']}"
+    #if old_summoner == salsa_king_summoner:
+    #    return f"{emoji_codes['pogo']} {new_summoner} has overtaken {old_summoner} to achieve rank {position}, telling {old_summoner} that throughout Heaven and Earth, he alone is The Fraudulent One. {emoji_codes['pogo']}"
+    #if new_summoner == salsa_king_summoner:
+    #    return f"{emoji_codes['pogo']} {new_summoner} has overtaken {old_summoner} to achieve rank {position}, proving once again that throughout Heaven and Earth, he alone is The Honored One. {emoji_codes['pogo']}"
+    return f"{game_type} : " + random.choice(messages)
 
 
 async def clear_channel(channel):
@@ -352,7 +372,7 @@ async def update_leaderboard(
                             if send_alert_message:
                                 try:
                                     await general_channel.send(
-                                        get_random_message(previous_rankings[i][0], updated_rankings_list[i][0], i + 1))
+                                        get_random_message(previous_rankings[i][0], updated_rankings_list[i][0], i + 1, game_type))
                                     logging.info(f"{game_type} Rankings update message sent to General chat!")
                                     print(f"{game_type} Rankings update message sent to General chat!")
                                 except discord.HTTPException as e:
@@ -494,19 +514,17 @@ async def update_leaderboard(
     # Pass game_type and the specific refreshing message content to the generic timer
     await countdown_timer(360, message, game_type)
 
+
 async def countdown_timer(time: int, message: discord.Message, game_type: str):
     """Generic countdown timer for leaderboard updates."""
     log_prefix = f"[{game_type} Countdown]"
     logging.info(f"{log_prefix} Starting timer ({time}s) for message {message.id}")
     print(f"Starting {game_type} countdown timer ({time}s)")
 
-    # Ensure time is at least 1 to avoid instant loop exit
     time = max(1, time)
 
-    # Calculate the initial number of minutes remaining
-    initial_minutes = (time + 59) // 60 # Round up
+    initial_minutes = (time + 59) // 60  # Round up
 
-    # Edit the status message to display the initial time
     try:
         await message.edit(content=f"Next update in: {initial_minutes} minutes")
     except discord.NotFound:
@@ -517,41 +535,44 @@ async def countdown_timer(time: int, message: discord.Message, game_type: str):
         return
 
     last_displayed_minute = initial_minutes
-    seconds_mode = False # Flag to track if we are showing seconds
+    notified_10 = False
+    notified_5 = False
 
     while time > 0:
         await asyncio.sleep(1)
         time -= 1
 
-        if time <= 0: # Check if timer ended
+        if time <= 0:
             break
 
-        # Update display logic
         minutes_remaining = (time + 59) // 60
 
         try:
-            if time <= 10 and not seconds_mode:
-                logging.info(f"{log_prefix} Switching to seconds display.")
-                await message.edit(content=f"Next update in: {time} seconds")
-                seconds_mode = True
-            elif seconds_mode and time > 0: # Update seconds if already in seconds mode
-                 if time % 2 == 0: # Update every 2 seconds when below 10
-                    await message.edit(content=f"Next update in: {time} seconds")
-            elif minutes_remaining < last_displayed_minute and not seconds_mode:
-                logging.info(f"{log_prefix} Updating minutes: {minutes_remaining}")
+            if time == 10 and not notified_10:
+                await message.edit(content="Next update in: 10 seconds")
+                logging.info(f"{log_prefix} Displayed 10 seconds")
+                notified_10 = True
+
+            elif time == 5 and not notified_5:
+                await message.edit(content="Next update in: 5 seconds")
+                logging.info(f"{log_prefix} Displayed 5 seconds")
+                notified_5 = True
+
+            elif minutes_remaining < last_displayed_minute:
                 await message.edit(content=f"Next update in: {minutes_remaining} minutes")
+                logging.info(f"{log_prefix} Updated to {minutes_remaining} minutes")
                 last_displayed_minute = minutes_remaining
 
         except discord.NotFound:
             logging.warning(f"{log_prefix} Status message {message.id} not found during update. Stopping timer.")
-            return # Exit function cleanly
+            return
         except discord.HTTPException as e:
-             logging.error(f"{log_prefix} Failed to edit status message during update: {e}")
-             # Continue timer, user just won't see update
+            logging.error(f"{log_prefix} Failed to edit status message during update: {e}")
+            # Continue loop
 
-    # Timer finished naturally
     logging.info(f"{log_prefix} Countdown timer finished naturally for message {message.id}")
     print(f"{game_type} Countdown timer finished.")
+
 
 # ===============================================================
 # ANTI-NUKE (Protects from mass deletion of channels and bans)
@@ -641,7 +662,7 @@ async def lol_leaderboard_update_loop():
         updated_rankings_list=updated_lol_rankings_list, # Pass the global list
         leaderboard_channel_id=LOL_LEADERBOARD_CHANNEL_ID,
         background_image_path=LOL_BACKGROUND_PATH,
-        send_alert_message=False # Disable alerts for LoL (as per original)
+        send_alert_message=True # Enable alerts for LoL
     )
     logging.info("[LoL Loop] Task cycle completed.")
 
@@ -662,17 +683,17 @@ async def on_ready():
     tft_lb_channel = client.get_channel(TFT_LEADERBOARD_CHANNEL_ID)
     lol_lb_channel = client.get_channel(LOL_LEADERBOARD_CHANNEL_ID)
 
+    # Stop the bot if critical channels are missing
     if not tft_lb_channel:
         logging.error(f"FATAL: TFT Leaderboard Channel (ID: {TFT_LEADERBOARD_CHANNEL_ID}) not found.")
         print(f"Error: TFT Leaderboard Channel (ID: {TFT_LEADERBOARD_CHANNEL_ID}) not found.")
-        # Consider stopping the bot if critical channels are missing
-        # await client.close()
-        # return
+        await client.close()
+        return
     if not lol_lb_channel:
         logging.error(f"FATAL: LoL Leaderboard Channel (ID: {LOL_LEADERBOARD_CHANNEL_ID}) not found.")
         print(f"Error: LoL Leaderboard Channel (ID: {LOL_LEADERBOARD_CHANNEL_ID}) not found.")
-        # await client.close()
-        # return
+        await client.close()
+        return
 
     # Clear Channels on Startup
     await clear_channel(tft_lb_channel)
@@ -735,6 +756,10 @@ async def on_message(message):
     message_lower = message.content.lower()
     if message.author == client.user:
         return
+
+    if message_lower == 'poggiesxdd':
+        await message.delete()
+        await message.channel.send("<:POGGIES:926135482360950824>")
 
     if message_lower == 'pogo':
         await message.delete()

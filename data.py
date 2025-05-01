@@ -3,7 +3,7 @@ discord_ids = {"Sir Mighty Bacon": "<@149681004880199681>", "Settupss": "<@14461
                    "Sehnbon": "<@198960489022095360>", "Ramza": "<@86595633288351744>",
                    "Gourish": "<@700837976544116808>", "Gabyumi": "<@241712679150944257>",
                    "Best Pigeon NA": "<@180136748091834368>", "meyst": "<@153778413646118912>",
-                   "Limited": "<@715430081975025687>", "Z3SIeeper": "<@130242869708587008>",
+                   "Limi": "<@715430081975025687>", "Z3Sleeper": "<@130242869708587008>",
                    "BlackDrag": "<@244390872983011328>", "Flames": "<@80373001006096384>",
                    "Tiny Cena": "<@154752158854545408>",
                    "Aàrón": "<@64494156914888704>", "5billon": "<@133779784105721856>",
@@ -20,8 +20,9 @@ discord_ids = {"Sir Mighty Bacon": "<@149681004880199681>", "Settupss": "<@14461
                    "Skyhigh2005": "<@339383907449569281>", "Zotto": "<@148963530262052864>",
                    "Evelynn Toes": "<@152469092182261761>", "Shrektangle": "<@117811507693223944>",
                    "Wazzaii": "<@399391319300112386>", "Chopin is Bach": "<@112316340844462080>",
-                   "Andrei": "<@125330438515458048>"} #"Billie": "<@279031910984974346>"
+                   "Andrei": "<@125330438515458048>", "Drzoan": "<@164114739050446849>"} #"Billie": "<@279031910984974346>"
 
+# TFT-SUMMONER-V1 : /tft/summoner/v1/summoners/by-puuid/{encryptedPUUID} :  id
 tft_summoner_ids = {"Sir Mighty Bacon": "0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txqQw6Pxo9o",
                     "Settupss": "w-THN6OPeTdgL2JauMBPkvYaUYgD8WiwiX39mc3Yk4Dcs1k",
                     "Classiq": "FQtC6bnuIM6JzqQGPswTwgoSvEZEa0WucLjaChTRdrKdbAQ",
@@ -31,8 +32,8 @@ tft_summoner_ids = {"Sir Mighty Bacon": "0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txq
                     "Gourish": "9zX1sJAd7RciO6B7GwQODzAvBaQO634peXMAUtOINuX2y_k",
                     "Gabyumi": "8nLXCqx3oDKEJ4pAceeQSr3L0uUAdY4rdTJgXKHh8OyRzoc",
                     "meyst": "dasfJoEy9c_DNWqG8Y30RzK6Fgm-hdE_6dcx7XzL3MzA-Lw",
-                    "Limited": "OkZo1rN5o0DDWK5LGwgXDT4k5fd2FHhCRcPv69LulAEqirk",
-                    "Z3SIeeper": "u78gFAF4MJ2J4brtythuTE-uPpYEaFNCRK5hbXDLOOjf_3Ck",
+                    "Limi": "OkZo1rN5o0DDWK5LGwgXDT4k5fd2FHhCRcPv69LulAEqirk",
+                    "Z3Sleeper": "u78gFAF4MJ2J4brtythuTE-uPpYEaFNCRK5hbXDLOOjf_3Ck",
                     "BlackDrag": "cmxCpBLbYX48necTpKLBiTn5IM1J0AYWHKiCAC5OcyuG6_o",
                     "Flames": "APXt68Ogg5-pMLP5vdoq1hwpn-wl4sFxJl6GJg4356U3Vbs",
                     "Tiny Cena": "UBLAyVJLtvI0DvNJZc5Ln_ShUKt_DpPJijJNgewxRLTP4Mg",
@@ -59,9 +60,11 @@ tft_summoner_ids = {"Sir Mighty Bacon": "0GG54nxtoEItfeHzhyB367L5eSIsq1U8sNE9txq
                     "Shrektangle": "AJeJwbD1HZIGNh6eORY6uGQMmAbCEMrKl-wFdGHhqdEoim0",
                     "Wazzaii": "zUdGoQbWL0X0t-D49NvukUU2uKYL-eFE8MBVuxMjU2yYn-C9",
                     "Chopin is Bach": "6O5aOY2ykeAIPAm0ztZiHtH8Ykm482WEHVDkCTi0K5PA4I0",
-                    "Andrei": "3eBPR6YQ2UeXMLDWmwtO1mxkdzWvMcA4sX3r7tYfNi4QZew"
+                    "Andrei": "3eBPR6YQ2UeXMLDWmwtO1mxkdzWvMcA4sX3r7tYfNi4QZew",
+                    "Drzoan": "OnWPhvvn67hdy0SKdfy9vzL6s9isIyXLb2dPjge7kuZWz5I"
                     } #"Billie": "Byu5-LfqzgmQmUWz4sdqBolhf2X2zst8FapBLx3Z9J4gHOQ"
 
+# SUMMONER-V4 : /lol/summoner/v4/summoners/by-puuid/{encryptedPUUID} :  id
 lol_summoner_ids = {"Sir Mighty Bacon": "BGGUjqEm1nar21U8pP_wj7Bv2uyd1Na-03wy7yeZVMRdEv0",
                     "Settupss": "r6XtQGwiHuXfAHfrfvIXXuhOYpyyoUsm2JgC3r_BAVGWYbs",
                     "Classiq": "yYoauMyQZaUfORAaOybCxcKgToviC5W5Yay_uyhZC-aAzYk",
@@ -71,8 +74,8 @@ lol_summoner_ids = {"Sir Mighty Bacon": "BGGUjqEm1nar21U8pP_wj7Bv2uyd1Na-03wy7ye
                     "Gourish": "3dgqr2I7GQmtQCkdLB_calb0h-UmOyWJVQhjCC_bB-U-Ln4",
                     "Gabyumi": "0j2bXO5OOOeFhe4LX1cGAzEYxBSP8x3xZmIqbuFQVd2j8Yw",
                     "meyst": "g0BTZnymywWaJ39n_oE8XCrNy2hN6Zi0ljnYIXBR5jU2ILs",
-                    "Limited": "N0LkC1sOwO-9J_fE2_IHpcEc-B4GArYFD11Jhfh21MklKLg",
-                    "Z3SIeeper": "H8mMWxvMNWpxhMoSOaC8m59txmO3ZmLTmAEV1hCIzNrLdZ-b",
+                    "Limi": "N0LkC1sOwO-9J_fE2_IHpcEc-B4GArYFD11Jhfh21MklKLg",
+                    "Z3Sleeper": "H8mMWxvMNWpxhMoSOaC8m59txmO3ZmLTmAEV1hCIzNrLdZ-b",
                     "BlackDrag": "hLXUGO0f4JSogjsJKhyrXlzzFm27iz5nkLuOczd2YKEOCqw",
                     "Flames": "IZx8e2BrDLu1x7X6pUgzPxMqqKBOMwXrJ59Fgr0W7C3GSjY",
                     "Tiny Cena": "kr9B4wdzki8INVxOyXrvPDqUcdCxMKoDhUc4ytusynhqn7Q",
@@ -99,17 +102,18 @@ lol_summoner_ids = {"Sir Mighty Bacon": "BGGUjqEm1nar21U8pP_wj7Bv2uyd1Na-03wy7ye
                     "Shrektangle": "Az2OVpJd1zlChwavlsJJ5smzRVDMVFm1g_chlDdTCNRhk-Q",
                     "Wazzaii": "Q_HNTT3UYCFsbSTeDn-85p0H20fsbgpJ8Lpwh_1R6eeDdoEA",
                     "Chopin is Bach": "HqmOUAf20MrW0CDmZN0A_MNpfdBaK4MpJJGhz2SAc3Q7hLk",
-                    "Andrei": "jyIqP2051PUgj1HSH9kY0nhPc3h8mzU-zvsf3k2CqJWAl1c"
+                    "Andrei": "jyIqP2051PUgj1HSH9kY0nhPc3h8mzU-zvsf3k2CqJWAl1c",
+                    "Drzoan" : "0PALVyqTBITEs3ZCage8rMmfJmp22ZHiZLq1-r6-YSQk1zQ"
                     } #"Billie": "bfL8SKc7Mc7EbJiF-E1kT-3WdfjJ9kVb9dr4hAwrH7dm_TM"
                       #"Mrs Mighty Bacon": "9C7cBE25XnHAq5v79I93sHF870IF-gPEUWeL-wG4UJavp2E"
 
 summoner_names_list = ["Sir Mighty Bacon", "Settupss", "Classiq", "Wallaby", "Sehnbon", "Gourish", "Ramza",
-                           "Gabyumi", "meyst", "Limited", "Z3SIeeper", "BlackDrag", "Flames",
-                           "Tiny Cena", "Aàrón", "5billon", "Nappy", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
+                           "Gabyumi", "meyst", "Limi", "Z3Sleeper", "BlackDrag", "Flames",
+                           "Tiny Cena", "Aàrón", "5billon", "KingNeptun3", "Mrs Mighty Bacon", "cpt stryder",
                            "cancerkween", "Azote", "MeowMix", "Skrt Skrt Skaarl", "Maa san",
-                           "NonMaisWallah", "Mnesia", "Fonty", "Oogli", "Cowboy Codi", "nasir", "Skyhigh2005", "Zotto",
-                           "Evelynn Toes", "Shrektangle", "Wazzaii", "Chopin is Bach", "Andrei"
-                           ] #"Billie"
+                           "NonMaisWallah", "Mnesia", "Oogli", "Cowboy Codi", "nasir", "Zotto",
+                           "Evelynn Toes", "Shrektangle", "Wazzaii", "Chopin is Bach", "Andrei", "Drzoan"
+                           ] #Billie, #Nappy, #Fonty, #Skyhigh2005
 
 ranks = {
     "IRON IV": 1, "IRON III": 2, "IRON II": 3, "IRON I": 4,
@@ -136,5 +140,15 @@ emoji_codes = {
         "peepoflor": "<:peepoflor:974826396641808414>",
         "pepeshrug": "<:pepeshrug:847289938253053952>",
         "sadge": "<:sadge:1119499660638306416>",
-        "pepestrong": "<:PepeStrong:958637692583817226>"
+        "pepestrong": "<:PepeStrong:958637692583817226>",
+        "buffet": "<:buffet:1343104194646642719>",
+        "salute": "<:salute:1142990172770811957>",
+        "joever": "<:joever:1177480431164215346>",
+        "absolutecinema": "<:absolutecinema:1247439307292278864>",
+        "icant": "<:icant:1128787202961326170>",
+        "xdd": "<:xdd:1253150484496121976>",
+        "yamesy": "<:yamesy:1325154841991057418>",
+        "barack": "<:barack:1177480458125180958>",
+        "wallabyBald": "<:wallabyBald:1348607333340680204>",
+        "hah": "<:HAH:1228978055968587806>"
     }
