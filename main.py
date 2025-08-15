@@ -2,11 +2,13 @@ import asyncio
 import io
 from datetime import datetime, timedelta, timezone
 import discord
+import requests
 from discord.ext import commands, tasks
 from collections import defaultdict
 from datetime import datetime, timedelta
 import random
 
+from requests import HTTPError
 from riotwatcher import LolWatcher, TftWatcher
 from PIL import Image, ImageDraw, ImageFont
 import logging
@@ -16,16 +18,8 @@ from data import discord_ids, tft_summoner_ids, lol_summoner_ids, ranks, summone
 
 # --- Riot API Setup ---
 load_dotenv()
-lol_watcher_key = os.environ.get('LOL_WATCHER_KEY')
-tft_watcher_key = os.environ.get('TFT_WATCHER_KEY')
-tft_watcher = TftWatcher(api_key=tft_watcher_key)
-lol_watcher = LolWatcher(api_key=lol_watcher_key)
-
-# --- Logging ---
-logging.basicConfig(level=logging.INFO, filename='app.log', filemode='w',
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logging.getLogger("PIL").setLevel(logging.WARNING)
-logging.getLogger("discord").setLevel(logging.WARNING)
+lol_api_key = os.environ.get('LOL_API_KEY')
+tft_api_key = os.environ.get('TFT_API_KEY')
 
 # --- Constants ---
 REGION = 'na1'
@@ -33,10 +27,10 @@ GENERAL_CHANNEL_ID = 1249887657761443841
 TFT_LEADERBOARD_CHANNEL_ID = 1249993766300024842
 LOL_LEADERBOARD_CHANNEL_ID = 1249993747119472693
 
-RANK_FETCH_INTERVAL_SECONDS = 60 # How often to wait between batches of rank fetching
-LEADERBOARD_UPDATE_INTERVAL_SECONDS = 360 # 6 minutes for leaderboard image update
+RANK_FETCH_INTERVAL_SECONDS = 30 # How often to wait between batches of rank fetching
+LEADERBOARD_UPDATE_INTERVAL_SECONDS = 120 # 6 minutes for leaderboard image update
 
-API_BATCH_SIZE = 8
+API_BATCH_SIZE = 10
 API_RETRY_ATTEMPTS = 3 # Number of retries on connection errors
 TFT_QUEUE_TYPE = "RANKED_TFT"
 LOL_QUEUE_TYPE = "RANKED_SOLO_5x5"
@@ -79,6 +73,25 @@ def get_tft_summoner_id(summoner_name):
 def get_lol_summoner_id(summoner_name):
     return lol_summoner_ids.get(summoner_name)
 
+
+def get_ranked_stats_by_puuid(puuid: str, region: str, api_key: str, game_type: str):
+    """
+    Fetches ranked stats for a given PUUID for either LoL or TFT.
+    """
+    if game_type == "LoL":
+        url = f"https://{region}.api.riotgames.com/lol/league/v4/entries/by-puuid/{puuid}"
+    elif game_type == "TFT":
+        url = f"https://{region}.api.riotgames.com/tft/league/v1/by-puuid/{puuid}"
+    else:
+        raise ValueError(f"Invalid game_type '{game_type}' specified. Must be 'LoL' or 'TFT'.")
+
+    headers = {
+        "X-Riot-Token": api_key
+    }
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
 def calculate_tier_division_value(tier_division_rank):
     return ranks.get(tier_division_rank, 0)
 
@@ -88,20 +101,23 @@ def rank_to_value(tier_division_rank, lp):
     final_ranked_value = tier_division_value * 100 + lp
     return final_ranked_value
 
-async def get_ranked_stats(summoner_names, get_summoner_id_func, watcher, queue_type, game_name=""):
-    from requests.exceptions import HTTPError
+
+async def get_ranked_stats(summoner_names, get_summoner_id_func, queue_type, game_name, api_key):
     rankings_list = []
 
     for summoner_name in summoner_names:
         max_attempts = 2
         attempt = 0
-        ranked_stats = None
+        all_stats = None  # Renamed to avoid confusion
         while attempt < max_attempts:
             try:
-                summoner_id = get_summoner_id_func(summoner_name)
+                # This should be a PUUID, ensure your get_summoner_id_func returns it
+                puuid = get_summoner_id_func(summoner_name)
                 logging.info(f"Making request to Riot API for {game_name} ranked stats of summoner: {summoner_name}")
                 print(f"Making request to Riot API for {game_name} ranked stats of summoner: {summoner_name}")
-                ranked_stats = watcher.league.by_summoner(region=REGION, encrypted_summoner_id=summoner_id)
+
+                # Call the generic function with the game_name parameter
+                all_stats = get_ranked_stats_by_puuid(puuid, REGION, api_key, game_name)
                 break
             except ConnectionError:
                 attempt += 1
@@ -109,30 +125,37 @@ async def get_ranked_stats(summoner_names, get_summoner_id_func, watcher, queue_
                 logging.warning(f"ConnectionError occurred, retrying in {wait_time} seconds...")
                 await asyncio.sleep(wait_time)
             except HTTPError as e:
+                # If a 404 Not Found error occurs (player unranked), treat it as success
+                if e.response.status_code == 404:
+                    all_stats = []  # Empty list signifies no ranked entries found
+                    break
                 if e.response.status_code == 429:
-                    retry_after = int(e.response.headers.get('Retry-After', 0))
+                    retry_after = int(e.response.headers.get('Retry-After', 1))
                     logging.warning(f"429 Client Error: Too Many Requests, retrying in {retry_after} seconds...")
                     await asyncio.sleep(retry_after)
-                    continue
+                    # No increment on attempt, as we want to retry this request
                 else:
-                    raise e
+                    logging.error(f"HTTPError for {summoner_name}: {e}")
+                    all_stats = None  # Ensure it's None on unhandled errors
+                    break  # Break on other HTTP errors
         else:
-            logging.error(f"Failed to get data from Riot API after {max_attempts} attempts")
+            logging.error(f"Failed to get data from Riot API for {summoner_name} after {max_attempts} attempts")
 
-        ranked_stats = next((stats for stats in ranked_stats if stats["queueType"] == queue_type), None)
+        # Find the stats for the specific queue type
+        ranked_stats = next((stats for stats in all_stats if stats.get("queueType") == queue_type),
+                            None) if all_stats else None
 
         if ranked_stats:
-            tier = ranked_stats["tier"]
-            rank = ranked_stats["rank"]
-            lp = ranked_stats["leaguePoints"]
+            tier = ranked_stats.get("tier", "UNRANKED")
+            rank = ranked_stats.get("rank", "")
+            lp = ranked_stats.get("leaguePoints", 0)
             tier_division = f"{tier} {rank}"
             ranked_value = rank_to_value(tier_division, lp)
+            tier_division_lp = f"{tier} {rank} {lp} LP"
             if tier in ["MASTER", "GRANDMASTER", "CHALLENGER"]:
-                rank = ""
-                tier_division_lp = f"{tier} {lp}"
-            else:
-                tier_division_lp = f"{tier} {rank} {lp}"
-            print(f"{summoner_name}: {ranked_value}: {tier} {rank} {lp} LP")
+                tier_division_lp = f"{tier} {lp} LP"
+
+            print(f"{summoner_name}: {ranked_value}: {tier_division_lp}")
         else:
             tier = "UNRANKED"
             lp = 0
@@ -152,20 +175,20 @@ async def update_rankings_list_task(
 ):
     """
     Continuously fetches rankings in batches for a specific game type.
-    Determines which API functions/constants to use based on game_type_name.
+    This version uses our own get_ranked_stats_by_puuid function.
     """
     logging.info(f"Starting continuous rank fetching task for {game_type_name}...")
     print(f"Starting background rank fetching for {game_type_name}...")
 
-    # Determine the correct functions and constants based on game_type_name ONCE
+    # Determine the correct functions, constants, AND api_key
     if game_type_name == "TFT":
         id_func = get_tft_summoner_id
-        watcher_instance = tft_watcher
-        q_type = TFT_QUEUE_TYPE
+        q_type = "RANKED_TFT"
+        api_key_to_use = tft_api_key
     elif game_type_name == "LoL":
         id_func = get_lol_summoner_id
-        watcher_instance = lol_watcher
-        q_type = LOL_QUEUE_TYPE
+        q_type = "RANKED_SOLO_5x5"
+        api_key_to_use = lol_api_key
     else:
         logging.error(f"[{game_type_name} Fetcher] Invalid game_type_name provided. Stopping task.")
         print(f"Error: Invalid game type '{game_type_name}' for fetching task.")
@@ -186,10 +209,10 @@ async def update_rankings_list_task(
                 # Call the generic get_ranked_stats with the correct parameters
                 batch_rankings = await get_ranked_stats(
                     summoner_names=batch,
-                    get_summoner_id_func=id_func,           # Use determined function
-                    watcher=watcher_instance,               # Use determined watcher
-                    queue_type=q_type,                      # Use determined queue type
-                    game_name=game_type_name
+                    get_summoner_id_func=id_func,
+                    queue_type=q_type,
+                    game_name=game_type_name,
+                    api_key=api_key_to_use
                 )
             except Exception as e:
                 logging.exception(f"[{game_type_name} Fetcher] Unhandled error calling get_ranked_stats for batch {batch}: {e}")
@@ -202,7 +225,7 @@ async def update_rankings_list_task(
                 await asyncio.sleep(RANK_FETCH_INTERVAL_SECONDS)
                 continue
 
-            # --- Update shared list (logic remains the same) ---
+            # --- Update shared list ---
             async with lock:
                 new_data_map = {ranking[0]: ranking for ranking in batch_rankings}
                 for idx, existing_ranking in enumerate(rankings_list_to_update):
@@ -751,9 +774,13 @@ async def on_ready():
 
     print("Bot is ready and tasks are running.")
 
+pity_counter = 0
+
 @client.event
 async def on_message(message):
     message_lower = message.content.lower()
+    global pity_counter
+
     if message.author == client.user:
         return
 
@@ -780,6 +807,15 @@ async def on_message(message):
     if message_lower == 'bigcaughtpogo':
         await message.delete()
         await message.channel.send(file=discord.File("img/bigcaughtpogo.png"))
+
+    if message_lower == 'pogoflickleave':
+        await message.delete()
+        await message.channel.send(file=discord.File("img/pogo_flick_leave.gif"))
+
+    # if message.author.id == 518195108634427402:
+    #    if '<:POGGIES:926135482360950824>' in message.content:
+    #        await message.delete()
+    #        await message.channel.send(file=discord.File("img/pogo_flick_leave.gif"))
 
     #if message.author.id == 80373001006096384:
     #    await message.delete()
