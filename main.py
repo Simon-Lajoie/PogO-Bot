@@ -9,9 +9,6 @@ import logging
 import os
 from dotenv import load_dotenv
 
-# Import your config for channel IDs used here
-import config
-
 # --- Basic Setup ---
 load_dotenv()
 logging.basicConfig(level=logging.INFO, format='%(asctime)s:%(levelname)s:%(name)s: %(message)s')
@@ -26,82 +23,8 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # =================================================================================
-# ANTI-NUKE LOGIC (This is separate from leaderboards and can stay here)
+# GENERAL EVENTS & COMMANDS
 # =================================================================================
-# This could also be moved into its own 'SecurityCog' in the future.
-BAN_THRESHOLD = 2
-KICK_THRESHOLD = 2
-DELETE_THRESHOLD = 2
-TIME_FRAME = timedelta(minutes=5)
-action_tracker = defaultdict(list)
-
-
-async def check_actions(user, action_type, threshold):
-    """Checks if a user has exceeded an action threshold in a given time frame."""
-    now = datetime.now(timezone.utc)
-    # Filter out old actions
-    action_tracker[action_type] = [action for action in action_tracker[action_type] if now - action[1] < TIME_FRAME]
-    # Add the new action
-    action_tracker[action_type].append((user, now))
-    # Count actions by the specific user
-    user_actions = [action for action in action_tracker[action_type] if action[0] == user]
-    return len(user_actions) >= threshold
-
-
-@bot.event
-async def on_member_ban(guild, user):
-    async for entry in guild.audit_logs(limit=1, action=discord.AuditLogAction.ban):
-        if entry.target.id == user.id:
-            logging.info(f"{entry.user} banned {user.name}")
-            if await check_actions(entry.user, "ban", BAN_THRESHOLD):
-                logging.warning(f"{entry.user} exceeded ban threshold.")
-                await guild.ban(entry.user, reason="Exceeded ban threshold")
-                channel = bot.get_channel(config.GENERAL_CHANNEL_ID)
-                if channel:
-                    await channel.send(
-                        f"{entry.user.mention} was banned for suspicious activity! RIP BOZO! <:PogO:949833186689568768>")
-
-
-@bot.event
-async def on_member_remove(member):
-    # This specifically checks for kicks, as bans are handled above
-    async for entry in member.guild.audit_logs(limit=1, action=discord.AuditLogAction.kick):
-        if entry.target.id == member.id:
-            logging.info(f"{entry.user} kicked {member.name}")
-            if await check_actions(entry.user, "kick", KICK_THRESHOLD):
-                logging.warning(f"{entry.user} exceeded kick threshold.")
-                await member.guild.ban(entry.user, reason="Exceeded kick threshold")
-                channel = bot.get_channel(config.GENERAL_CHANNEL_ID)
-                if channel:
-                    await channel.send(
-                        f"{entry.user.mention} was banned for suspicious activity! RIP BOZO! <:PogO:949833186689568768>")
-
-
-@bot.event
-async def on_guild_channel_delete(channel):
-    async for entry in channel.guild.audit_logs(limit=1, action=discord.AuditLogAction.channel_delete):
-        if entry.target.id == channel.id:
-            logging.info(f"{entry.user} deleted channel {channel.name}")
-            if await check_actions(entry.user, "delete", DELETE_THRESHOLD):
-                logging.warning(f"{entry.user} exceeded delete threshold.")
-                await channel.guild.ban(entry.user, reason="Exceeded delete threshold")
-                alert_channel = bot.get_channel(config.GENERAL_CHANNEL_ID)
-                if alert_channel:
-                    await alert_channel.send(
-                        f"{entry.user.mention} was banned for suspicious activity! RIP BOZO! <:PogO:949833186689568768>")
-
-
-# =================================================================================
-# GENERAL EVENTS & COMMANDS (Also fine to keep here)
-# =================================================================================
-# This could also be moved into its own 'FunCog' or 'GeneralCog' in the future.
-@bot.event
-async def on_ready():
-    """Called when the bot is connected and ready."""
-    logging.info(f"Logged in as {bot.user.name} ({bot.user.id})")
-    print(f"Logged in as {bot.user.name}")
-    print("------")
-
 
 @bot.event
 async def on_message(message):
@@ -161,14 +84,13 @@ async def main():
     # Load the leaderboard cog
     # The path uses dots, not slashes. 'cogs.leaderboard_cog' refers to cogs/leaderboard_cog.py
     try:
-        logging.info("Loading leaderboard_cog...")
+        logging.info("Loading cogs...")
         await bot.load_extension("cogs.leaderboard_cog")
-        logging.info("leaderboard_cog loaded successfully.")
+        await bot.load_extension("cogs.security_cog")
+        logging.info("All cogs loaded successfully.")
     except Exception as e:
-        logging.critical(f"Failed to load leaderboard_cog: {e}", exc_info=True)
-        # You might want to stop the bot if a critical cog fails to load
-        # await bot.close()
-        # return
+        logging.critical(f"Failed to load a cog: {e}", exc_info=True)
+        return
 
     # Start the bot
     async with bot:
