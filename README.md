@@ -23,7 +23,7 @@ PogO Bot is a Discord bot mainly for Riot Games related content. It has several 
 
 ## Technologies
 * Python
-* Libraries: Discord, RiotWatcher, Pillow
+* Libraries: Discord, Pillow
 
 ## Author
 * Simon Lajoie
