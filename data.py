@@ -1,4 +1,4 @@
-discord_ids = {"Sir Mighty Bacon": "<@149681004880199681>", "Settupss": "<@144611125391130624>",
+discord_ids = {"Simon": "<@149681004880199681>", "Settupss": "<@144611125391130624>",
                    "Classiq": "<@155758849582825472>", "Wallaby": "<@315272936053276672>",
                    "Sehnbon": "<@198960489022095360>", "Ramza": "<@86595633288351744>",
                    "Gourish": "<@700837976544116808>", "Gabyumi": "<@241712679150944257>",
@@ -21,7 +21,7 @@ discord_ids = {"Sir Mighty Bacon": "<@149681004880199681>", "Settupss": "<@14461
                    "Andrei": "<@125330438515458048>", "Drzoan": "<@164114739050446849>"} # "Billie": "<@279031910984974346>"
 
 # TFT SUMMONER PUUID : /riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine} : Pogo Bot TFT API Key
-tft_summoner_ids = {"Sir Mighty Bacon": "HcViC80nr7e1qdO-PTy64kgsOXOVuTTQEDp6YXkpG_1Prv32w243RfBHHCeq0aKF6CyACXQo4Lilfg",
+tft_summoner_ids = {"Simon": "HcViC80nr7e1qdO-PTy64kgsOXOVuTTQEDp6YXkpG_1Prv32w243RfBHHCeq0aKF6CyACXQo4Lilfg",
                     "Settupss": "sBW-VWp9U5IigHAle6LewqKR1g8sRqJfnRD-bW-UNoE_zcjKFPnHihZNHMbTzJ4t1Xi8tWV2lxL-LQ",
                     "Classiq": "JLL97fOhG64Bxa_n9VgEw6lihfAjbmsZSsCmrc7yXRezt2k6C6wXQot0kaBeG5dhkvCvxj0Pjujg0Q",
                     "Wallaby": "5Yy-wFhXPUQujKtmXn7tjqNz-18w31wonAgwFL0EV1jhRbWOkH-L-qsjDyUZEdaN4LEa_Fx_IvI6Eg",
@@ -60,7 +60,7 @@ tft_summoner_ids = {"Sir Mighty Bacon": "HcViC80nr7e1qdO-PTy64kgsOXOVuTTQEDp6YXk
                     }
 
 # LoL SUMMONER PUUID : /riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine} : Pogo Bot LoL API Key
-lol_summoner_ids = {"Sir Mighty Bacon": "Epjjk5nQJob27TdE4tfd6ogGhnjjKQGORsI6Y0mjhFc79k9vu7fyW5VrUn3IBM3JLhja9RRvYULASQ",
+lol_summoner_ids = {"Simon": "Epjjk5nQJob27TdE4tfd6ogGhnjjKQGORsI6Y0mjhFc79k9vu7fyW5VrUn3IBM3JLhja9RRvYULASQ",
                     "Settupss": "8uV34jdyBRzKD73RvXLjnSWeeh_iVtf8QCn8o57P9EMcb6Kw5WV6iQeyRzMawEbd7soqWVn6bld9cA",
                     "Classiq": "wsBvflplguVtyqfMrVhT13p0ZzQEs1H--0U4jiGmIUVwblJ9E9Br_Sb9J38dR_tDqiknWuA4rm7gwA",
                     "Wallaby": "REMUBzsdhG-pJZCGjvw2t6qEVM0P0DBKzxkjyN-ZH_Stwr_BpOGk5Z_UjY2PM3_ZxqkK9BK_R-xJUA",
@@ -98,7 +98,7 @@ lol_summoner_ids = {"Sir Mighty Bacon": "Epjjk5nQJob27TdE4tfd6ogGhnjjKQGORsI6Y0m
                     "Billie": "Vj1sKPh65ZuqB_hEL-9UM7JyV7Mbsv6BNGCuMiVovdgbSdJdrYyQSAmCKM5WusIwUO8zSepgOT28yQ"
                     }
 
-summoner_names_list = ["Sir Mighty Bacon","Settupss", "Classiq", "Wallaby", "Sehnbon", "Gourish", "Ramza",
+summoner_names_list = ["Simon","Settupss", "Classiq", "Wallaby", "Sehnbon", "Gourish", "Ramza",
                         "Gabyumi", "meyst", "Limi", "Z3Sleeper", "BlackDrag", "Flames",
                         "Tiny Cena", "Aàrón", "5billon", "KingNeptun3", "cpt stryder",
                         "Azote", "Skrt Skrt Skaarl", "Maa san", "Smoking hookah", "Angel", "Oogli", "Rogier", "Zotto",

@@ -7,12 +7,14 @@ from datetime import datetime, timedelta, timezone
 import logging
 import config
 
+# =================================================================================
+# ANTI-NUKE SECURITY COG
+# =================================================================================
 class SecurityCog(commands.Cog):
     """A cog for handling server security and anti-nuke features."""
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        # These constants and the tracker are now instance variables
         self.ban_threshold = 2
         self.kick_threshold = 2
         self.delete_threshold = 2
@@ -22,7 +24,6 @@ class SecurityCog(commands.Cog):
     async def _check_actions(self, user, action_type, threshold):
         """
         Checks if a user has exceeded an action threshold in a given time frame.
-        This is now a helper method of the class.
         """
         now = datetime.now(timezone.utc)
         # Filter out old actions

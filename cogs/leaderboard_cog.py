@@ -1,4 +1,5 @@
 # cogs/leaderboard_cog.py
+import math
 
 import discord
 from discord.ext import commands, tasks
@@ -308,17 +309,27 @@ class LeaderboardCog(commands.Cog):
 
     # --- Helper function to format countdown text ---
     def _format_countdown_text(self, seconds: int) -> str | None:
-        """Formats the remaining time into a user-friendly string."""
+        """
+        Formats the remaining time into a user-friendly string.
+        - Above 1 minute: Updates in minutes.
+        - Below 1 minute: Displays countdown at 50, 40, 30, 20, 10 seconds.
+        """
         if seconds <= 0:
             return "Updating now..."
-        if seconds <= 10:
-            return f"Next update in: {seconds} seconds"
 
-        minutes = (seconds + 59) // 60  # Round up to the nearest minute
-        if minutes == 1:
-            return "Next update in: 1 minute"
+        # Handle > 1 minute first
+        if seconds > 50:  # Let's use 50 as the cutoff
+            minutes = (seconds + 59) // 60  # Round up to the nearest minute
+            if minutes == 1:
+                return "Next update in: 1 minute"
+            else:
+                return f"Next update in: {minutes} minutes"
+
+        # Handle <= 50 seconds
         else:
-            return f"Next update in: {minutes} minutes"
+            # This logic will now produce 50, 40, 30, 20, 10 correctly
+            display_seconds = math.ceil(seconds / 10) * 10
+            return f"Next update in: {display_seconds} seconds"
 
     async def _check_and_notify_rank_changes(self, game_type: str, new_rankings: list):
         """Compares old and new rankings and sends a message if there's a change."""
