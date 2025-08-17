@@ -230,11 +230,14 @@ class LeaderboardCog(commands.Cog):
                     logging.error(f"[{game_type}] Failed to edit timer message: {e}")
 
     async def _update_leaderboard_display(self, game_type: str):
-        """Fetches data, generates image, and updates Discord messages."""
+        """
+        Fetches data, generates an image, and updates the leaderboard display.
+        - Creates a persistent timer message on the first run.
+        - On subsequent runs, edits the timer and replaces the old image.
+        """
         lb = self.leaderboards[game_type]
 
         async with lb["lock"]:
-            # ... (Data preparation logic is unchanged) ...
             current_rankings = lb["current_rankings"][:]
             if not current_rankings:
                 logging.warning(f"[{game_type}] No rankings available to generate image.")
@@ -242,7 +245,6 @@ class LeaderboardCog(commands.Cog):
             await self._check_and_notify_rank_changes(game_type, current_rankings)
             lb["previous_rankings"] = current_rankings[:]
 
-        # ... (Image generation is unchanged) ...
         image_buffer = self.image_generator.generate_leaderboard_image(current_rankings, lb["background_path"])
         if image_buffer is None:
             logging.error(f"[{game_type}] Failed to generate leaderboard image.")
@@ -254,32 +256,55 @@ class LeaderboardCog(commands.Cog):
                 logging.error(f"[{game_type}] Channel {lb['channel_id']} not found.")
                 return
 
-            # --- MESSAGE HANDLING LOGIC ---
-            # 1. Delete old messages
-            if lb["timer_message"]: await lb["timer_message"].delete()
-            if lb["image_message"]: await lb["image_message"].delete()
+            # 1. Ensure a timer message exists. If not, create it.
+            # This only runs once after a startup cleanup or if the message was deleted.
+            if lb["timer_message"] is None:
+                placeholder_text = "Initializing leaderboard..."
+                new_timer_message = await channel.send(content=placeholder_text)
+                lb["timer_message"] = new_timer_message
+                lb["last_displayed_text"] = placeholder_text
+                logging.info(f"[{game_type}] Created persistent timer message: {new_timer_message.id}")
 
-            # 2. Post new messages (Timer first, then Image for better order)
+            # 2. Delete the old leaderboard image, if it exists.
+            if lb["image_message"]:
+                try:
+                    await lb["image_message"].delete()
+                except discord.NotFound:
+                    # This is fine, it means the message was already gone.
+                    logging.warning(f"[{game_type}] Old image message was already deleted, which is okay.")
+                except discord.HTTPException as e:
+                    logging.error(f"[{game_type}] Could not delete old image message: {e}")
+
+            # 3. Send the new leaderboard image.
+            new_image_message = await channel.send(
+                file=discord.File(image_buffer, filename=f"{game_type}_leaderboard.png")
+            )
+            lb["image_message"] = new_image_message  # Store the reference to the new message
+
+            # 4. Set the time for the next update.
             update_interval = config.LEADERBOARD_UPDATE_INTERVAL_SECONDS
             lb["next_update_time"] = datetime.now() + timedelta(seconds=update_interval)
+
+            # 5. Immediately edit the persistent timer message to reset the countdown.
+            # The countdown_task will then take over for second-by-second updates.
             initial_timer_text = self._format_countdown_text(update_interval)
-
-            new_timer_message = await channel.send(content=initial_timer_text)
-            new_image_message = await channel.send(file=discord.File(image_buffer, filename=f"{game_type}_leaderboard.png")
-            )
-
-            # 3. Store the new message objects for the next cycle
-            lb["timer_message"] = new_timer_message
-            lb["image_message"] = new_image_message
+            await lb["timer_message"].edit(content=initial_timer_text)
             lb["last_displayed_text"] = initial_timer_text
 
-            logging.info(f"[{game_type}] Successfully posted new leaderboard.")
+            logging.info(f"[{game_type}] Successfully updated leaderboard display.")
 
         except discord.NotFound:
-            logging.warning(f"[{game_type}] An old message was already deleted. Resetting.")
-            lb["timer_message"], lb["image_message"] = None, None  # Reset state
+            # This is a critical failure if the persistent timer message is gone.
+            # Resetting the state will cause it to be recreated on the next cycle.
+            logging.warning(f"[{game_type}] Timer message was not found during update (likely deleted manually). Resetting state.")
+            lb["timer_message"], lb["image_message"] = None, None
+        except discord.HTTPException as e:
+            logging.error(f"[{game_type}] A Discord API error occurred during display update: {e}")
+            # If the error is 404 (Not Found), it means our timer message is gone. Reset to self-heal.
+            if e.status == 404:
+                lb["timer_message"], lb["image_message"] = None, None
         except Exception as e:
-            logging.error(f"[{game_type}] An error occurred during display update: {e}", exc_info=True)
+            logging.error(f"[{game_type}] An unexpected error occurred during display update: {e}", exc_info=True)
 
     # --- Helper function to format countdown text ---
     def _format_countdown_text(self, seconds: int) -> str | None:
